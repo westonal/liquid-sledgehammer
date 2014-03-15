@@ -7,11 +7,14 @@ public final class FinancialTransaction {
 	private final long value;
 	private String description;
 	private LocalDate date;
+	private String groupPattern;
 
-	private FinancialTransaction(long value, String description, LocalDate date) {
+	private FinancialTransaction(long value, String description,
+			LocalDate date, String groupPattern) {
 		this.value = value;
 		this.description = description;
 		this.date = date;
+		this.groupPattern = groupPattern;
 	}
 
 	public long getValue() {
@@ -23,16 +26,19 @@ public final class FinancialTransaction {
 		private long value;
 		private String description = "";
 		private LocalDate date;
+		private String groupPattern;
 
 		public Builder value(long value) {
 			this.value = value;
 			return this;
 		}
 
-		public FinancialTransaction build() {			
-			if(date==null) throw new FinancialTransactionConstructionException();
-			
-			return new FinancialTransaction(value, description, date);
+		public FinancialTransaction build() {
+			if (date == null)
+				throw new FinancialTransactionConstructionException();
+
+			return new FinancialTransaction(value, description, date,
+					groupPattern);
 		}
 
 		public Builder description(String description) {
@@ -41,7 +47,12 @@ public final class FinancialTransaction {
 		}
 
 		public Builder date(int year, int month, int day) {
-			date = new LocalDate(year,month,day);
+			date = new LocalDate(year, month, day);
+			return this;
+		}
+
+		public Builder groupPattern(String groupPattern) {
+			this.groupPattern = groupPattern;
 			return this;
 		}
 
@@ -53,5 +64,9 @@ public final class FinancialTransaction {
 
 	public LocalDate getDate() {
 		return date;
+	}
+
+	public String getGroupPattern() {
+		return groupPattern;
 	}
 }

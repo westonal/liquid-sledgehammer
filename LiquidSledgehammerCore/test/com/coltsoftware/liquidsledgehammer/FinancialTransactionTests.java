@@ -2,8 +2,6 @@ package com.coltsoftware.liquidsledgehammer;
 
 import static org.junit.Assert.*;
 
-import java.util.Calendar;
-
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
