@@ -3,8 +3,8 @@ package com.coltsoftware.liquidsledgehammer;
 import static org.junit.Assert.*;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -51,16 +51,13 @@ public class FinancialTransactionTests {
 	@Test
 	public void can_specify_date_by_y_m_d() {
 		FinancialTransaction transaction = builder.date(2020, 3, 15).build();
-		assertEquals(new GregorianCalendar(2020, Calendar.MARCH, 15).getTime(),
-				transaction.getDate());
+		assertEquals(new LocalDate(2020, 3, 15), transaction.getDate());
 	}
 
 	@Test
 	public void can_specify_alternative_date_by_y_m_d() {
 		FinancialTransaction transaction = builder.date(2045, 1, 31).build();
-		assertEquals(
-				new GregorianCalendar(2045, Calendar.JANUARY, 31).getTime(),
-				transaction.getDate());
+		assertEquals(new LocalDate(2045, 1, 31), transaction.getDate());
 	}
 
 }

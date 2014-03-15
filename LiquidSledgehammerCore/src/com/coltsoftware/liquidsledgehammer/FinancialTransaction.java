@@ -1,15 +1,14 @@
 package com.coltsoftware.liquidsledgehammer;
 
-import java.util.Date;
-import java.util.GregorianCalendar;
+import org.joda.time.LocalDate;
 
 public final class FinancialTransaction {
 
 	private final long value;
 	private String description;
-	private Date date;
+	private LocalDate date;
 
-	private FinancialTransaction(long value, String description, Date date) {
+	private FinancialTransaction(long value, String description, LocalDate date) {
 		this.value = value;
 		this.description = description;
 		this.date = date;
@@ -23,7 +22,7 @@ public final class FinancialTransaction {
 
 		private long value;
 		private String description = "";
-		private Date date;
+		private LocalDate date;
 
 		public Builder value(long value) {
 			this.value = value;
@@ -42,7 +41,7 @@ public final class FinancialTransaction {
 		}
 
 		public Builder date(int year, int month, int day) {
-			date = new GregorianCalendar(year, month - 1, day).getTime();
+			date = new LocalDate(year,month,day);
 			return this;
 		}
 
@@ -52,7 +51,7 @@ public final class FinancialTransaction {
 		return description;
 	}
 
-	public Date getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 }
