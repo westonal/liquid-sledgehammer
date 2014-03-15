@@ -1,20 +1,28 @@
 package com.coltsoftware.liquidsledgehammer;
 
-public class GroupValueGenerator {
+public final class GroupValueGenerator {
 
 	public GroupValues getGroupValues(FinancialTransaction transaction) {
-		long value = transaction.getValue();
 		String groupPattern = transaction.getGroupPattern();
-		if (groupPattern == null)
-			return new GroupValues(value, 0);
+		GroupValues groupValues = new GroupValues(transaction.getValue());
 
-		String[] split = groupPattern.split("=");
+		if (groupPattern == null)
+			return groupValues;
+
+		for (String group : groupPattern.split(","))
+			processGroup(groupValues, group);
+
+		return groupValues;
+	}
+
+	private void processGroup(GroupValues groupValues, String group) {
+		String[] split = group.split("=");
+		String groupName = split[0];
 		if (split.length == 1) {
-			return new GroupValues(0, value);
+			groupValues.pushRemainingToGroup(groupName);
 		} else {
-			long parseInt = Long.parseLong(split[1]);
-			value -= parseInt;
-			return new GroupValues(value, parseInt);
+			long groupValue = Long.parseLong(split[1]);
+			groupValues.pushToGroup(groupName, groupValue);
 		}
 	}
 

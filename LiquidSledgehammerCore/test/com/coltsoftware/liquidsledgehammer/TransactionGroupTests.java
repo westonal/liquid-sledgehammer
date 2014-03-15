@@ -30,6 +30,12 @@ public class TransactionGroupTests {
 		GroupValues groupValues = getValues(99, null);
 		assertEquals(99, groupValues.getUnassigned());
 	}
+	
+	@Test
+	public void value_of_unknown_group() {
+		GroupValues groupValues = getValues(99, null);
+		assertEquals(0, groupValues.get("one"));
+	}
 
 	@Test
 	public void one_group_specified() {
@@ -43,6 +49,22 @@ public class TransactionGroupTests {
 		GroupValues groupValues = getValues(99, "one=10");
 		assertEquals(89, groupValues.getUnassigned());
 		assertEquals(10, groupValues.get("one"));
+	}
+	
+	@Test
+	public void value_to_two_groups_specified() {
+		GroupValues groupValues = getValues(99, "one=10,two=30");
+		assertEquals(59, groupValues.getUnassigned());
+		assertEquals(10, groupValues.get("one"));
+		assertEquals(30, groupValues.get("two"));
+	}
+	
+	@Test
+	public void value_to_two_groups_one_specified() {
+		GroupValues groupValues = getValues(99, "one=10,two");
+		assertEquals(0, groupValues.getUnassigned());
+		assertEquals(10, groupValues.get("one"));
+		assertEquals(89, groupValues.get("two"));
 	}
 
 }
