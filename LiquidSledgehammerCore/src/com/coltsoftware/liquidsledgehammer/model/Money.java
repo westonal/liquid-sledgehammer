@@ -63,11 +63,20 @@ public final class Money {
 	}
 
 	public Money subtract(Money otherValue) {
-		return new Money(getValue() - otherValue.getValue(), getCurrency());
+		return add(otherValue, -otherValue.value);
 	}
 
 	public Money add(Money otherValue) {
-		return new Money(getValue() + otherValue.getValue(), getCurrency());
+		return add(otherValue, otherValue.value);
+	}
+
+	private Money add(Money otherValue, long valueToAdd) {
+		Currency theMainCurrency = getCurrency();
+
+		if (!theMainCurrency.equals(otherValue.currency))
+			throw new MoneyCurrencyException();
+
+		return new Money(value + valueToAdd, theMainCurrency);
 	}
 
 }
