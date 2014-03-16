@@ -1,4 +1,4 @@
-package com.coltsoftware.liquidsledgehammer;
+package com.coltsoftware.liquidsledgehammer.model;
 
 import java.text.NumberFormat;
 import java.util.Currency;
@@ -6,12 +6,17 @@ import java.util.Locale;
 
 public final class Money {
 
+	public static final Money Zero = new Money(0);
 	private final Currency currency;
 	private final long value;
 
-	public Money(long value, Currency instance) {
+	public Money(long value, Currency currency) {
 		this.value = value;
-		this.currency = instance;
+		this.currency = currency;
+	}
+
+	public Money(long value) {
+		this(value, Currency.getInstance(Locale.getDefault()));
 	}
 
 	public long getValue() {
@@ -55,6 +60,14 @@ public final class Money {
 		return String.format("%s%s %s", sign,
 				currency.getSymbol(Locale.getDefault()),
 				format.format(displayValue));
+	}
+
+	public Money subtract(Money otherValue) {
+		return new Money(getValue() - otherValue.getValue(), getCurrency());
+	}
+
+	public Money add(Money otherValue) {
+		return new Money(getValue() + otherValue.getValue(), getCurrency());
 	}
 
 }

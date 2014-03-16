@@ -1,4 +1,4 @@
-package com.coltsoftware.liquidsledgehammer;
+package com.coltsoftware.liquidsledgehammer.model;
 
 import static org.junit.Assert.*;
 
@@ -6,6 +6,9 @@ import java.util.Currency;
 import java.util.Locale;
 
 import org.junit.Test;
+
+import com.coltsoftware.liquidsledgehammer.BaseTest;
+import com.coltsoftware.liquidsledgehammer.model.Money;
 
 public final class MoneyEqualityTests extends BaseTest {
 

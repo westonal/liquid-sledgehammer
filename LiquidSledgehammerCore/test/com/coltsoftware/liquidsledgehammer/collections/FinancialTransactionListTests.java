@@ -1,4 +1,4 @@
-package com.coltsoftware.liquidsledgehammer;
+package com.coltsoftware.liquidsledgehammer.collections;
 
 import static org.junit.Assert.*;
 
@@ -6,6 +6,9 @@ import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.coltsoftware.liquidsledgehammer.collections.FinancialTransactionList;
+import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 
 public final class FinancialTransactionListTests {
 
@@ -23,20 +26,20 @@ public final class FinancialTransactionListTests {
 
 	@Test
 	public void inital_total_is_zero() {
-		assertEquals(0, ftl.getTotalValue());
+		assertEquals(0, ftl.getTotalValue().getValue());
 	}
 
 	@Test
 	public void can_add_transaction() {
 		ftl.add(makeTransaction(123));
-		assertEquals(123, ftl.getTotalValue());
+		assertEquals(123, ftl.getTotalValue().getValue());
 	}
 
 	@Test
 	public void can_add_two_transactions() {
 		ftl.add(makeTransaction(123));
 		ftl.add(makeTransaction(100));
-		assertEquals(223, ftl.getTotalValue());
+		assertEquals(223, ftl.getTotalValue().getValue());
 	}
 
 	@Test

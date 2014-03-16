@@ -1,4 +1,4 @@
-package com.coltsoftware.liquidsledgehammer;
+package com.coltsoftware.liquidsledgehammer.model;
 
 import static org.junit.Assert.*;
 
@@ -6,7 +6,8 @@ import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.coltsoftware.liquidsledgehammer.FinancialTransaction.Builder;
+import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
+import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction.Builder;
 
 public class FinancialTransactionTests {
 
@@ -20,13 +21,13 @@ public class FinancialTransactionTests {
 	@Test
 	public void default_value_is_0() {
 		FinancialTransaction transaction = builder.build();
-		assertEquals(0, transaction.getValue());
+		assertEquals(0, transaction.getValue().getValue());
 	}
 
 	@Test
 	public void can_specifty_transaction_value() {
 		FinancialTransaction transaction = builder.value(1).build();
-		assertEquals(1, transaction.getValue());
+		assertEquals(1, transaction.getValue().getValue());
 	}
 
 	@Test

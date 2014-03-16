@@ -1,15 +1,19 @@
-package com.coltsoftware.liquidsledgehammer;
+package com.coltsoftware.liquidsledgehammer.model;
+
+import java.util.Currency;
+import java.util.Locale;
 
 import org.joda.time.LocalDate;
 
+
 public final class FinancialTransaction {
 
-	private final long value;
+	private final Money value;
 	private String description;
 	private LocalDate date;
 	private String groupPattern;
 
-	private FinancialTransaction(long value, String description,
+	private FinancialTransaction(Money value, String description,
 			LocalDate date, String groupPattern) {
 		this.value = value;
 		this.description = description;
@@ -17,19 +21,20 @@ public final class FinancialTransaction {
 		this.groupPattern = groupPattern;
 	}
 
-	public long getValue() {
+	public Money getValue() {
 		return value;
 	}
 
 	public static class Builder {
 
-		private long value;
+		private Money value = Money.Zero;
 		private String description = "";
 		private LocalDate date;
 		private String groupPattern;
 
 		public Builder value(long value) {
-			this.value = value;
+			this.value = new Money(value, Currency.getInstance(Locale
+					.getDefault()));
 			return this;
 		}
 

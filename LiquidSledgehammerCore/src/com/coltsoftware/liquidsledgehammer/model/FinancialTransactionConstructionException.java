@@ -1,4 +1,4 @@
-package com.coltsoftware.liquidsledgehammer;
+package com.coltsoftware.liquidsledgehammer.model;
 
 public final class FinancialTransactionConstructionException extends RuntimeException {
 

@@ -1,4 +1,10 @@
-package com.coltsoftware.liquidsledgehammer;
+package com.coltsoftware.liquidsledgehammer.collections;
+
+import java.util.Currency;
+import java.util.Locale;
+
+import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
+import com.coltsoftware.liquidsledgehammer.model.Money;
 
 public final class GroupValueGenerator {
 
@@ -21,7 +27,8 @@ public final class GroupValueGenerator {
 		if (split.length == 1) {
 			groupValues.pushRemainingToGroup(groupName);
 		} else {
-			long groupValue = Long.parseLong(split[1]);
+			Money groupValue = new Money(Long.parseLong(split[1]),
+					Currency.getInstance(Locale.getDefault()));
 			groupValues.pushToGroup(groupName, groupValue);
 		}
 	}

@@ -1,21 +1,24 @@
-package com.coltsoftware.liquidsledgehammer;
+package com.coltsoftware.liquidsledgehammer.collections;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
+import com.coltsoftware.liquidsledgehammer.model.Money;
 
 public final class FinancialTransactionList implements
 		Iterable<FinancialTransaction> {
 
 	private final ArrayList<FinancialTransaction> transactions = new ArrayList<FinancialTransaction>();
 
-	private long value;
+	private Money value = Money.Zero;
 
 	public void add(FinancialTransaction transaction) {
 		transactions.add(transaction);
-		value += transaction.getValue();
+		value = value.add(transaction.getValue());
 	}
 
-	public long getTotalValue() {
+	public Money getTotalValue() {
 		return value;
 	}
 
