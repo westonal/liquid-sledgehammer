@@ -8,7 +8,7 @@ public abstract class BaseTest {
 		assertFalse(equals(a, b));
 	}
 
-	private static boolean equals(Object a, Object b) {
+	protected static boolean equals(Object a, Object b) {
 		if (a == b)
 			return true;
 		if (a == null)
