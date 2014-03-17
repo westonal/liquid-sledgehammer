@@ -2,25 +2,9 @@ package com.coltsoftware.liquidsledgehammer.collections;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import com.coltsoftware.liquidsledgehammer.BaseTest;
-import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
-
-public final class FinancialTreeNodeTests extends BaseTest {
-
-	private FinancialTreeNode root;
-
-	private FinancialTransaction createTransaction(long value) {
-		return new FinancialTransaction.Builder().date(2014, 5, 1).value(value)
-				.build();
-	}
-
-	@Before
-	public void setup() {
-		root = new FinancialTreeNode();
-	}
+public final class FinancialTreeNodeTests extends FinancialTreeNodeTestsBase {
 
 	@Test
 	public void initial_size() {
@@ -42,7 +26,7 @@ public final class FinancialTreeNodeTests extends BaseTest {
 		assertEquals(2, count(root.getTransactions()));
 		assertEquals(445, root.getTotalValue().getValue());
 	}
-	
+
 	@Test
 	public void can_add_another_tree() {
 		FinancialTreeNode ftn = new FinancialTreeNode();
@@ -51,7 +35,7 @@ public final class FinancialTreeNodeTests extends BaseTest {
 		assertEquals(0, count(root.getTransactions()));
 		assertEquals(100, root.getTotalValue().getValue());
 	}
-	
+
 	@Test
 	public void can_add_two_other_trees() {
 		FinancialTreeNode ftn1 = new FinancialTreeNode();
@@ -62,6 +46,21 @@ public final class FinancialTreeNodeTests extends BaseTest {
 		root.add(ftn2);
 		assertEquals(0, count(root.getTransactions()));
 		assertEquals(300, root.getTotalValue().getValue());
+	}
+
+	@Test
+	public void parent_after_add_tree() {
+		FinancialTreeNode ftn = new FinancialTreeNode();
+		root.add(ftn);
+		assertEquals(root, ftn.getParent());
+	}
+
+	@Test(expected=TreeException.class)
+	public void cant_assign_to_two_parents() {
+		FinancialTreeNode otherRoot = new FinancialTreeNode();
+		FinancialTreeNode ftn = new FinancialTreeNode();		
+		root.add(ftn);
+		otherRoot.add(ftn);
 	}
 
 }
