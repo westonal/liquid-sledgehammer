@@ -44,7 +44,16 @@ public final class FinancialTreeNode {
 		return totalValue;
 	}
 
-	public FinancialTreeNode findOrCreate(String name) {
+	public FinancialTreeNode findOrCreate(String path) {
+		if (path == "")
+			return this;
+		FinancialTreeNode inner = this;
+		for (String name : path.split("\\."))
+			inner = inner.findBySingleName(name);
+		return inner;
+	}
+
+	private FinancialTreeNode findBySingleName(String name) {
 		for (FinancialTreeNode child : children)
 			if (child.getName().equals(name))
 				return child;
