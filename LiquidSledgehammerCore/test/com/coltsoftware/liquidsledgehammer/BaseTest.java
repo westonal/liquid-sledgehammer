@@ -2,6 +2,8 @@ package com.coltsoftware.liquidsledgehammer;
 
 import static org.junit.Assert.assertFalse;
 
+import java.util.Iterator;
+
 public abstract class BaseTest {
 
 	protected static void assertNotEqual(Object a, Object b) {
@@ -14,6 +16,15 @@ public abstract class BaseTest {
 		if (a == null)
 			return false;
 		return a.equals(b);
+	}
+
+	protected static int count(Iterator<?> iterator) {
+		int count = 0;
+		while (iterator.hasNext()) {
+			iterator.next();
+			count++;
+		}
+		return count;
 	}
 
 }

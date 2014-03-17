@@ -2,6 +2,8 @@ package com.coltsoftware.liquidsledgehammer;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+
 import org.junit.Test;
 
 public final class BaseTestTests extends BaseTest {
@@ -39,5 +41,25 @@ public final class BaseTestTests extends BaseTest {
 		assertEquals(a, b);
 		assertNotSame(a, b);
 		assertTrue(equals(a, b));
+	}
+
+	@Test
+	public void can_count_iteratable() {
+		assertEquals(0, count(new ArrayList<Object>().iterator()));
+	}
+
+	@Test
+	public void can_count_iteratable_1() {
+		ArrayList<Integer> arrayList = new ArrayList<Integer>();
+		arrayList.add(1);
+		assertEquals(1, count(arrayList.iterator()));
+	}
+
+	@Test
+	public void can_count_iteratable_2() {
+		ArrayList<Float> arrayList = new ArrayList<Float>();
+		arrayList.add(10f);
+		arrayList.add(20f);
+		assertEquals(2, count(arrayList.iterator()));
 	}
 }
