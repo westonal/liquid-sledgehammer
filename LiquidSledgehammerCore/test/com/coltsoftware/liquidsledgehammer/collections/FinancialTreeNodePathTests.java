@@ -25,6 +25,11 @@ public final class FinancialTreeNodePathTests extends
 	}
 
 	@Test
+	public void can_find_empty_path() {
+		assertEquals(root, root.findOrCreate(""));
+	}
+
+	@Test
 	public void can_find_by_short_path() {
 		FinancialTreeNode ftn = root.findOrCreate("external");
 		assertEquals("external", ftn.getName());
@@ -58,7 +63,6 @@ public final class FinancialTreeNodePathTests extends
 	}
 
 	@Test
-	@Ignore
 	public void can_deep_find() {
 		FinancialTreeNode ftnOneTwo = root.findOrCreate("one.two");
 		FinancialTreeNode ftnOne = root.findOrCreate("one");
