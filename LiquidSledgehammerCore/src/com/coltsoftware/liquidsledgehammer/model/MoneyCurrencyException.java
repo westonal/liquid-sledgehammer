@@ -1,6 +1,8 @@
 package com.coltsoftware.liquidsledgehammer.model;
 
-public class MoneyCurrencyException extends RuntimeException {
+import com.coltsoftware.liquidsledgehammer.BaseException;
+
+public class MoneyCurrencyException extends BaseException {
 
 	private static final long serialVersionUID = 7673728265835455396L;
 

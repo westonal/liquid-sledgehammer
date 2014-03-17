@@ -9,15 +9,28 @@ import com.coltsoftware.liquidsledgehammer.model.Money;
 
 public final class FinancialTreeNode {
 
+	private FinancialTreeNode parent;
+	private final String name;
 	private final FinancialTransactionList transactions = new FinancialTransactionList();
 	private final ArrayList<FinancialTreeNode> children = new ArrayList<FinancialTreeNode>();
+
+	public FinancialTreeNode(String name) {
+		this.name = name;
+	}
+
+	public FinancialTreeNode() {
+		this("");
+	}
 
 	public void add(FinancialTransaction transaction) {
 		transactions.add(transaction);
 	}
 
 	public void add(FinancialTreeNode child) {
+		if (child.getParent() != null)
+			throw new TreeException();
 		children.add(child);
+		child.parent = this;
 	}
 
 	public Iterator<FinancialTransaction> getTransactions() {
@@ -29,6 +42,24 @@ public final class FinancialTreeNode {
 		for (FinancialTreeNode child : children)
 			totalValue = totalValue.add(child.getTotalValue());
 		return totalValue;
+	}
+
+	public FinancialTreeNode findOrCreate(String name) {
+		for (FinancialTreeNode child : children)
+			if (child.getName().equals(name))
+				return child;
+
+		FinancialTreeNode financialTreeNode = new FinancialTreeNode(name);
+		add(financialTreeNode);
+		return financialTreeNode;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public FinancialTreeNode getParent() {
+		return parent;
 	}
 
 }
