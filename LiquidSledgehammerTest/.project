@@ -18,7 +18,7 @@
 		<link>
 			<name>coretest</name>
 			<type>2</type>
-			<location>C:/Users/Alan/Documents/GitHub/liquid-sledgehammer/LiquidSledgehammerCore/test</location>
+			<location>PARENT-1-PROJECT_LOC/LiquidSledgehammerCore/test</location>
 		</link>
 	</linkedResources>
 </projectDescription>
