@@ -18,6 +18,10 @@ public abstract class BaseTest {
 		return a.equals(b);
 	}
 
+	protected static int count(Iterable<?> iterable) {
+		return count(iterable.iterator());
+	}
+
 	protected static int count(Iterator<?> iterator) {
 		int count = 0;
 		while (iterator.hasNext()) {

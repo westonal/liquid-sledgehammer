@@ -44,15 +44,35 @@ public final class BaseTestTests extends BaseTest {
 	}
 
 	@Test
-	public void can_count_iteratable() {
+	public void can_count_iterator() {
 		assertEquals(0, count(new ArrayList<Object>().iterator()));
+	}
+
+	@Test
+	public void can_count_iteratable() {
+		assertEquals(0, count(new ArrayList<Object>()));
+	}
+
+	@Test
+	public void can_count_iterator_1() {
+		ArrayList<Integer> arrayList = new ArrayList<Integer>();
+		arrayList.add(1);
+		assertEquals(1, count(arrayList.iterator()));
 	}
 
 	@Test
 	public void can_count_iteratable_1() {
 		ArrayList<Integer> arrayList = new ArrayList<Integer>();
 		arrayList.add(1);
-		assertEquals(1, count(arrayList.iterator()));
+		assertEquals(1, count(arrayList));
+	}
+
+	@Test
+	public void can_count_iterator_2() {
+		ArrayList<Float> arrayList = new ArrayList<Float>();
+		arrayList.add(10f);
+		arrayList.add(20f);
+		assertEquals(2, count(arrayList.iterator()));
 	}
 
 	@Test
@@ -60,6 +80,6 @@ public final class BaseTestTests extends BaseTest {
 		ArrayList<Float> arrayList = new ArrayList<Float>();
 		arrayList.add(10f);
 		arrayList.add(20f);
-		assertEquals(2, count(arrayList.iterator()));
+		assertEquals(2, count(arrayList));
 	}
 }
