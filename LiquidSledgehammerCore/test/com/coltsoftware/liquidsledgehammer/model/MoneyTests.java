@@ -41,5 +41,25 @@ public final class MoneyTests {
 		Money m = new Money(123, Currency.getInstance(Locale.US));
 		assertEquals(Currency.getInstance(Locale.US), m.getCurrency());
 	}
+	
+	@Test
+	public void is_zero() {
+		assertTrue(new Money(0, Currency.getInstance(Locale.US)).isZero());
+	}
+	
+	@Test
+	public void is_zero_UK() {
+		assertTrue(new Money(0, Currency.getInstance(Locale.UK)).isZero());
+	}
+	
+	@Test
+	public void is_non_zero_positive() {
+		assertFalse(new Money(10, Currency.getInstance(Locale.UK)).isZero());
+	}
+	
+	@Test
+	public void is_non_zero_negative() {
+		assertFalse(new Money(-10, Currency.getInstance(Locale.UK)).isZero());
+	}
 
 }

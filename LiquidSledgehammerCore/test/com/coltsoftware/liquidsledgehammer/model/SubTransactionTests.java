@@ -2,7 +2,8 @@ package com.coltsoftware.liquidsledgehammer.model;
 
 import static org.junit.Assert.*;
 
-import org.joda.time.LocalDate;
+import java.util.Iterator;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,7 +11,7 @@ import com.coltsoftware.liquidsledgehammer.BaseTest;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction.Builder;
 
-public final class SubTransactionTests extends BaseTest{
+public final class SubTransactionTests extends BaseTest {
 
 	private Builder builder;
 
@@ -24,11 +25,59 @@ public final class SubTransactionTests extends BaseTest{
 		FinancialTransaction transaction = builder.value(10000).build();
 		assertEquals(1, count(transaction.getSubTransactions()));
 	}
-	
+
 	@Test
 	public void can_get_single_sub_transaction_and_has_same_value() {
 		FinancialTransaction transaction = builder.value(10000).build();
-		assertEquals(transaction.getValue(), transaction.getSubTransactions().iterator().next().getValue());
+		SubTransaction subTransaction = transaction.getSubTransactions()
+				.iterator().next();
+		assertSame(transaction.getValue(), subTransaction.getValue());
+	}
+
+	@Test
+	public void can_get_single_sub_transaction_and_group_is_empty_string() {
+		FinancialTransaction transaction = builder.value(10000).build();
+		SubTransaction subTransaction = transaction.getSubTransactions()
+				.iterator().next();
+		assertEquals("", subTransaction.getGroup());
+	}
+
+	@Test
+	public void transaction_with_one_group_has_one_sub_transaction_with_same_group() {
+		FinancialTransaction transaction = builder.value(10000)
+				.groupPattern("one").build();
+		assertEquals(1, count(transaction.getSubTransactions()));
+		SubTransaction subTransaction = transaction.getSubTransactions()
+				.iterator().next();
+		assertEquals("one", subTransaction.getGroup());
+	}
+
+	@Test
+	public void transaction_with_two_group_pattern_has_two_sub_transactions() {
+		FinancialTransaction transaction = builder.value(10000)
+				.groupPattern("one=10,two").build();
+		assertEquals(2, count(transaction.getSubTransactions()));
+	}
+
+	@Test
+	public void transaction_with_two_group_pattern_has_sub_transactions_with_correct_group_names() {
+		FinancialTransaction transaction = builder.value(10000)
+				.groupPattern("one=10,two").build();
+		Iterator<SubTransaction> iterator = transaction.getSubTransactions()
+				.iterator();
+		assertEquals("one", iterator.next().getGroup());
+		assertEquals("two", iterator.next().getGroup());
+	}
+
+	@Test
+	public void transaction_with_one_group_with_remainer() {
+		FinancialTransaction transaction = builder.value(10000)
+				.groupPattern("one=10").build();
+		Iterator<SubTransaction> iterator = transaction.getSubTransactions()
+				.iterator();
+		assertEquals("one", iterator.next().getGroup());
+		assertEquals("", iterator.next().getGroup());
+		assertFalse(iterator.hasNext());
 	}
 
 }

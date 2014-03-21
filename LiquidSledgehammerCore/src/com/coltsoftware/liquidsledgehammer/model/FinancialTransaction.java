@@ -6,13 +6,15 @@ import java.util.Locale;
 
 import org.joda.time.LocalDate;
 
+import com.coltsoftware.liquidsledgehammer.collections.GroupValueGenerator;
+import com.coltsoftware.liquidsledgehammer.collections.GroupValues;
 
 public final class FinancialTransaction {
 
 	private final Money value;
-	private String description;
-	private LocalDate date;
-	private String groupPattern;
+	private final String description;
+	private final LocalDate date;
+	private final String groupPattern;
 
 	private FinancialTransaction(Money value, String description,
 			LocalDate date, String groupPattern) {
@@ -78,7 +80,9 @@ public final class FinancialTransaction {
 
 	public Iterable<SubTransaction> getSubTransactions() {
 		ArrayList<SubTransaction> arrayList = new ArrayList<SubTransaction>();
-		arrayList.add(new SubTransaction(this));
+		GroupValues values = new GroupValueGenerator().getGroupValues(this);
+		for (String group : values)
+			arrayList.add(new SubTransaction(this, group));
 		return arrayList;
 	}
 }

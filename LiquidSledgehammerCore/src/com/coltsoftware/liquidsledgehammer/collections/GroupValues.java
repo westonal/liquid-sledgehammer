@@ -1,14 +1,16 @@
 package com.coltsoftware.liquidsledgehammer.collections;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.Iterator;
 
 import com.coltsoftware.liquidsledgehammer.model.Money;
 
-public final class GroupValues {
+public final class GroupValues implements Iterable<String> {
 
 	private Money unassigned;
-	private final Map<String, Money> other = new HashMap<String, Money>();
+	private final ArrayList<String> keysInOrder = new ArrayList<String>();
+	private final HashMap<String, Money> other = new HashMap<String, Money>();
 
 	GroupValues(Money totalValue) {
 		this.unassigned = totalValue;
@@ -29,7 +31,17 @@ public final class GroupValues {
 
 	void pushToGroup(String groupName, Money value) {
 		other.put(groupName, value);
+		keysInOrder.add(groupName);
 		unassigned = unassigned.subtract(value);
+	}
+
+	@Override
+	public Iterator<String> iterator() {
+		ArrayList<String> result = new ArrayList<String>();
+		result.addAll(keysInOrder);
+		if (!unassigned.isZero())
+			result.add("");
+		return result.iterator();
 	}
 
 }

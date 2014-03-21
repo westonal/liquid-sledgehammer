@@ -57,7 +57,7 @@ public final class MoneyEqualityTests extends BaseTest {
 		Money other = null;
 		assertFalse(m.equals(other));
 	}
-	
+
 	@Test
 	public void are_not_equal_due_to_currency() {
 		Money m1 = new Money(123, Currency.getInstance(Locale.UK));
@@ -65,26 +65,33 @@ public final class MoneyEqualityTests extends BaseTest {
 		assertNotEqual(m1, m2);
 		assertNotEqual(m2, m1);
 	}
-	
+
 	@Test
 	public void hash_are_equal() {
 		Money m1 = new Money(2346, Currency.getInstance(Locale.UK));
 		Money m2 = new Money(2346, Currency.getInstance(Locale.UK));
 		assertEquals(m1.hashCode(), m2.hashCode());
 	}
-	
+
 	@Test
 	public void hash_are_not_equal() {
 		Money m1 = new Money(2346, Currency.getInstance(Locale.UK));
 		Money m2 = new Money(1234, Currency.getInstance(Locale.UK));
 		assertNotEqual(m1.hashCode(), m2.hashCode());
 	}
-	
+
 	@Test
 	public void hash_are_not_equal_due_to_currency() {
 		Money m1 = new Money(34734, Currency.getInstance(Locale.UK));
 		Money m2 = new Money(34734, Currency.getInstance(Locale.US));
 		assertNotEqual(m1.hashCode(), m2.hashCode());
+	}
+
+	@Test
+	public void zeros_of_different_currencies_are_not_equal() {
+		Money m1 = new Money(0, Currency.getInstance(Locale.UK));
+		Money m2 = new Money(0, Currency.getInstance(Locale.US));
+		assertNotEqual(m1, m2);
 	}
 
 }

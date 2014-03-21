@@ -5,12 +5,13 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.coltsoftware.liquidsledgehammer.BaseTest;
 import com.coltsoftware.liquidsledgehammer.collections.GroupValueGenerator;
 import com.coltsoftware.liquidsledgehammer.collections.GroupValues;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction.Builder;
 
-public class TransactionGroupTests {
+public final class TransactionGroupTests extends BaseTest{
 
 	private Builder builder;
 	private GroupValueGenerator gvg;
@@ -68,6 +69,36 @@ public class TransactionGroupTests {
 		assertEquals(0, groupValues.getUnassigned().getValue());
 		assertEquals(10, groupValues.get("one").getValue());
 		assertEquals(89, groupValues.get("two").getValue());
+	}
+	
+	@Test
+	public void one_group_value_specified_has_one_value() {
+		GroupValues groupValues = getValues(99, "one");
+		assertEquals(1, count(groupValues));
+	}
+	
+	@Test
+	public void one_group_value_exactly_specified_has_one_value() {
+		GroupValues groupValues = getValues(99, "one=99");
+		assertEquals(1, count(groupValues));
+	}
+	
+	@Test
+	public void one_group_value_exactly_specified_negative_has_one_value() {
+		GroupValues groupValues = getValues(-99, "one=-99");
+		assertEquals(1, count(groupValues));
+	}
+	
+	@Test
+	public void one_group_value_specified_has_two_values() {
+		GroupValues groupValues = getValues(99, "one=10");
+		assertEquals(2, count(groupValues));
+	}
+	
+	@Test
+	public void one_group_value_specified_negative_has_two_values() {
+		GroupValues groupValues = getValues(-99, "one=-10");
+		assertEquals(2, count(groupValues));
 	}
 
 }

@@ -79,4 +79,8 @@ public final class Money {
 		return new Money(value + valueToAdd, theMainCurrency);
 	}
 
+	public boolean isZero() {
+		return value == 0;
+	}
+
 }
