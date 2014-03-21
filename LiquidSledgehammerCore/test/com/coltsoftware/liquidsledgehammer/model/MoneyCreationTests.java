@@ -47,4 +47,12 @@ public final class MoneyCreationTests {
 		Money m2 = Money.fromString("-123.12", Currency.getInstance(Locale.US));
 		assertEquals(m1, m2);
 	}
+
+	@Test
+	public void can_create_huge_value_by_string_with_pence_and_currency() {
+		Money m1 = new Money(123153461231212l, Currency.getInstance(Locale.US));
+		Money m2 = Money.fromString("1231534612312.12",
+				Currency.getInstance(Locale.US));
+		assertEquals(m1, m2);
+	}
 }

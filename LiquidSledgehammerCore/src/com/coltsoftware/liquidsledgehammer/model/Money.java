@@ -20,7 +20,7 @@ public final class Money {
 	}
 
 	public static Money fromString(String value, Currency currency) {
-		long value2 = (long) (Float.parseFloat(value) * getDecimalFraction(currency));
+		long value2 = (long) (Double.parseDouble(value) * getDecimalFraction(currency));
 		return new Money(value2, currency);
 	}
 
