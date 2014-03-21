@@ -3,7 +3,6 @@ package com.coltsoftware.liquidsledgehammer.collections;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public final class FinancialTreeNodePathTests extends
