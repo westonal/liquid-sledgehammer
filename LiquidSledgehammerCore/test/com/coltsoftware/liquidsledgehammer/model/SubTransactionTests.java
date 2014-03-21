@@ -2,7 +2,9 @@ package com.coltsoftware.liquidsledgehammer.model;
 
 import static org.junit.Assert.*;
 
+import java.util.Currency;
 import java.util.Iterator;
+import java.util.Locale;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,11 +15,13 @@ import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction.Builder;
 
 public final class SubTransactionTests extends BaseTest {
 
+	private final Currency usDollars = Currency.getInstance(Locale.US);
 	private Builder builder;
 
 	@Before
 	public void setup() {
-		builder = new FinancialTransaction.Builder().date(2014, 5, 1);
+		builder = new FinancialTransaction.Builder().date(2014, 5, 1).currency(
+				usDollars);
 	}
 
 	@Test
@@ -77,6 +81,21 @@ public final class SubTransactionTests extends BaseTest {
 				.iterator();
 		assertEquals("one", iterator.next().getGroup());
 		assertEquals("", iterator.next().getGroup());
+		assertFalse(iterator.hasNext());
+	}
+
+	@Test
+	public void transaction_with_two_groups_values() {
+		FinancialTransaction transaction = builder.value(25000)
+				.groupPattern("one=150").build();
+		Iterator<SubTransaction> iterator = transaction.getSubTransactions()
+				.iterator();
+		SubTransaction sub = iterator.next();
+		assertEquals("one", sub.getGroup());
+		assertEquals(Money.fromString("150", usDollars), sub.getValue());
+		sub = iterator.next();
+		assertEquals("", sub.getGroup());
+		assertEquals(Money.fromString("100", usDollars), sub.getValue());
 		assertFalse(iterator.hasNext());
 	}
 

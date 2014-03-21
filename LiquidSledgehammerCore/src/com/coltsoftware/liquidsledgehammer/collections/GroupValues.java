@@ -21,6 +21,8 @@ public final class GroupValues implements Iterable<String> {
 	}
 
 	public Money get(String groupName) {
+		if ("".equals(groupName))
+			return unassigned;
 		Money value = other.get(groupName);
 		return value == null ? Money.Zero : value;
 	}

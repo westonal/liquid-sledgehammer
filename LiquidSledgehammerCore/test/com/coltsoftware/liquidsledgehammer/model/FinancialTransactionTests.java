@@ -2,6 +2,9 @@ package com.coltsoftware.liquidsledgehammer.model;
 
 import static org.junit.Assert.*;
 
+import java.util.Currency;
+import java.util.Locale;
+
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,6 +60,21 @@ public class FinancialTransactionTests {
 	public void can_specify_alternative_date_by_y_m_d() {
 		FinancialTransaction transaction = builder.date(2045, 1, 31).build();
 		assertEquals(new LocalDate(2045, 1, 31), transaction.getDate());
+	}
+
+	@Test
+	public void default_currency_if_not_specified() {
+		FinancialTransaction transaction = builder.build();
+		assertEquals(Currency.getInstance(Locale.getDefault()), transaction
+				.getValue().getCurrency());
+	}
+
+	@Test
+	public void can_specify_currency() {
+		FinancialTransaction transaction = builder.currency(
+				Currency.getInstance(Locale.JAPAN)).build();
+		assertEquals(Currency.getInstance(Locale.JAPAN), transaction.getValue()
+				.getCurrency());
 	}
 
 }

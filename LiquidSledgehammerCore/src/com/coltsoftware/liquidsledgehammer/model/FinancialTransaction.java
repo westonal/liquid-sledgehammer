@@ -30,14 +30,14 @@ public final class FinancialTransaction {
 
 	public static class Builder {
 
-		private Money value = Money.Zero;
+		private long value = 0;
 		private String description = "";
 		private LocalDate date;
 		private String groupPattern;
+		private Currency currency;
 
 		public Builder value(long value) {
-			this.value = new Money(value, Currency.getInstance(Locale
-					.getDefault()));
+			this.value = value;
 			return this;
 		}
 
@@ -45,7 +45,10 @@ public final class FinancialTransaction {
 			if (date == null)
 				throw new FinancialTransactionConstructionException();
 
-			return new FinancialTransaction(value, description, date,
+			Money moneyValue = new Money(value, currency != null ? currency
+					: Currency.getInstance(Locale.getDefault()));
+
+			return new FinancialTransaction(moneyValue, description, date,
 					groupPattern);
 		}
 
@@ -61,6 +64,11 @@ public final class FinancialTransaction {
 
 		public Builder groupPattern(String groupPattern) {
 			this.groupPattern = groupPattern;
+			return this;
+		}
+
+		public Builder currency(Currency currency) {
+			this.currency = currency;
 			return this;
 		}
 
@@ -82,7 +90,7 @@ public final class FinancialTransaction {
 		ArrayList<SubTransaction> arrayList = new ArrayList<SubTransaction>();
 		GroupValues values = new GroupValueGenerator().getGroupValues(this);
 		for (String group : values)
-			arrayList.add(new SubTransaction(this, group));
+			arrayList.add(new SubTransaction(this, group, values.get(group)));
 		return arrayList;
 	}
 }

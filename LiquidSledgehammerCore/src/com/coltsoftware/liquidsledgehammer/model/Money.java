@@ -16,7 +16,20 @@ public final class Money {
 	}
 
 	public Money(long value) {
-		this(value, Currency.getInstance(Locale.getDefault()));
+		this(value, defaultCurrency());
+	}
+
+	public static Money fromString(String value, Currency currency) {
+		long value2 = (long) (Float.parseFloat(value) * getDecimalFraction(currency));
+		return new Money(value2, currency);
+	}
+
+	public static Money fromString(String value) {
+		return fromString(value, defaultCurrency());
+	}
+
+	private static Currency defaultCurrency() {
+		return Currency.getInstance(Locale.getDefault());
 	}
 
 	public long getValue() {
@@ -54,12 +67,20 @@ public final class Money {
 		NumberFormat format = NumberFormat.getInstance();
 		format.setMinimumFractionDigits(defaultFractionDigits);
 		format.setMaximumFractionDigits(defaultFractionDigits);
-		double divider = Math.pow(10, defaultFractionDigits);
+		double divider = getDecimalFraction(defaultFractionDigits);
 		double displayValue = Math.abs(value) / divider;
 		String sign = value < 0 ? "-" : "";
 		return String.format("%s%s %s", sign,
 				currency.getSymbol(Locale.getDefault()),
 				format.format(displayValue));
+	}
+
+	private static double getDecimalFraction(Currency currency) {
+		return getDecimalFraction(currency.getDefaultFractionDigits());
+	}
+
+	private static double getDecimalFraction(int defaultFractionDigits) {
+		return Math.pow(10, defaultFractionDigits);
 	}
 
 	public Money subtract(Money otherValue) {

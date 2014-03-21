@@ -3,19 +3,22 @@ package com.coltsoftware.liquidsledgehammer.model;
 public final class SubTransaction {
 
 	private final FinancialTransaction transaction;
-	private String groupPattern;
+	private final String group;
+	private final Money value;
 
-	public SubTransaction(FinancialTransaction transaction, String group) {
+	public SubTransaction(FinancialTransaction transaction, String group,
+			Money value) {
 		this.transaction = transaction;
-		this.groupPattern=group;
+		this.group = group;
+		this.value = value;
 	}
 
 	public Money getValue() {
-		return transaction.getValue();
+		return value;
 	}
 
 	public String getGroup() {
-		return groupPattern;
+		return group;
 	}
 
 }
