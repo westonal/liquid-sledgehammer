@@ -1,5 +1,6 @@
 package com.coltsoftware.liquidsledgehammer.model;
 
+import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Locale;
 
@@ -73,5 +74,11 @@ public final class FinancialTransaction {
 
 	public String getGroupPattern() {
 		return groupPattern;
+	}
+
+	public Iterable<SubTransaction> getSubTransactions() {
+		ArrayList<SubTransaction> arrayList = new ArrayList<SubTransaction>();
+		arrayList.add(new SubTransaction(this));
+		return arrayList;
 	}
 }
