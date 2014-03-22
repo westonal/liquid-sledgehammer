@@ -32,6 +32,8 @@ public final class GroupValues implements Iterable<String> {
 	}
 
 	void pushToGroup(String groupName, Money value) {
+		if (!value.sameSignAs(unassigned))
+			value = value.negate();
 		other.put(groupName, value);
 		keysInOrder.add(groupName);
 		unassigned = unassigned.subtract(value);

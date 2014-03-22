@@ -84,24 +84,50 @@ public final class Money {
 	}
 
 	public Money subtract(Money otherValue) {
+		if (otherValue.isZero())
+			return this;
+		if (isZero())
+			return otherValue.negate();
 		return add(otherValue, -otherValue.value);
 	}
 
+	public Money negate() {
+		return new Money(-value, currency);
+	}
+
 	public Money add(Money otherValue) {
+		if (isZero())
+			return otherValue;
+		if (otherValue.isZero())
+			return this;
 		return add(otherValue, otherValue.value);
 	}
 
 	private Money add(Money otherValue, long valueToAdd) {
-		Currency theMainCurrency = getCurrency();
-
-		if (!theMainCurrency.equals(otherValue.currency))
+		if (!currency.equals(otherValue.currency))
 			throw new MoneyCurrencyException();
 
-		return new Money(value + valueToAdd, theMainCurrency);
+		return new Money(value + valueToAdd, currency);
 	}
 
 	public boolean isZero() {
 		return value == 0;
+	}
+
+	public boolean isNegative() {
+		return value < 0;
+	}
+
+	public boolean isPositive() {
+		return !isNegative();
+	}
+
+	public boolean sameSignAs(Money other) {
+		if (isZero() || other.isZero())
+			return true;
+		if (isNegative() != other.isNegative())
+			return false;
+		return true;
 	}
 
 }
