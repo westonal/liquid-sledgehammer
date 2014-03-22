@@ -11,43 +11,33 @@ public final class MoneyCreationTests extends MoneyTestBase {
 
 	@Test
 	public void can_create_by_string_and_currency() {
-		Money m1 = new Money(12300, gbp);
-		Money m2 = Money.fromString("123", gbp);
-		assertEquals(m1, m2);
+		assertEquals(gbp(12300), Money.fromString("123", gbp));
 	}
 
 	@Test
 	public void can_create_by_string_with_pence_and_currency() {
-		Money m1 = new Money(12312, usd);
-		Money m2 = Money.fromString("123.12", usd);
-		assertEquals(m1, m2);
+		assertEquals(usd(12312), Money.fromString("123.12", usd));
 	}
 
 	@Test
 	public void can_create_yen_by_string_with_pence_and_currency() {
-		Money m1 = new Money(12312, yen);
-		Money m2 = Money.fromString("12312", yen);
-		assertEquals(m1, m2);
+		assertEquals(yen(12312), Money.fromString("12312", yen));
 	}
 
 	@Test
-	public void can_create_sith_default_currency() {
-		Money m1 = Money.fromString("12312", local);
-		Money m2 = Money.fromString("12312");
-		assertEquals(m1, m2);
+	public void can_create_with_default_currency() {
+		assertEquals(Money.fromString("12312", local),
+				Money.fromString("12312"));
 	}
 
 	@Test
 	public void can_create_negative_by_string_with_pence_and_currency() {
-		Money m1 = new Money(-12312, usd);
-		Money m2 = Money.fromString("-123.12", usd);
-		assertEquals(m1, m2);
+		assertEquals(usd(-12312), Money.fromString("-123.12", usd));
 	}
 
 	@Test
 	public void can_create_huge_value_by_string_with_pence_and_currency() {
-		Money m1 = new Money(123153461231212l, usd);
-		Money m2 = Money.fromString("1231534612312.12", usd);
-		assertEquals(m1, m2);
+		assertEquals(usd(123153461231212l),
+				Money.fromString("1231534612312.12", usd));
 	}
 }
