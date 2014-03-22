@@ -65,10 +65,6 @@ public final class FinancialTransaction {
 			return value(new Money(moneyValue.getValue(), currency));
 		}
 
-		public Builder value(long value) {
-			return value(new Money(value, moneyValue.getCurrency()));
-		}
-
 		public Builder value(String value) {
 			return value(value, moneyValue.getCurrency());
 		}

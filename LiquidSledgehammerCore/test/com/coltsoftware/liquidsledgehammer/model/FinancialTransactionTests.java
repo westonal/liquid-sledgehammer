@@ -27,8 +27,8 @@ public final class FinancialTransactionTests extends MoneyTestBase {
 
 	@Test
 	public void can_specifty_transaction_value() {
-		FinancialTransaction transaction = builder.value(1).build();
-		assertEquals(1, transaction.getValue().getValue());
+		FinancialTransaction transaction = builder.value(usd(1)).build();
+		assertEquals(usd(1), transaction.getValue());
 	}
 
 	@Test
@@ -68,14 +68,14 @@ public final class FinancialTransactionTests extends MoneyTestBase {
 
 	@Test
 	public void can_specify_currency() {
-		FinancialTransaction transaction = builder.currency(gbp).value(123)
+		FinancialTransaction transaction = builder.currency(gbp).value("1.23")
 				.currency(usd).build();
 		assertEquals(usd(123), transaction.getValue());
 	}
 
 	@Test
 	public void can_specify_currency_first() {
-		FinancialTransaction transaction = builder.currency(yen).value(123)
+		FinancialTransaction transaction = builder.currency(yen).value("123")
 				.build();
 		assertEquals(yen(123), transaction.getValue());
 	}
