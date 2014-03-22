@@ -2,6 +2,7 @@ package com.coltsoftware.liquidsledgehammer.model;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Locale;
 
@@ -9,8 +10,8 @@ import org.junit.Test;
 
 import com.coltsoftware.liquidsledgehammer.model.Money;
 
-public final class MoneyTests extends MoneyTestBase{	
-	
+public final class MoneyTests extends MoneyTestBase {
+
 	@Test
 	public void can_create_and_read_value() {
 		Money m = new Money(123, gbp);
@@ -96,40 +97,111 @@ public final class MoneyTests extends MoneyTestBase{
 	public void same_sign_two_positives() {
 		assertTrue(new Money(100, gbp).sameSignAs(new Money(100, gbp)));
 	}
-	
+
 	@Test
 	public void same_sign_two_negatives() {
 		assertTrue(new Money(-100, gbp).sameSignAs(new Money(-50, gbp)));
 	}
-	
+
 	@Test
 	public void not_same_sign_first_negative() {
 		assertFalse(new Money(-100, gbp).sameSignAs(new Money(50, gbp)));
 	}
-	
+
 	@Test
 	public void not_same_sign_first_positive() {
 		assertFalse(new Money(123, gbp).sameSignAs(new Money(-412, gbp)));
 	}
-	
+
 	@Test
 	public void zeros_same_sign_as_positive() {
 		assertTrue(new Money(0, gbp).sameSignAs(new Money(412, gbp)));
 	}
-	
+
 	@Test
 	public void zeros_same_sign_as_negative() {
 		assertTrue(new Money(0, gbp).sameSignAs(new Money(-412, gbp)));
 	}
-	
+
 	@Test
 	public void zeros_same_sign_as_positive_zero_second() {
 		assertTrue(new Money(412, gbp).sameSignAs(new Money(0, gbp)));
 	}
-	
+
 	@Test
 	public void zeros_same_sign_as_negative_zero_second() {
 		assertTrue(new Money(-412, gbp).sameSignAs(new Money(0, gbp)));
+	}
+
+	@Test
+	public void same_sign_empty() {
+		ArrayList<Money> moneys = new ArrayList<Money>();
+		assertTrue(Money.allSameSign(moneys));
+		assertTrue(Money.allPositiveOrZero(moneys));
+		assertTrue(Money.allNegativeOrZero(moneys));
+	}
+
+	@Test
+	public void same_sign_set_two_items() {
+		ArrayList<Money> moneys = new ArrayList<Money>();
+		moneys.add(pounds(5));
+		moneys.add(pounds(50));
+		assertTrue(Money.allSameSign(moneys));
+		assertTrue(Money.allPositiveOrZero(moneys));
+		assertFalse(Money.allNegativeOrZero(moneys));
+	}
+
+	@Test
+	public void same_sign_set_two_items_negative() {
+		ArrayList<Money> moneys = new ArrayList<Money>();
+		moneys.add(pounds(-5));
+		moneys.add(pounds(-50));
+		assertTrue(Money.allSameSign(moneys));
+		assertFalse(Money.allPositiveOrZero(moneys));
+		assertTrue(Money.allNegativeOrZero(moneys));
+	}
+
+	@Test
+	public void different_sign_set_two_items() {
+		ArrayList<Money> moneys = new ArrayList<Money>();
+		moneys.add(pounds(5));
+		moneys.add(pounds(-50));
+		assertFalse(Money.allSameSign(moneys));
+		assertFalse(Money.allPositiveOrZero(moneys));
+		assertFalse(Money.allNegativeOrZero(moneys));
+	}
+
+	@Test
+	public void different_sign_set_two_items_with_zero() {
+		ArrayList<Money> moneys = new ArrayList<Money>();
+		moneys.add(pounds(5));
+		moneys.add(pounds(0));
+		moneys.add(pounds(-50));
+		assertFalse(Money.allSameSign(moneys));
+		assertFalse(Money.allPositiveOrZero(moneys));
+		assertFalse(Money.allNegativeOrZero(moneys));
+	}
+
+	@Test
+	public void same_sign_set_two_items_with_zero() {
+		ArrayList<Money> moneys = new ArrayList<Money>();
+		moneys.add(pounds(5));
+		moneys.add(pounds(0));
+		moneys.add(pounds(5));
+		assertTrue(Money.allSameSign(moneys));
+		assertTrue(Money.allPositiveOrZero(moneys));
+		assertFalse(Money.allNegativeOrZero(moneys));
+	}
+
+	@Test
+	public void same_sign_set_two_items_with_zero_negative() {
+		ArrayList<Money> moneys = new ArrayList<Money>();
+		moneys.add(pounds(-5));
+		moneys.add(pounds(0));
+		moneys.add(pounds(-5));
+		assertTrue(Money.allSameSign(moneys));
+		assertFalse(Money.allPositiveOrZero(moneys));
+		assertTrue(Money.allNegativeOrZero(moneys));
 	}
 
 }

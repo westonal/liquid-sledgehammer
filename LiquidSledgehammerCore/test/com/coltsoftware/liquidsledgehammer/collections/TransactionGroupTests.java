@@ -136,7 +136,6 @@ public final class TransactionGroupTests extends BaseTest {
 	}
 
 	@Test
-	@Ignore
 	public void two_groups_mixed_signs() {
 		GroupValues groupValues = getValues(9900, "one=100,two=-1");
 		assertEquals(1, count(groupValues));

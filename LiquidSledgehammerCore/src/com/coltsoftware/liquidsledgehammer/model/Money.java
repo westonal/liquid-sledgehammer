@@ -130,4 +130,22 @@ public final class Money {
 		return true;
 	}
 
+	public static boolean allSameSign(Iterable<Money> monies) {
+		return allPositiveOrZero(monies) || allNegativeOrZero(monies);
+	}
+
+	public static boolean allPositiveOrZero(Iterable<Money> monies) {
+		for (Money money : monies)
+			if (money.isNegative())
+				return false;
+		return true;
+	}
+
+	public static boolean allNegativeOrZero(Iterable<Money> monies) {
+		for (Money money : monies)
+			if (!money.isZero() && money.isPositive())
+				return false;
+		return true;
+	}
+
 }
