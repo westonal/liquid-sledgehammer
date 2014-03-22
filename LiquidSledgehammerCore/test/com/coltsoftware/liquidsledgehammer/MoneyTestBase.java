@@ -13,7 +13,7 @@ public abstract class MoneyTestBase extends BaseTest {
 	protected final Currency euro = Currency.getInstance(Locale.GERMANY);
 	protected final Currency local = Currency.getInstance(Locale.getDefault());
 
-	protected Money pounds(long pence) {
+	protected Money gbp(long pence) {
 		return new Money(pence, gbp);
 	}
 
@@ -27,6 +27,10 @@ public abstract class MoneyTestBase extends BaseTest {
 
 	protected Money euro(long cents) {
 		return new Money(cents, euro);
+	}
+
+	protected Money local(long minorUnit) {
+		return new Money(minorUnit, local);
 	}
 
 }

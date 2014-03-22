@@ -142,8 +142,8 @@ public final class MoneyTests extends MoneyTestBase {
 	@Test
 	public void same_sign_set_two_items() {
 		ArrayList<Money> moneys = new ArrayList<Money>();
-		moneys.add(pounds(5));
-		moneys.add(pounds(50));
+		moneys.add(gbp(5));
+		moneys.add(gbp(50));
 		assertTrue(Money.allSameSign(moneys));
 		assertTrue(Money.allPositiveOrZero(moneys));
 		assertFalse(Money.allNegativeOrZero(moneys));
@@ -152,8 +152,8 @@ public final class MoneyTests extends MoneyTestBase {
 	@Test
 	public void same_sign_set_two_items_negative() {
 		ArrayList<Money> moneys = new ArrayList<Money>();
-		moneys.add(pounds(-5));
-		moneys.add(pounds(-50));
+		moneys.add(gbp(-5));
+		moneys.add(gbp(-50));
 		assertTrue(Money.allSameSign(moneys));
 		assertFalse(Money.allPositiveOrZero(moneys));
 		assertTrue(Money.allNegativeOrZero(moneys));
@@ -162,8 +162,8 @@ public final class MoneyTests extends MoneyTestBase {
 	@Test
 	public void different_sign_set_two_items() {
 		ArrayList<Money> moneys = new ArrayList<Money>();
-		moneys.add(pounds(5));
-		moneys.add(pounds(-50));
+		moneys.add(gbp(5));
+		moneys.add(gbp(-50));
 		assertFalse(Money.allSameSign(moneys));
 		assertFalse(Money.allPositiveOrZero(moneys));
 		assertFalse(Money.allNegativeOrZero(moneys));
@@ -172,9 +172,9 @@ public final class MoneyTests extends MoneyTestBase {
 	@Test
 	public void different_sign_set_two_items_with_zero() {
 		ArrayList<Money> moneys = new ArrayList<Money>();
-		moneys.add(pounds(5));
-		moneys.add(pounds(0));
-		moneys.add(pounds(-50));
+		moneys.add(gbp(5));
+		moneys.add(gbp(0));
+		moneys.add(gbp(-50));
 		assertFalse(Money.allSameSign(moneys));
 		assertFalse(Money.allPositiveOrZero(moneys));
 		assertFalse(Money.allNegativeOrZero(moneys));
@@ -183,9 +183,9 @@ public final class MoneyTests extends MoneyTestBase {
 	@Test
 	public void same_sign_set_two_items_with_zero() {
 		ArrayList<Money> moneys = new ArrayList<Money>();
-		moneys.add(pounds(5));
-		moneys.add(pounds(0));
-		moneys.add(pounds(5));
+		moneys.add(gbp(5));
+		moneys.add(gbp(0));
+		moneys.add(gbp(5));
 		assertTrue(Money.allSameSign(moneys));
 		assertTrue(Money.allPositiveOrZero(moneys));
 		assertFalse(Money.allNegativeOrZero(moneys));
@@ -194,9 +194,9 @@ public final class MoneyTests extends MoneyTestBase {
 	@Test
 	public void same_sign_set_two_items_with_zero_negative() {
 		ArrayList<Money> moneys = new ArrayList<Money>();
-		moneys.add(pounds(-5));
-		moneys.add(pounds(0));
-		moneys.add(pounds(-5));
+		moneys.add(gbp(-5));
+		moneys.add(gbp(0));
+		moneys.add(gbp(-5));
 		assertTrue(Money.allSameSign(moneys));
 		assertFalse(Money.allPositiveOrZero(moneys));
 		assertTrue(Money.allNegativeOrZero(moneys));

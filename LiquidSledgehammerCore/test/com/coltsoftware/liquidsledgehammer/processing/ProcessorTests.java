@@ -68,9 +68,9 @@ public final class ProcessorTests extends MoneyTestBase {
 		resolver.put("hats", "External.Clothing.Headwear");
 		FinancialTransactionList list = new FinancialTransactionList();
 		list.add(new FinancialTransaction.Builder().date(2014, 3, 1)
-				.value(pounds(10000)).groupPattern("holiday").build());
+				.value(gbp(10000)).groupPattern("holiday").build());
 		list.add(new FinancialTransaction.Builder().date(2014, 4, 1)
-				.value(pounds(30000)).groupPattern("hats").build());
+				.value(gbp(30000)).groupPattern("hats").build());
 
 		processor.populateTree(list, root);
 
@@ -78,11 +78,11 @@ public final class ProcessorTests extends MoneyTestBase {
 				.getSubTransactions()));
 		assertEquals(1, count(root.findOrCreate("External.Clothing.Headwear")
 				.getSubTransactions()));
-		assertEquals(pounds(10000), root.findOrCreate("External.Holiday")
+		assertEquals(gbp(10000), root.findOrCreate("External.Holiday")
 				.getTotalValue());
-		assertEquals(pounds(30000),
+		assertEquals(gbp(30000),
 				root.findOrCreate("External.Clothing.Headwear").getTotalValue());
-		assertEquals(pounds(40000), root.getTotalValue());
+		assertEquals(gbp(40000), root.getTotalValue());
 	}
 
 	@Test

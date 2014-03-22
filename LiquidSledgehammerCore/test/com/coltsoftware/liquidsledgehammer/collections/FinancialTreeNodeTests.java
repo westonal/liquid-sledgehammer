@@ -30,10 +30,10 @@ public final class FinancialTreeNodeTests extends FinancialTreeNodeTestsBase {
 	@Test
 	public void can_add_another_tree() {
 		FinancialTreeNode ftn = new FinancialTreeNode();
-		ftn.add(createSubTransaction(pounds(100)));
+		ftn.add(createSubTransaction(gbp(100)));
 		root.add(ftn);
 		assertEquals(0, count(root.getSubTransactions()));
-		assertEquals(pounds(100), root.getTotalValue());
+		assertEquals(gbp(100), root.getTotalValue());
 	}
 
 	@Test

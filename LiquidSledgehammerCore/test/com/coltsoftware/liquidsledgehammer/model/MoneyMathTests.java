@@ -11,149 +11,129 @@ public final class MoneyMathTests extends MoneyTestBase {
 
 	@Test
 	public void can_add_same_currency_us() {
-		Money m1 = new Money(123, usd);
-		Money m2 = new Money(200, usd);
-		Money mtotal = m1.add(m2);
-		assertEquals(323, mtotal.getValue());
-		assertEquals(usd, mtotal.getCurrency());
+		assertEquals(usd(323), usd(123).add(usd(200)));
 	}
 
 	@Test
 	public void can_add_same_currency_uk() {
-		Money m1 = new Money(123, gbp);
-		Money m2 = new Money(200, gbp);
-		Money mtotal = m1.add(m2);
-		assertEquals(323, mtotal.getValue());
-		assertEquals(gbp, mtotal.getCurrency());
+		assertEquals(gbp(323), gbp(123).add(gbp(200)));
 	}
 
 	@Test
 	public void can_subtract_same_currency_us() {
-		Money m1 = new Money(123, usd);
-		Money m2 = new Money(23, usd);
-		Money mtotal = m1.subtract(m2);
-		assertEquals(100, mtotal.getValue());
-		assertEquals(usd, mtotal.getCurrency());
+		assertEquals(usd(100), usd(123).subtract(usd(23)));
 	}
 
 	@Test
 	public void can_subtract_same_currency_uk() {
-		Money m1 = new Money(123, gbp);
-		Money m2 = new Money(23, gbp);
-		Money mtotal = m1.subtract(m2);
-		assertEquals(100, mtotal.getValue());
-		assertEquals(gbp, mtotal.getCurrency());
+		assertEquals(gbp(100), gbp(123).subtract(gbp(23)));
 	}
 
 	@Test(expected = MoneyCurrencyException.class)
 	public void cant_add_same_currency_us() {
-		Money m1 = new Money(123, usd);
-		Money m2 = new Money(200, gbp);
-		m1.add(m2);
+		usd(123).add(gbp(200));
 	}
 
 	@Test(expected = MoneyCurrencyException.class)
 	public void cant_subtract_same_currency_us() {
-		Money m1 = new Money(123, usd);
-		Money m2 = new Money(200, gbp);
-		m1.subtract(m2);
+		usd(123).subtract(gbp(23));
 	}
 
 	@Test
 	public void can_add_to_zero_default_currency() {
-		Money m1 = new Money(123, local);
+		Money m1 = local(123);
 		assertEquals(m1, Money.Zero.add(m1));
 	}
 
 	@Test
 	public void can_add_to_zero_usd() {
-		Money m1 = new Money(123, usd);
+		Money m1 = usd(123);
 		assertEquals(m1, Money.Zero.add(m1));
 	}
 
 	@Test
 	public void can_add_to_zero_yen() {
-		Money m1 = new Money(123, yen);
+		Money m1 = yen(123);
 		assertEquals(m1, Money.Zero.add(m1));
 	}
 
 	@Test
 	public void can_add_to_zero_efficiency_test_usd() {
-		Money m1 = new Money(123, usd);
+		Money m1 = usd(123);
 		assertSame(m1, Money.Zero.add(m1));
 	}
 
 	@Test
 	public void can_add_to_zero_efficiency_test_yen() {
-		Money m1 = new Money(123, yen);
+		Money m1 = yen(123);
 		assertSame(m1, Money.Zero.add(m1));
 	}
 
 	@Test
 	public void can_add_to_custom_zero_efficiency_test_yen() {
-		Money m1 = new Money(123, yen);
-		Money zero = new Money(0, yen);
+		Money m1 = yen(123);
+		Money zero = yen(0);
 		assertSame(m1, zero.add(m1));
 	}
 
 	@Test
 	public void can_add_custom_zero_efficiency_test_yen() {
-		Money m1 = new Money(123, yen);
-		Money zero = new Money(0, yen);
+		Money m1 = yen(123);
+		Money zero = yen(0);
 		assertSame(m1, m1.add(zero));
 	}
 
 	@Test
 	public void can_subtract_from_zero_default_currency() {
-		Money m1 = new Money(123, local);
-		Money m1Negative = new Money(-123, local);
-		assertEquals(m1Negative, Money.Zero.subtract(m1));
+		Money m1 = local(123);
+		Money expected = local(-123);
+		assertEquals(expected, Money.Zero.subtract(m1));
 	}
 
 	@Test
 	public void can_subtract_from_zero_usd() {
-		Money m1 = new Money(123, usd);
-		Money expected = new Money(-123, usd);
+		Money m1 = usd(123);
+		Money expected = usd(-123);
 		assertEquals(expected, Money.Zero.subtract(m1));
 	}
 
 	@Test
 	public void can_subtract_from_zero_yen() {
-		Money m1 = new Money(123, yen);
-		Money expected = new Money(-123, yen);
+		Money m1 = yen(123);
+		Money expected = yen(-123);
 		assertEquals(expected, Money.Zero.subtract(m1));
 	}
 
 	@Test
 	public void can_subtract_zero_efficiency_test() {
-		Money m1 = new Money(123, local);
+		Money m1 = local(123);
 		assertSame(m1, m1.subtract(Money.Zero));
 	}
 
 	@Test
 	public void can_subtract_zero_from_zero_usd_efficiency_test() {
-		Money m1 = new Money(123, usd);
+		Money m1 = usd(123);
 		assertSame(m1, m1.subtract(Money.Zero));
 	}
 
 	@Test
 	public void can_subtract_custom_zero_from_zero_usd_efficiency_test() {
-		Money m1 = new Money(123, usd);
-		Money zero = new Money(0, usd);
+		Money m1 = usd(123);
+		Money zero = usd(0);
 		assertSame(m1, m1.subtract(zero));
 	}
 
 	@Test
 	public void can_negative_positive() {
-		Money m1 = new Money(123, local);
-		Money expected = new Money(-123, local);
+		Money m1 = local(123);
+		Money expected = local(-123);
 		assertEquals(expected, m1.negate());
 	}
 
 	@Test
 	public void can_negative_negative() {
-		Money m1 = new Money(-123, gbp);
-		Money expected = new Money(123, gbp);
+		Money m1 = gbp(123);
+		Money expected = gbp(-123);
 		assertEquals(expected, m1.negate());
 	}
 

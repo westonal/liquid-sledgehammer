@@ -44,9 +44,9 @@ public final class TransactionGroupTests extends MoneyTestBase {
 
 	@Test
 	public void one_group_specified() {
-		GroupValues groupValues = getValues(pounds(99), "one");
+		GroupValues groupValues = getValues(gbp(99), "one");
 		assertTrue(groupValues.getUnassigned().isZero());
-		assertEquals(pounds(99), groupValues.get("one"));
+		assertEquals(gbp(99), groupValues.get("one"));
 	}
 
 	@Test

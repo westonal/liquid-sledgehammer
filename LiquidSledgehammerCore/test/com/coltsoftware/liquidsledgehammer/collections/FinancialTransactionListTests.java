@@ -33,8 +33,8 @@ public final class FinancialTransactionListTests extends MoneyTestBase {
 
 	@Test
 	public void can_add_transaction() {
-		ftl.add(makeTransaction(pounds(123)));
-		assertEquals(pounds(123), ftl.getTotalValue());
+		ftl.add(makeTransaction(gbp(123)));
+		assertEquals(gbp(123), ftl.getTotalValue());
 	}
 
 	@Test

@@ -34,8 +34,8 @@ public final class SubTransactionListTests extends MoneyTestBase {
 
 	@Test
 	public void can_add_transaction() {
-		ftl.add(makeSubTransaction(pounds(123)));
-		assertEquals(pounds(123), ftl.getTotalValue());
+		ftl.add(makeSubTransaction(gbp(123)));
+		assertEquals(gbp(123), ftl.getTotalValue());
 	}
 
 	@Test
