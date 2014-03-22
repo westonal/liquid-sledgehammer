@@ -16,19 +16,18 @@ public final class SubTransactionTests extends MoneyTestBase {
 
 	@Before
 	public void setup() {
-		builder = new FinancialTransaction.Builder().date(2014, 5, 1).currency(
-				usd);
+		builder = new FinancialTransaction.Builder().date(2014, 5, 1);
 	}
 
 	@Test
 	public void can_get_single_sub_transaction() {
-		FinancialTransaction transaction = builder.value(10000).build();
+		FinancialTransaction transaction = builder.value(usd(10000)).build();
 		assertEquals(1, count(transaction.getSubTransactions()));
 	}
 
 	@Test
 	public void can_get_single_sub_transaction_and_has_same_value() {
-		FinancialTransaction transaction = builder.value(10000).build();
+		FinancialTransaction transaction = builder.value(usd(10000)).build();
 		SubTransaction subTransaction = transaction.getSubTransactions()
 				.iterator().next();
 		assertSame(transaction.getValue(), subTransaction.getValue());
@@ -36,7 +35,7 @@ public final class SubTransactionTests extends MoneyTestBase {
 
 	@Test
 	public void can_get_single_sub_transaction_and_group_is_empty_string() {
-		FinancialTransaction transaction = builder.value(10000).build();
+		FinancialTransaction transaction = builder.value(usd(10000)).build();
 		SubTransaction subTransaction = transaction.getSubTransactions()
 				.iterator().next();
 		assertEquals("", subTransaction.getGroup());
@@ -44,7 +43,7 @@ public final class SubTransactionTests extends MoneyTestBase {
 
 	@Test
 	public void transaction_with_one_group_has_one_sub_transaction_with_same_group() {
-		FinancialTransaction transaction = builder.value(10000)
+		FinancialTransaction transaction = builder.value(usd(10000))
 				.groupPattern("one").build();
 		assertEquals(1, count(transaction.getSubTransactions()));
 		SubTransaction subTransaction = transaction.getSubTransactions()
@@ -54,14 +53,14 @@ public final class SubTransactionTests extends MoneyTestBase {
 
 	@Test
 	public void transaction_with_two_group_pattern_has_two_sub_transactions() {
-		FinancialTransaction transaction = builder.value(10000)
+		FinancialTransaction transaction = builder.value(usd(10000))
 				.groupPattern("one=10,two").build();
 		assertEquals(2, count(transaction.getSubTransactions()));
 	}
 
 	@Test
 	public void transaction_with_two_group_pattern_has_sub_transactions_with_correct_group_names() {
-		FinancialTransaction transaction = builder.value(10000)
+		FinancialTransaction transaction = builder.value(usd(10000))
 				.groupPattern("one=10,two").build();
 		Iterator<SubTransaction> iterator = transaction.getSubTransactions()
 				.iterator();
@@ -71,7 +70,7 @@ public final class SubTransactionTests extends MoneyTestBase {
 
 	@Test
 	public void transaction_with_one_group_with_remainer() {
-		FinancialTransaction transaction = builder.value(10000)
+		FinancialTransaction transaction = builder.value(usd(10000))
 				.groupPattern("one=10").build();
 		Iterator<SubTransaction> iterator = transaction.getSubTransactions()
 				.iterator();
@@ -82,7 +81,7 @@ public final class SubTransactionTests extends MoneyTestBase {
 
 	@Test
 	public void transaction_with_two_groups_values() {
-		FinancialTransaction transaction = builder.value(25000)
+		FinancialTransaction transaction = builder.value(usd(25000))
 				.groupPattern("one=150").build();
 		Iterator<SubTransaction> iterator = transaction.getSubTransactions()
 				.iterator();
