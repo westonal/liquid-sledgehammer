@@ -3,15 +3,14 @@ package com.coltsoftware.liquidsledgehammer.collections;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.coltsoftware.liquidsledgehammer.collections.FinancialTransactionList;
-import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.model.Money;
+import com.coltsoftware.liquidsledgehammer.model.SubTransaction;
 
 public final class FinancialTreeNode {
 
 	private FinancialTreeNode parent;
 	private final String name;
-	private final FinancialTransactionList transactions = new FinancialTransactionList();
+	private final SubTransactionList transactions = new SubTransactionList();
 	private final ArrayList<FinancialTreeNode> children = new ArrayList<FinancialTreeNode>();
 
 	public FinancialTreeNode(String name) {
@@ -22,7 +21,7 @@ public final class FinancialTreeNode {
 		this("");
 	}
 
-	public void add(FinancialTransaction transaction) {
+	public void add(SubTransaction transaction) {
 		transactions.add(transaction);
 	}
 
@@ -33,7 +32,7 @@ public final class FinancialTreeNode {
 		child.parent = this;
 	}
 
-	public Iterator<FinancialTransaction> getTransactions() {
+	public Iterator<SubTransaction> getSubTransactions() {
 		return transactions.iterator();
 	}
 

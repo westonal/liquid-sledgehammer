@@ -43,7 +43,7 @@ public final class FinancialTreeNodePathTests extends
 	@Test
 	public void found_element_exists_on_root() {
 		FinancialTreeNode ftn = root.findOrCreate("external");
-		ftn.add(createTransaction(300));
+		ftn.add(createSubTransaction(usd(300)));
 		assertEquals(ftn.getTotalValue(), root.getTotalValue());
 	}
 

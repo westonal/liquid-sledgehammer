@@ -23,8 +23,8 @@ public final class TransactionGroupTests extends MoneyTestBase {
 		gvg = new GroupValueGenerator();
 	}
 
-	private GroupValues getValues(long value, String pattern) {
-		FinancialTransaction transaction = builder.value(value).currency(euro)
+	private GroupValues getValues(Money value, String pattern) {
+		FinancialTransaction transaction = builder.value(value)
 				.groupPattern(pattern).build();
 		GroupValues groupValues = gvg.getGroupValues(transaction);
 		return groupValues;
@@ -32,26 +32,26 @@ public final class TransactionGroupTests extends MoneyTestBase {
 
 	@Test
 	public void no_groups_specified() {
-		GroupValues groupValues = getValues(99, null);
-		assertEquals(99, groupValues.getUnassigned().getValue());
+		GroupValues groupValues = getValues(usd(99), null);
+		assertEquals(usd(99), groupValues.getUnassigned());
 	}
 
 	@Test
 	public void value_of_unknown_group() {
-		GroupValues groupValues = getValues(99, null);
-		assertEquals(0, groupValues.get("one").getValue());
+		GroupValues groupValues = getValues(usd(99), null);
+		assertTrue(groupValues.get("one").isZero());
 	}
 
 	@Test
 	public void one_group_specified() {
-		GroupValues groupValues = getValues(99, "one");
-		assertEquals(0, groupValues.getUnassigned().getValue());
-		assertEquals(99, groupValues.get("one").getValue());
+		GroupValues groupValues = getValues(pounds(99), "one");
+		assertTrue(groupValues.getUnassigned().isZero());
+		assertEquals(pounds(99), groupValues.get("one"));
 	}
 
 	@Test
 	public void value_to_one_group_specified() {
-		GroupValues groupValues = getValues(9900, "one=10");
+		GroupValues groupValues = getValues(euro(9900), "one=10");
 		assertEquals(Money.fromString("89", euro), groupValues.getUnassigned());
 		assertEquals(Money.fromString("10", euro), groupValues.get("one"));
 		assertEquals(Money.fromString("89", euro), groupValues.get(""));
@@ -59,7 +59,7 @@ public final class TransactionGroupTests extends MoneyTestBase {
 
 	@Test
 	public void value_to_two_groups_specified() {
-		GroupValues groupValues = getValues(9900, "one=10,two=30");
+		GroupValues groupValues = getValues(euro(9900), "one=10,two=30");
 		assertEquals(Money.fromString("59", euro), groupValues.getUnassigned());
 		assertEquals(Money.fromString("10", euro), groupValues.get("one"));
 		assertEquals(Money.fromString("30", euro), groupValues.get("two"));
@@ -68,7 +68,7 @@ public final class TransactionGroupTests extends MoneyTestBase {
 
 	@Test
 	public void value_to_two_groups_one_specified() {
-		GroupValues groupValues = getValues(9900, "one=10,two");
+		GroupValues groupValues = getValues(euro(9900), "one=10,two");
 		assertEquals(Money.fromString("0", euro), groupValues.getUnassigned());
 		assertEquals(Money.fromString("10", euro), groupValues.get("one"));
 		assertEquals(Money.fromString("89", euro), groupValues.get("two"));
@@ -77,44 +77,44 @@ public final class TransactionGroupTests extends MoneyTestBase {
 
 	@Test
 	public void one_group_value_specified_has_one_value() {
-		GroupValues groupValues = getValues(99, "one");
+		GroupValues groupValues = getValues(euro(99), "one");
 		assertEquals(1, count(groupValues));
 	}
 
 	@Test
 	public void one_group_value_exactly_specified_has_one_value() {
-		GroupValues groupValues = getValues(9900, "one=99");
+		GroupValues groupValues = getValues(euro(9900), "one=99");
 		assertEquals(1, count(groupValues));
 	}
 
 	@Test
 	public void one_group_value_exactly_specified_has_one_value_specified_with_incorrect_sign() {
-		GroupValues groupValues = getValues(9900, "one=-99");
+		GroupValues groupValues = getValues(euro(9900), "one=-99");
 		assertEquals(1, count(groupValues));
 		assertEquals(Money.fromString("99", euro), groupValues.get("one"));
 	}
 
 	@Test
 	public void one_group_value_exactly_specified_negative_has_one_value() {
-		GroupValues groupValues = getValues(-9900, "one=-99");
+		GroupValues groupValues = getValues(euro(-9900), "one=-99");
 		assertEquals(1, count(groupValues));
 	}
 
 	@Test
 	public void one_group_value_specified_has_two_values() {
-		GroupValues groupValues = getValues(99, "one=10");
+		GroupValues groupValues = getValues(euro(99), "one=10");
 		assertEquals(2, count(groupValues));
 	}
 
 	@Test
 	public void one_group_value_specified_negative_has_two_values() {
-		GroupValues groupValues = getValues(-99, "one=-10");
+		GroupValues groupValues = getValues(euro(-99), "one=-10");
 		assertEquals(2, count(groupValues));
 	}
 
 	@Test
 	public void one_group_but_overshoots_the_available() {
-		GroupValues groupValues = getValues(9900, "one=100");
+		GroupValues groupValues = getValues(euro(9900), "one=100");
 		assertEquals(2, count(groupValues));
 		assertEquals(Money.fromString("-1", euro), groupValues.getUnassigned());
 		assertEquals(Money.fromString("100", euro), groupValues.get("one"));
@@ -123,7 +123,7 @@ public final class TransactionGroupTests extends MoneyTestBase {
 
 	@Test
 	public void one_group_but_overshoots_the_available_negative() {
-		GroupValues groupValues = getValues(-9900, "one=-100");
+		GroupValues groupValues = getValues(euro(-9900), "one=-100");
 		assertEquals(2, count(groupValues));
 		assertEquals(Money.fromString("1", euro), groupValues.getUnassigned());
 		assertEquals(Money.fromString("-100", euro), groupValues.get("one"));
@@ -132,7 +132,7 @@ public final class TransactionGroupTests extends MoneyTestBase {
 
 	@Test
 	public void two_groups_mixed_signs() {
-		GroupValues groupValues = getValues(9900, "one=100,two=-1");
+		GroupValues groupValues = getValues(euro(9900), "one=100,two=-1");
 		assertEquals(1, count(groupValues));
 		assertEquals(Money.fromString("99", euro), groupValues.getUnassigned());
 		assertEquals(Money.fromString("99", euro), groupValues.get(""));

@@ -25,4 +25,8 @@ public abstract class MoneyTestBase extends BaseTest {
 		return new Money(yenValue, yen);
 	}
 
+	protected Money euro(long cents) {
+		return new Money(cents, euro);
+	}
+
 }

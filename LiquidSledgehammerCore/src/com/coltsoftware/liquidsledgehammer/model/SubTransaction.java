@@ -21,4 +21,8 @@ public final class SubTransaction {
 		return group;
 	}
 
+	public FinancialTransaction getTransaction() {
+		return transaction;
+	}
+
 }

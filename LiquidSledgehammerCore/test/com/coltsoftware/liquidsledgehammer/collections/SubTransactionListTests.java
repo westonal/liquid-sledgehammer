@@ -8,22 +8,23 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.coltsoftware.liquidsledgehammer.MoneyTestBase;
-import com.coltsoftware.liquidsledgehammer.collections.FinancialTransactionList;
+import com.coltsoftware.liquidsledgehammer.collections.SubTransactionList;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.model.Money;
+import com.coltsoftware.liquidsledgehammer.model.SubTransaction;
 
-public final class FinancialTransactionListTests extends MoneyTestBase {
+public final class SubTransactionListTests extends MoneyTestBase {
 
-	private FinancialTransactionList ftl;
+	private SubTransactionList ftl;
 
-	private static FinancialTransaction makeTransaction(Money value) {
+	private static SubTransaction makeSubTransaction(Money value) {
 		return new FinancialTransaction.Builder().date(2014, 3, 1).value(value)
-				.build();
+				.build().getSubTransactions().iterator().next();
 	}
 
 	@Before
 	public void setup() {
-		ftl = new FinancialTransactionList();
+		ftl = new SubTransactionList();
 	}
 
 	@Test
@@ -33,23 +34,23 @@ public final class FinancialTransactionListTests extends MoneyTestBase {
 
 	@Test
 	public void can_add_transaction() {
-		ftl.add(makeTransaction(pounds(123)));
+		ftl.add(makeSubTransaction(pounds(123)));
 		assertEquals(pounds(123), ftl.getTotalValue());
 	}
 
 	@Test
 	public void can_add_two_transactions() {
-		ftl.add(makeTransaction(usd(123)));
-		ftl.add(makeTransaction(usd(100)));
+		ftl.add(makeSubTransaction(usd(123)));
+		ftl.add(makeSubTransaction(usd(100)));
 		assertEquals(usd(223), ftl.getTotalValue());
 	}
 
 	@Test
 	public void can_loop_single_transaction() {
-		FinancialTransaction newTransaction = makeTransaction(yen(123));
+		SubTransaction newTransaction = makeSubTransaction(yen(123));
 		ftl.add(newTransaction);
 		int count = 0;
-		for (FinancialTransaction transaction : ftl) {
+		for (SubTransaction transaction : ftl) {
 			assertSame(newTransaction, transaction);
 			count++;
 		}
@@ -58,12 +59,12 @@ public final class FinancialTransactionListTests extends MoneyTestBase {
 
 	@Test
 	public void can_loop_two_transactions_in_order() {
-		FinancialTransaction newTransaction1 = makeTransaction(yen(100));
-		FinancialTransaction newTransaction2 = makeTransaction(yen(200));
+		SubTransaction newTransaction1 = makeSubTransaction(yen(100));
+		SubTransaction newTransaction2 = makeSubTransaction(yen(200));
 		ftl.add(newTransaction1);
 		ftl.add(newTransaction2);
-		ArrayList<FinancialTransaction> results = new ArrayList<FinancialTransaction>();
-		for (FinancialTransaction transaction : ftl)
+		ArrayList<SubTransaction> results = new ArrayList<SubTransaction>();
+		for (SubTransaction transaction : ftl)
 			results.add(transaction);
 		assertEquals(2, results.size());
 		assertEquals(newTransaction1, results.get(0));
