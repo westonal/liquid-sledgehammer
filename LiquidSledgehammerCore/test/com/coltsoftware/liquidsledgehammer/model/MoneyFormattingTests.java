@@ -9,24 +9,21 @@ import org.junit.Test;
 
 import com.coltsoftware.liquidsledgehammer.model.Money;
 
-public final class MoneyFormattingTests {
+public final class MoneyFormattingTests extends MoneyTestBase {
 
 	@Test
 	public void can_format_money_as_string() {
-		assertEquals("£ 1.23",
-				new Money(123, Currency.getInstance(Locale.UK)).toString());
+		assertEquals("£ 1.23", new Money(123, gbp).toString());
 	}
 
 	@Test
 	public void can_format_negative_money_as_string() {
-		assertEquals("-£ 1.23",
-				new Money(-123, Currency.getInstance(Locale.UK)).toString());
+		assertEquals("-£ 1.23", new Money(-123, gbp).toString());
 	}
 
 	@Test
 	public void can_format_money_with_no_penny_as_string() {
-		assertEquals("£ 1.00",
-				new Money(100, Currency.getInstance(Locale.UK)).toString());
+		assertEquals("£ 1.00", new Money(100, gbp).toString());
 	}
 
 	@Test

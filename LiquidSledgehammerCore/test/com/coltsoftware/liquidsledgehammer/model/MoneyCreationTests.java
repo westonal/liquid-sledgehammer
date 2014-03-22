@@ -9,19 +9,19 @@ import org.junit.Test;
 
 import com.coltsoftware.liquidsledgehammer.model.Money;
 
-public final class MoneyCreationTests {
+public final class MoneyCreationTests extends MoneyTestBase {
 
 	@Test
 	public void can_create_by_string_and_currency() {
-		Money m1 = new Money(12300, Currency.getInstance(Locale.UK));
-		Money m2 = Money.fromString("123", Currency.getInstance(Locale.UK));
+		Money m1 = new Money(12300, gbp);
+		Money m2 = Money.fromString("123", gbp);
 		assertEquals(m1, m2);
 	}
 
 	@Test
 	public void can_create_by_string_with_pence_and_currency() {
-		Money m1 = new Money(12312, Currency.getInstance(Locale.US));
-		Money m2 = Money.fromString("123.12", Currency.getInstance(Locale.US));
+		Money m1 = new Money(12312, usd);
+		Money m2 = Money.fromString("123.12", usd);
 		assertEquals(m1, m2);
 	}
 
@@ -43,16 +43,15 @@ public final class MoneyCreationTests {
 
 	@Test
 	public void can_create_negative_by_string_with_pence_and_currency() {
-		Money m1 = new Money(-12312, Currency.getInstance(Locale.US));
-		Money m2 = Money.fromString("-123.12", Currency.getInstance(Locale.US));
+		Money m1 = new Money(-12312, usd);
+		Money m2 = Money.fromString("-123.12", usd);
 		assertEquals(m1, m2);
 	}
 
 	@Test
 	public void can_create_huge_value_by_string_with_pence_and_currency() {
-		Money m1 = new Money(123153461231212l, Currency.getInstance(Locale.US));
-		Money m2 = Money.fromString("1231534612312.12",
-				Currency.getInstance(Locale.US));
+		Money m1 = new Money(123153461231212l, usd);
+		Money m2 = Money.fromString("1231534612312.12", usd);
 		assertEquals(m1, m2);
 	}
 }
