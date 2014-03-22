@@ -2,7 +2,6 @@ package com.coltsoftware.liquidsledgehammer.model;
 
 import java.util.ArrayList;
 import java.util.Currency;
-import java.util.Locale;
 
 import org.joda.time.LocalDate;
 
@@ -30,23 +29,14 @@ public final class FinancialTransaction {
 
 	public static class Builder {
 
-		private long value = 0;
+		private Money moneyValue = Money.Zero;
 		private String description = "";
 		private LocalDate date;
 		private String groupPattern;
-		private Currency currency;
-
-		public Builder value(long value) {
-			this.value = value;
-			return this;
-		}
 
 		public FinancialTransaction build() {
 			if (date == null)
 				throw new FinancialTransactionConstructionException();
-
-			Money moneyValue = new Money(value, currency != null ? currency
-					: Currency.getInstance(Locale.getDefault()));
 
 			return new FinancialTransaction(moneyValue, description, date,
 					groupPattern);
@@ -68,7 +58,27 @@ public final class FinancialTransaction {
 		}
 
 		public Builder currency(Currency currency) {
-			this.currency = currency;
+			if (!moneyValue.isZero()
+					&& currency.getDefaultFractionDigits() != moneyValue
+							.getCurrency().getDefaultFractionDigits())
+				throw new FinancialTransactionConstructionException();
+			return value(new Money(moneyValue.getValue(), currency));
+		}
+
+		public Builder value(long value) {
+			return value(new Money(value, moneyValue.getCurrency()));
+		}
+
+		public Builder value(String value) {
+			return value(value, moneyValue.getCurrency());
+		}
+
+		public Builder value(String value, Currency currency) {
+			return value(Money.fromString(value, currency));
+		}
+
+		public Builder value(Money money) {
+			moneyValue = money;
 			return this;
 		}
 

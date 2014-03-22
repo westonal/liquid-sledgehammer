@@ -3,11 +3,9 @@ package com.coltsoftware.liquidsledgehammer.model;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.Currency;
-import java.util.Locale;
-
 import org.junit.Test;
 
+import com.coltsoftware.liquidsledgehammer.MoneyTestBase;
 import com.coltsoftware.liquidsledgehammer.model.Money;
 
 public final class MoneyTests extends MoneyTestBase {
@@ -22,7 +20,7 @@ public final class MoneyTests extends MoneyTestBase {
 	public void can_create_and_read_value_without_specifying_currency() {
 		Money m = new Money(50);
 		assertEquals(50, m.getValue());
-		assertEquals(m.getCurrency(), Currency.getInstance(Locale.getDefault()));
+		assertEquals(m.getCurrency(), local);
 	}
 
 	@Test

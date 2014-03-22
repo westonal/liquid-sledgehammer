@@ -2,26 +2,22 @@ package com.coltsoftware.liquidsledgehammer.model;
 
 import static org.junit.Assert.*;
 
-import java.util.Currency;
 import java.util.Iterator;
-import java.util.Locale;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import com.coltsoftware.liquidsledgehammer.BaseTest;
+import com.coltsoftware.liquidsledgehammer.MoneyTestBase;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction.Builder;
 
-public final class SubTransactionTests extends BaseTest {
+public final class SubTransactionTests extends MoneyTestBase {
 
-	private final Currency usDollars = Currency.getInstance(Locale.US);
 	private Builder builder;
 
 	@Before
 	public void setup() {
 		builder = new FinancialTransaction.Builder().date(2014, 5, 1).currency(
-				usDollars);
+				usd);
 	}
 
 	@Test
@@ -92,10 +88,10 @@ public final class SubTransactionTests extends BaseTest {
 				.iterator();
 		SubTransaction sub = iterator.next();
 		assertEquals("one", sub.getGroup());
-		assertEquals(Money.fromString("150", usDollars), sub.getValue());
+		assertEquals(Money.fromString("150", usd), sub.getValue());
 		sub = iterator.next();
 		assertEquals("", sub.getGroup());
-		assertEquals(Money.fromString("100", usDollars), sub.getValue());
+		assertEquals(Money.fromString("100", usd), sub.getValue());
 		assertFalse(iterator.hasNext());
 	}
 

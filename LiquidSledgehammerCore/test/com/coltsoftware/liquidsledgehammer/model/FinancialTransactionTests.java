@@ -2,17 +2,15 @@ package com.coltsoftware.liquidsledgehammer.model;
 
 import static org.junit.Assert.*;
 
-import java.util.Currency;
-import java.util.Locale;
-
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.coltsoftware.liquidsledgehammer.MoneyTestBase;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction.Builder;
 
-public class FinancialTransactionTests {
+public final class FinancialTransactionTests extends MoneyTestBase {
 
 	private Builder builder;
 
@@ -65,16 +63,45 @@ public class FinancialTransactionTests {
 	@Test
 	public void default_currency_if_not_specified() {
 		FinancialTransaction transaction = builder.build();
-		assertEquals(Currency.getInstance(Locale.getDefault()), transaction
-				.getValue().getCurrency());
+		assertEquals(local, transaction.getValue().getCurrency());
 	}
 
 	@Test
 	public void can_specify_currency() {
-		FinancialTransaction transaction = builder.currency(
-				Currency.getInstance(Locale.JAPAN)).build();
-		assertEquals(Currency.getInstance(Locale.JAPAN), transaction.getValue()
-				.getCurrency());
+		FinancialTransaction transaction = builder.currency(gbp).value(123)
+				.currency(usd).build();
+		assertEquals(usd(123), transaction.getValue());
+	}
+
+	@Test
+	public void can_specify_currency_first() {
+		FinancialTransaction transaction = builder.currency(yen).value(123)
+				.build();
+		assertEquals(yen(123), transaction.getValue());
+	}
+
+	@Test
+	public void can_set_whole_value() {
+		FinancialTransaction transaction = builder.value(usd(99)).build();
+		assertEquals(usd(99), transaction.getValue());
+	}
+
+	@Test
+	public void can_set_whole_value_by_string() {
+		FinancialTransaction transaction = builder.currency(yen).value("99")
+				.build();
+		assertEquals(yen(99), transaction.getValue());
+	}
+
+	@Test
+	public void can_set_whole_value_by_string_and_currency() {
+		FinancialTransaction transaction = builder.value("99", yen).build();
+		assertEquals(yen(99), transaction.getValue());
+	}
+
+	@Test(expected = FinancialTransactionConstructionException.class)
+	public void cant_change_currency_if_number_of_decimal_places_differes() {
+		builder.currency(usd).value("99").currency(yen).build();
 	}
 
 }

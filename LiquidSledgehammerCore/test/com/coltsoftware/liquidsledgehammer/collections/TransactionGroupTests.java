@@ -2,25 +2,20 @@ package com.coltsoftware.liquidsledgehammer.collections;
 
 import static org.junit.Assert.*;
 
-import java.util.Currency;
-import java.util.Locale;
-
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import com.coltsoftware.liquidsledgehammer.BaseTest;
+import com.coltsoftware.liquidsledgehammer.MoneyTestBase;
 import com.coltsoftware.liquidsledgehammer.collections.GroupValueGenerator;
 import com.coltsoftware.liquidsledgehammer.collections.GroupValues;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.model.Money;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction.Builder;
 
-public final class TransactionGroupTests extends BaseTest {
+public final class TransactionGroupTests extends MoneyTestBase {
 
 	private Builder builder;
 	private GroupValueGenerator gvg;
-	private final Currency euro = Currency.getInstance(Locale.GERMANY);
 
 	@Before
 	public void setup() {

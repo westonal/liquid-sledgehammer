@@ -1,19 +1,18 @@
 package com.coltsoftware.liquidsledgehammer.processing;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.Mock;
 
-import com.coltsoftware.liquidsledgehammer.BaseTest;
+import com.coltsoftware.liquidsledgehammer.MoneyTestBase;
 import com.coltsoftware.liquidsledgehammer.collections.AliasPathResolver;
 import com.coltsoftware.liquidsledgehammer.collections.FinancialTransactionList;
 import com.coltsoftware.liquidsledgehammer.collections.FinancialTreeNode;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 
-import static org.junit.Assert.*;
-
-public final class ProcessorTests extends BaseTest {
+public final class ProcessorTests extends MoneyTestBase {
 
 	private Processor processor;
 	private AliasPathResolver resolver;
@@ -50,19 +49,19 @@ public final class ProcessorTests extends BaseTest {
 				.getTotalValue().getValue());
 		assertEquals(10000, root.getTotalValue().getValue());
 	}
-	
+
 	@Test
 	public void same_transaction_is_in_the_tree() {
 		resolver.put("holiday", "External.Holiday");
 		FinancialTransactionList list = new FinancialTransactionList();
-		FinancialTransaction transaction = new FinancialTransaction.Builder().date(2014, 3, 1)
-				.value(10000).groupPattern("holiday").build();
+		FinancialTransaction transaction = new FinancialTransaction.Builder()
+				.date(2014, 3, 1).value(10000).groupPattern("holiday").build();
 		list.add(transaction);
 		processor.populateTree(list, root);
 		assertEquals(transaction, root.findOrCreate("External.Holiday")
 				.getTransactions().next());
 	}
-	
+
 	@Test
 	public void can_populate_tree_with_two_items() {
 		resolver.put("holiday", "External.Holiday");
@@ -85,7 +84,7 @@ public final class ProcessorTests extends BaseTest {
 				.getTotalValue().getValue());
 		assertEquals(40000, root.getTotalValue().getValue());
 	}
-	
+
 	@Test
 	@Ignore
 	public void can_populate_tree_with_one_item_with_complex_group() {
@@ -101,8 +100,8 @@ public final class ProcessorTests extends BaseTest {
 				.getTransactions()));
 		assertEquals(1, count(root.findOrCreate("External.Clothing.Headwear")
 				.getTransactions()));
-		assertEquals(300, root.findOrCreate("External.Holiday")
-				.getTotalValue().getValue());
+		assertEquals(300, root.findOrCreate("External.Holiday").getTotalValue()
+				.getValue());
 		assertEquals(700, root.findOrCreate("External.Clothing.Headwear")
 				.getTotalValue().getValue());
 		assertEquals(10000, root.getTotalValue().getValue());
