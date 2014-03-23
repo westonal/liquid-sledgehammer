@@ -18,7 +18,7 @@
 		<link>
 			<name>coretest</name>
 			<type>2</type>
-			<location>PARENT-1-PROJECT_LOC/LiquidSledgehammerCore/test</location>
+			<locationURI>PARENT-1-PROJECT_LOC/LiquidSledgehammerCore/test</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

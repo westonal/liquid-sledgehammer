@@ -1,6 +1,6 @@
 package com.coltsoftware.liquidsledgehammer;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 import java.util.Iterator;
 
@@ -23,6 +23,7 @@ public abstract class BaseTest {
 	}
 
 	protected static int count(Iterator<?> iterator) {
+		assertNotNull(iterator);
 		int count = 0;
 		while (iterator.hasNext()) {
 			iterator.next();
