@@ -20,8 +20,31 @@ public final class Money {
 	}
 
 	public static Money fromString(String value, Currency currency) {
-		long value2 = (long) (Double.parseDouble(value) * getDecimalFraction(currency));
+		int idx = value.lastIndexOf('.');
+		int decimalPlacesSeen;
+		if (idx == -1)
+			decimalPlacesSeen = 0;
+		else
+			decimalPlacesSeen = value.length() - idx - 1;
+		value += zerosForCurrency(currency, decimalPlacesSeen);
+		value = value.replaceFirst("\\.", "");
+		long value2 = (long) (Double.parseDouble(value));
 		return new Money(value2, currency);
+	}
+
+	private static String zerosForCurrency(Currency currency,
+			int decimalPlacesSeen) {
+		int n = currency.getDefaultFractionDigits();
+		int decimalPlacesToAdd = n - decimalPlacesSeen;
+		if (decimalPlacesToAdd < 0)
+			throw new MoneyFromStringException();
+		return nZeros(decimalPlacesToAdd);
+	}
+
+	private static String nZeros(int n) {
+		if (n == 0)
+			return "";
+		return String.format(String.format("%%0%dd", n), 0);
 	}
 
 	public static Money fromString(String value) {
