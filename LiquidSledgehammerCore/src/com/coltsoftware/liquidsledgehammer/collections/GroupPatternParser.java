@@ -6,7 +6,7 @@ import java.util.HashMap;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.model.Money;
 
-public final class GroupValueGenerator {
+public final class GroupPatternParser {
 
 	public GroupValues getGroupValues(FinancialTransaction transaction) {
 		String groupPattern = transaction.getGroupPattern();

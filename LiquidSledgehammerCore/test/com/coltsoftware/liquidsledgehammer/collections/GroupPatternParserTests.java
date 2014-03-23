@@ -6,21 +6,21 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.coltsoftware.liquidsledgehammer.MoneyTestBase;
-import com.coltsoftware.liquidsledgehammer.collections.GroupValueGenerator;
+import com.coltsoftware.liquidsledgehammer.collections.GroupPatternParser;
 import com.coltsoftware.liquidsledgehammer.collections.GroupValues;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.model.Money;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction.Builder;
 
-public final class TransactionGroupTests extends MoneyTestBase {
+public final class GroupPatternParserTests extends MoneyTestBase {
 
 	private Builder builder;
-	private GroupValueGenerator gvg;
+	private GroupPatternParser gvg;
 
 	@Before
 	public void setup() {
 		builder = new FinancialTransaction.Builder().date(2014, 5, 1);
-		gvg = new GroupValueGenerator();
+		gvg = new GroupPatternParser();
 	}
 
 	private GroupValues getValues(Money value, String pattern) {

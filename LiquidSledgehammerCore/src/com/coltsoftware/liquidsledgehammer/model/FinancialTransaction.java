@@ -5,7 +5,7 @@ import java.util.Currency;
 
 import org.joda.time.LocalDate;
 
-import com.coltsoftware.liquidsledgehammer.collections.GroupValueGenerator;
+import com.coltsoftware.liquidsledgehammer.collections.GroupPatternParser;
 import com.coltsoftware.liquidsledgehammer.collections.GroupValues;
 
 public final class FinancialTransaction {
@@ -94,7 +94,7 @@ public final class FinancialTransaction {
 
 	public Iterable<SubTransaction> getSubTransactions() {
 		ArrayList<SubTransaction> arrayList = new ArrayList<SubTransaction>();
-		GroupValues values = new GroupValueGenerator().getGroupValues(this);
+		GroupValues values = new GroupPatternParser().getGroupValues(this);
 		for (String group : values)
 			arrayList.add(new SubTransaction(this, group, values.get(group)));
 		return arrayList;
