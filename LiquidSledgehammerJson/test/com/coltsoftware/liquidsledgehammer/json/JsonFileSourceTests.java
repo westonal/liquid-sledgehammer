@@ -1,4 +1,4 @@
-package com.coltsoftware.liquidsledgehammer.sources;
+package com.coltsoftware.liquidsledgehammer.json;
 
 import static org.junit.Assert.assertEquals;
 
@@ -11,7 +11,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.coltsoftware.liquidsledgehammer.MoneyTestBase;
+import com.coltsoftware.liquidsledgehammer.json.JsonStreamTransactionSource;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
+import com.coltsoftware.liquidsledgehammer.sources.FinancialTransactionSource;
 
 public final class JsonFileSourceTests extends MoneyTestBase {
 
