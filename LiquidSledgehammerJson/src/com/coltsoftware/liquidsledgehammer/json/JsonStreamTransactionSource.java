@@ -3,6 +3,8 @@ package com.coltsoftware.liquidsledgehammer.json;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import org.joda.time.LocalDate;
+
 import com.coltsoftware.liquidsledgehammer.collections.FinancialTransactionList;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction.Builder;
@@ -29,8 +31,21 @@ public final class JsonStreamTransactionSource {
 
 		private String group;
 
+		private String date;
+
 		public void populateBuilder(Builder builder) {
-			builder.value(value).groupPattern(group).description(description);
+			LocalDate ldate = getLocalDate();
+			builder.value(value)
+					.groupPattern(group)
+					.description(description)
+					.date(ldate.getYear(), ldate.getMonthOfYear(),
+							ldate.getDayOfMonth());
+		}
+
+		private LocalDate getLocalDate() {
+			if (date == null)
+				throw new JsonException();
+			return LocalDate.parse(date);
 		}
 	}
 
@@ -52,7 +67,7 @@ public final class JsonStreamTransactionSource {
 
 	private static FinancialTransaction entryToFinancialTransaction(
 			StatementEntry entry) {
-		Builder builder = new FinancialTransaction.Builder().date(2014, 1, 1);
+		Builder builder = new FinancialTransaction.Builder();
 		entry.populateBuilder(builder);
 		return builder.build();
 	}

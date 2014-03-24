@@ -1,40 +1,31 @@
-package com.coltsoftware.liquidsledgehammer.json;
+package com.coltsoftware.liquidsledgehammer.json.streamsource;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Iterator;
 
-import org.junit.After;
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.coltsoftware.liquidsledgehammer.MoneyTestBase;
 import com.coltsoftware.liquidsledgehammer.json.JsonStreamTransactionSource;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.sources.FinancialTransactionSource;
 
-public final class JsonFileSourceTests extends MoneyTestBase {
+public final class ReadingTests extends StreamSourceTestBase {
 
-	private static InputStream loadAsset(String assetName) {
-		InputStream stream = Thread.currentThread().getContextClassLoader()
-				.getResourceAsStream(assetName);
-		return stream;
+	@Override
+	protected String getAssetName() {
+		return "statement.json";
 	}
 
-	private InputStream stream;
 	private FinancialTransactionSource source;
 
 	@Before
+	@Override
 	public void setup() {
-		stream = loadAsset("statement.json");
+		super.setup();
 		source = JsonStreamTransactionSource.fromStream(stream);
-	}
-
-	@After
-	public void teardown() throws IOException {
-		stream.close();
 	}
 
 	@Test
@@ -67,5 +58,14 @@ public final class JsonFileSourceTests extends MoneyTestBase {
 		assertEquals("g1=4", transaction.getGroupPattern());
 		transaction = iterator.next();
 		assertEquals(null, transaction.getGroupPattern());
+	}
+
+	@Test
+	public void can_read_dates() {
+		Iterator<FinancialTransaction> iterator = source.iterator();
+		FinancialTransaction transaction = iterator.next();
+		assertEquals(new LocalDate(2012, 4, 13), transaction.getDate());
+		transaction = iterator.next();
+		assertEquals(new LocalDate(2010, 5, 29), transaction.getDate());
 	}
 }

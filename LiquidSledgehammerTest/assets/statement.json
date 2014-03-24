@@ -4,11 +4,13 @@
     {
       "description": "Desc for item 1",
       "value": "9.87",
-      "group": "g1=4"
+      "group": "g1=4",
+      "date" : "2012-04-13"
     },
     {
       "description": "Desc for item 2",
-      "value": "9.12"
+      "value": "9.12",
+      "date" : "2010-05-29"
     }
   ]
 }
