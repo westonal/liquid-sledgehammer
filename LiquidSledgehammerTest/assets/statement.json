@@ -1,3 +1,13 @@
 {
-   "value": "9.87"
+  "entries" =
+  [
+    {
+      "description": "Desc for item 1",
+      "value": "9.87"
+    },
+    {
+      "description": "Desc for item 2",
+      "value": "9.12"
+    }
+  ]
 }

@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Iterator;
 
 import org.junit.Test;
 
@@ -32,14 +33,34 @@ public final class JsonFileSourceTests extends MoneyTestBase {
 	}
 
 	@Test
-	public void can_load_file() throws IOException {
+	public void can_load_file_and_read_values() throws IOException {
 		InputStream stream = loadAsset("statement.json");
 		try {
 			FinancialTransactionSource source = JsonStreamTransactionSource
 					.fromStream(stream);
-			assertEquals(1, count(source));
-			FinancialTransaction transaction = source.iterator().next();
+			assertEquals(2, count(source));
+			Iterator<FinancialTransaction> iterator = source.iterator();
+			FinancialTransaction transaction = iterator.next();
 			assertEquals(local(987), transaction.getValue());
+			transaction = iterator.next();
+			assertEquals(local(912), transaction.getValue());
+		} finally {
+			stream.close();
+		}
+	}
+
+	@Test
+	public void can_load_file_and_read_descriptions() throws IOException {
+		InputStream stream = loadAsset("statement.json");
+		try {
+			FinancialTransactionSource source = JsonStreamTransactionSource
+					.fromStream(stream);
+			assertEquals(2, count(source));
+			Iterator<FinancialTransaction> iterator = source.iterator();
+			FinancialTransaction transaction = iterator.next();
+			assertEquals("Desc for item 1", transaction.getDescription());
+			transaction = iterator.next();
+			assertEquals("Desc for item 2", transaction.getDescription());
 		} finally {
 			stream.close();
 		}

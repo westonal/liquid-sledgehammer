@@ -9,7 +9,19 @@ import com.google.gson.Gson;
 
 public final class JsonStreamTransactionSource {
 
-	public class MyClass {
+	private static class Statement {
+
+		private StatementEntry[] entries;
+
+		public StatementEntry[] getEntries() {
+			return entries;
+		}
+
+	}
+
+	private static class StatementEntry {
+
+		private String description;
 
 		private String value;
 
@@ -17,10 +29,9 @@ public final class JsonStreamTransactionSource {
 			return value;
 		}
 
-		public void setValue(String value) {
-			this.value = value;
+		public String getDescription() {
+			return description;
 		}
-
 	}
 
 	private JsonStreamTransactionSource() {
@@ -29,11 +40,13 @@ public final class JsonStreamTransactionSource {
 	public static FinancialTransactionSource fromStream(InputStream stream) {
 		FinancialTransactionList financialTransactionList = new FinancialTransactionList();
 
-		MyClass data = new Gson().fromJson(new InputStreamReader(stream),
-				MyClass.class);
+		Statement data = new Gson().fromJson(new InputStreamReader(stream),
+				Statement.class);
 
-		financialTransactionList.add(new FinancialTransaction.Builder()
-				.date(2014, 1, 1).value(data.getValue()).build());
+		for (StatementEntry entry : data.getEntries())
+			financialTransactionList.add(new FinancialTransaction.Builder()
+					.date(2014, 1, 1).value(entry.getValue())
+					.description(entry.getDescription()).build());
 
 		return new FinancialTransactionListSourceAdapter(
 				financialTransactionList);
