@@ -60,4 +60,11 @@ public final class MoneyCreationTests extends MoneyTestBase {
 	public void cant_create_yen_specifying_two_many_places() {
 		Money.fromString("1231.2", yen);
 	}
+
+	@Test
+	public void can_create_longer_value_without_specifying_all_places() {
+		Money expected = usd(123980);
+		assertEquals(expected, Money.fromString("1239.8", usd));
+		assertEquals(expected, Money.fromString("1239.80", usd));
+	}
 }

@@ -21,10 +21,8 @@ public final class Money {
 
 	public static Money fromString(String value, Currency currency) {
 		int idx = value.lastIndexOf('.');
-		int decimalPlacesSeen;
-		if (idx == -1)
-			decimalPlacesSeen = 0;
-		else
+		int decimalPlacesSeen = 0;
+		if (idx > -1)
 			decimalPlacesSeen = value.length() - idx - 1;
 		value += zerosForCurrency(currency, decimalPlacesSeen);
 		value = value.replaceFirst("\\.", "");
@@ -96,10 +94,6 @@ public final class Money {
 		return String.format("%s%s %s", sign,
 				currency.getSymbol(Locale.getDefault()),
 				format.format(displayValue));
-	}
-
-	private static double getDecimalFraction(Currency currency) {
-		return getDecimalFraction(currency.getDefaultFractionDigits());
 	}
 
 	private static double getDecimalFraction(int defaultFractionDigits) {
