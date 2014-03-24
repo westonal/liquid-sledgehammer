@@ -41,7 +41,7 @@ public final class JsonFileSourceTests extends MoneyTestBase {
 	}
 
 	@Test
-	public void can_read_values() throws IOException {
+	public void can_read_values() {
 		Iterator<FinancialTransaction> iterator = source.iterator();
 		FinancialTransaction transaction = iterator.next();
 		assertEquals(local(987), transaction.getValue());
@@ -50,11 +50,20 @@ public final class JsonFileSourceTests extends MoneyTestBase {
 	}
 
 	@Test
-	public void can_read_descriptions() throws IOException {
+	public void can_read_descriptions() {
 		Iterator<FinancialTransaction> iterator = source.iterator();
 		FinancialTransaction transaction = iterator.next();
 		assertEquals("Desc for item 1", transaction.getDescription());
 		transaction = iterator.next();
 		assertEquals("Desc for item 2", transaction.getDescription());
+	}
+
+	@Test
+	public void can_read_groups() {
+		Iterator<FinancialTransaction> iterator = source.iterator();
+		FinancialTransaction transaction = iterator.next();
+		assertEquals("g1=4", transaction.getGroupPattern());
+		transaction = iterator.next();
+		assertEquals(null, transaction.getGroupPattern());
 	}
 }

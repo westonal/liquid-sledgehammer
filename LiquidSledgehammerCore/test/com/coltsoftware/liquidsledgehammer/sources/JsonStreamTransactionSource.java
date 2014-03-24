@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 
 import com.coltsoftware.liquidsledgehammer.collections.FinancialTransactionList;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
+import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction.Builder;
 import com.google.gson.Gson;
 
 public final class JsonStreamTransactionSource {
@@ -16,7 +17,6 @@ public final class JsonStreamTransactionSource {
 		public StatementEntry[] getEntries() {
 			return entries;
 		}
-
 	}
 
 	private static class StatementEntry {
@@ -25,12 +25,10 @@ public final class JsonStreamTransactionSource {
 
 		private String value;
 
-		public String getValue() {
-			return value;
-		}
+		private String group;
 
-		public String getDescription() {
-			return description;
+		public void populateBuilder(Builder builder) {
+			builder.value(value).groupPattern(group).description(description);
 		}
 	}
 
@@ -44,12 +42,16 @@ public final class JsonStreamTransactionSource {
 				Statement.class);
 
 		for (StatementEntry entry : data.getEntries())
-			financialTransactionList.add(new FinancialTransaction.Builder()
-					.date(2014, 1, 1).value(entry.getValue())
-					.description(entry.getDescription()).build());
+			financialTransactionList.add(entryToFinancialTransaction(entry));
 
 		return new FinancialTransactionListSourceAdapter(
 				financialTransactionList);
 	}
 
+	private static FinancialTransaction entryToFinancialTransaction(
+			StatementEntry entry) {
+		Builder builder = new FinancialTransaction.Builder().date(2014, 1, 1);
+		entry.populateBuilder(builder);
+		return builder.build();
+	}
 }
