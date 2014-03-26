@@ -32,4 +32,28 @@ public final class AliasPathResolverTests {
 		assertEquals("Error.UnknownAlias.two", apr.resolve("two"));
 	}
 
+	@Test
+	public void resolve_uncategorised_by_empty_string() {
+		assertEquals("Error.Uncategorised", apr.resolve(""));
+	}
+
+	@Test
+	public void resolve_uncategorised_by_null() {
+		assertEquals("Error.Uncategorised", apr.resolve(null));
+	}
+
+	@Test
+	public void can_override_uncategorised_by_empty_string() {
+		apr.put("", "MyDefault.Path");
+		assertEquals("MyDefault.Path", apr.resolve(""));
+		assertEquals("MyDefault.Path", apr.resolve(null));
+	}
+
+	@Test
+	public void can_override_uncategorised_by_null() {
+		apr.put(null, "MyDefault.Path");
+		assertEquals("MyDefault.Path", apr.resolve(""));
+		assertEquals("MyDefault.Path", apr.resolve(null));
+	}
+
 }
