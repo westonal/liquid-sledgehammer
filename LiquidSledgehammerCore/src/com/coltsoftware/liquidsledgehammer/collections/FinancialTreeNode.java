@@ -6,7 +6,7 @@ import java.util.Iterator;
 import com.coltsoftware.liquidsledgehammer.model.Money;
 import com.coltsoftware.liquidsledgehammer.model.SubTransaction;
 
-public final class FinancialTreeNode {
+public final class FinancialTreeNode implements Iterable<FinancialTreeNode> {
 
 	private FinancialTreeNode parent;
 	private final String name;
@@ -32,8 +32,8 @@ public final class FinancialTreeNode {
 		child.parent = this;
 	}
 
-	public Iterator<SubTransaction> getSubTransactions() {
-		return transactions.iterator();
+	public Iterable<SubTransaction> getSubTransactions() {
+		return transactions;
 	}
 
 	public Money getTotalValue() {
@@ -68,6 +68,11 @@ public final class FinancialTreeNode {
 
 	public FinancialTreeNode getParent() {
 		return parent;
+	}
+
+	@Override
+	public Iterator<FinancialTreeNode> iterator() {
+		return children.iterator();
 	}
 
 }

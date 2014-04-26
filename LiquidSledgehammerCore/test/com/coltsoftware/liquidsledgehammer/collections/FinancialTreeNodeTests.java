@@ -2,6 +2,8 @@ package com.coltsoftware.liquidsledgehammer.collections;
 
 import static org.junit.Assert.*;
 
+import java.util.Iterator;
+
 import org.junit.Test;
 
 public final class FinancialTreeNodeTests extends FinancialTreeNodeTestsBase {
@@ -61,6 +63,26 @@ public final class FinancialTreeNodeTests extends FinancialTreeNodeTestsBase {
 		FinancialTreeNode ftn = new FinancialTreeNode();
 		root.add(ftn);
 		otherRoot.add(ftn);
+	}
+
+	@Test
+	public void can_iterate_one_child() {
+		FinancialTreeNode child1 = new FinancialTreeNode();
+		root.add(child1);
+		assertEquals(1, count(root));
+		assertSame(child1, root.iterator().next());
+	}
+
+	@Test
+	public void can_iterate_two_children() {
+		FinancialTreeNode child1 = new FinancialTreeNode();
+		FinancialTreeNode child2 = new FinancialTreeNode();
+		root.add(child1);
+		root.add(child2);
+		assertEquals(2, count(root));
+		Iterator<FinancialTreeNode> iterator = root.iterator();
+		assertSame(child1, iterator.next());
+		assertSame(child2, iterator.next());
 	}
 
 }

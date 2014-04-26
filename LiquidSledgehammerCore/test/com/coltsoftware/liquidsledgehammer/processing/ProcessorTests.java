@@ -59,7 +59,7 @@ public final class ProcessorTests extends MoneyTestBase {
 		list.add(transaction);
 		processor.populateTree(list, root);
 		assertEquals(transaction, root.findOrCreate("External.Holiday")
-				.getSubTransactions().next().getTransaction());
+				.getSubTransactions().iterator().next().getTransaction());
 	}
 
 	@Test
