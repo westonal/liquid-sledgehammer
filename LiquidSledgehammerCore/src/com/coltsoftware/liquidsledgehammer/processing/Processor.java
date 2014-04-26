@@ -1,10 +1,10 @@
 package com.coltsoftware.liquidsledgehammer.processing;
 
 import com.coltsoftware.liquidsledgehammer.collections.AliasPathResolver;
-import com.coltsoftware.liquidsledgehammer.collections.FinancialTransactionList;
 import com.coltsoftware.liquidsledgehammer.collections.FinancialTreeNode;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.model.SubTransaction;
+import com.coltsoftware.liquidsledgehammer.sources.FinancialTransactionSource;
 
 public final class Processor {
 
@@ -14,7 +14,7 @@ public final class Processor {
 		this.resolver = resolver;
 	}
 
-	public void populateTree(FinancialTransactionList list,
+	public void populateTree(FinancialTransactionSource list,
 			FinancialTreeNode root) {
 		for (FinancialTransaction transaction : list)
 			addTransaction(root, transaction);

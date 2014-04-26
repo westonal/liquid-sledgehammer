@@ -5,9 +5,10 @@ import java.util.Iterator;
 
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.model.Money;
+import com.coltsoftware.liquidsledgehammer.sources.FinancialTransactionSource;
 
 public final class FinancialTransactionList implements
-		Iterable<FinancialTransaction> {
+		FinancialTransactionSource {
 
 	private final ArrayList<FinancialTransaction> transactions = new ArrayList<FinancialTransaction>();
 
