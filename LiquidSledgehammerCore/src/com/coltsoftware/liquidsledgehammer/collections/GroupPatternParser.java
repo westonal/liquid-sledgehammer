@@ -20,7 +20,7 @@ public final class GroupPatternParser {
 
 		Currency currency = value.getCurrency();
 		for (String group : groupPattern.split(","))
-			processGroup(rawValues, groupValues, group, currency);
+			processGroup(rawValues, groupValues, group, currency, value);
 
 		if (!Money.allSameSign(rawValues.values()))
 			return new GroupValues(value);
@@ -29,17 +29,34 @@ public final class GroupPatternParser {
 	}
 
 	private void processGroup(HashMap<String, Money> result,
-			GroupValues groupValues, String group, Currency currency) {
+			GroupValues groupValues, String group, Currency currency,
+			Money fullValue) {
 		String[] split = group.split("=");
 		String groupName = split[0];
 		if (split.length == 1) {
 			result.put(groupName, Money.Zero);
 			groupValues.pushRemainingToGroup(groupName);
 		} else {
-			Money groupValue = Money.fromString(split[1], currency);
+			String groupValueText = split[1];
+			Money groupValue = groupValueTextToMoney(groupValueText, fullValue,
+					currency);
 			result.put(groupName, groupValue);
 			groupValues.pushToGroup(groupName, groupValue);
 		}
+	}
+
+	private Money groupValueTextToMoney(String groupValueText, Money fullValue,
+			Currency currency) {
+		Money groupValue;
+		if (groupValueText.endsWith("%")) {
+			double percentage = Double.parseDouble(groupValueText.substring(0,
+					groupValueText.length() - 1));
+			groupValue = new Money(
+					(long) (fullValue.getValue() * percentage / 100), currency);
+		} else {
+			groupValue = Money.fromString(groupValueText, currency);
+		}
+		return groupValue;
 	}
 
 }

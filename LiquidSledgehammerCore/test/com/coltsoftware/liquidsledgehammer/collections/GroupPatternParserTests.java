@@ -138,4 +138,39 @@ public final class GroupPatternParserTests extends MoneyTestBase {
 		assertEquals(Money.fromString("99", euro), groupValues.get(""));
 	}
 
+	@Test
+	public void percentage_allowed() {
+		GroupValues groupValues = getValues(euro(10000), "one=50%");
+		assertEquals(2, count(groupValues));
+		assertEquals(Money.fromString("50", euro), groupValues.get("one"));
+		assertEquals(Money.fromString("50", euro), groupValues.getUnassigned());
+	}
+
+	@Test
+	public void two_percentages_allowed() {
+		GroupValues groupValues = getValues(euro(10000), "one=50%,two=25%");
+		assertEquals(3, count(groupValues));
+		assertEquals(Money.fromString("50", euro), groupValues.get("one"));
+		assertEquals(Money.fromString("25", euro), groupValues.get("two"));
+		assertEquals(Money.fromString("25", euro), groupValues.getUnassigned());
+	}
+	
+	@Test
+	public void two_percentages_allowed_different_percentages() {
+		GroupValues groupValues = getValues(euro(10000), "one=10%,two=30%");
+		assertEquals(3, count(groupValues));
+		assertEquals(Money.fromString("10", euro), groupValues.get("one"));
+		assertEquals(Money.fromString("30", euro), groupValues.get("two"));
+		assertEquals(Money.fromString("60", euro), groupValues.getUnassigned());
+	}
+	
+	@Test
+	public void fractional_percentages_allowed() {
+		GroupValues groupValues = getValues(euro(20000), "one=10%,two=12.5%");
+		assertEquals(3, count(groupValues));
+		assertEquals(Money.fromString("20", euro), groupValues.get("one"));
+		assertEquals(Money.fromString("25", euro), groupValues.get("two"));
+		assertEquals(Money.fromString("155", euro), groupValues.getUnassigned());
+	}
+
 }
