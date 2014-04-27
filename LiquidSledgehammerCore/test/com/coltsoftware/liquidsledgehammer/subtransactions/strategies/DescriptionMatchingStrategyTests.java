@@ -30,7 +30,8 @@ public final class DescriptionMatchingStrategyTests extends MoneyTestBase {
 	public void refers_description_to_first_child() {
 		DescriptionStrategy descStrat = mock(DescriptionStrategy.class);
 		strategy.add(descStrat);
-		when(descStrat.unassigned(any(String.class))).thenReturn("grp");
+		when(descStrat.getGroupName()).thenReturn("grp");
+		when(descStrat.unassigned(any(String.class))).thenReturn(true);
 		assertEquals("grp", strategy.unassigned(builder.build()));
 		verify(descStrat, times(1)).unassigned("Desc");
 	}
@@ -50,8 +51,10 @@ public final class DescriptionMatchingStrategyTests extends MoneyTestBase {
 	public void if_first_child_returns_that_value_is_used() {
 		DescriptionStrategy descStrat1 = mock(DescriptionStrategy.class);
 		DescriptionStrategy descStrat2 = mock(DescriptionStrategy.class);
-		when(descStrat1.unassigned(any(String.class))).thenReturn("g1");
-		when(descStrat2.unassigned(any(String.class))).thenReturn("g2");
+		when(descStrat1.getGroupName()).thenReturn("g1");
+		when(descStrat2.getGroupName()).thenReturn("g2");
+		when(descStrat1.unassigned(any(String.class))).thenReturn(true);
+		when(descStrat2.unassigned(any(String.class))).thenReturn(false);
 		strategy.add(descStrat1);
 		strategy.add(descStrat2);
 		assertEquals("g1", strategy.unassigned(builder.build()));
@@ -63,7 +66,9 @@ public final class DescriptionMatchingStrategyTests extends MoneyTestBase {
 	public void if_first_child_returns_null_second_child_returns() {
 		DescriptionStrategy descStrat1 = mock(DescriptionStrategy.class);
 		DescriptionStrategy descStrat2 = mock(DescriptionStrategy.class);
-		when(descStrat2.unassigned(any(String.class))).thenReturn("g2");
+		when(descStrat1.getGroupName()).thenReturn("g1");
+		when(descStrat2.getGroupName()).thenReturn("g2");
+		when(descStrat2.unassigned(any(String.class))).thenReturn(true);
 		strategy.add(descStrat1);
 		strategy.add(descStrat2);
 		assertEquals("g2", strategy.unassigned(builder.build()));

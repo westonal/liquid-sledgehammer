@@ -12,19 +12,24 @@ public final class ContainsDescriptionStrategy implements DescriptionStrategy {
 	}
 
 	@Override
-	public String unassigned(String description) {
+	public boolean unassigned(String description) {
 		if (description == null)
-			return null;
+			return false;
 		description = description.toLowerCase();
 		for (String match : matches) {
 			if (description.contains(match))
-				return groupName;
+				return true;
 		}
-		return null;
+		return true;
 	}
 
 	public void addMatch(String match) {
 		matches.add(match.toLowerCase());
+	}
+
+	@Override
+	public String getGroupName() {
+		return groupName;
 	}
 
 }

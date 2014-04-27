@@ -12,9 +12,8 @@ public final class DescriptionMatchingStrategy implements
 	@Override
 	public String unassigned(FinancialTransaction transaction) {
 		for (DescriptionStrategy descStrat : descStrats) {
-			String res = descStrat.unassigned("Desc");
-			if (res != null)
-				return res;
+			if (descStrat.unassigned("Desc"))
+				return descStrat.getGroupName();
 		}
 		return "";
 	}
