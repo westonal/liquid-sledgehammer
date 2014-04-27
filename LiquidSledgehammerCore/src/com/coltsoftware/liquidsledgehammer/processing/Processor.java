@@ -10,9 +10,12 @@ import com.coltsoftware.liquidsledgehammer.subtransactions.SubTransactionFactory
 public final class Processor {
 
 	private final AliasPathResolver resolver;
+	private final SubTransactionFactory subTransactionFactory;
 
-	public Processor(AliasPathResolver resolver) {
+	public Processor(AliasPathResolver resolver,
+			SubTransactionFactory subTransactionFactory) {
 		this.resolver = resolver;
+		this.subTransactionFactory = subTransactionFactory;
 	}
 
 	public void populateTree(FinancialTransactionSource list,
@@ -23,7 +26,7 @@ public final class Processor {
 
 	private void addTransaction(FinancialTreeNode root,
 			FinancialTransaction transaction) {
-		Iterable<SubTransaction> subTransactions = new SubTransactionFactory()
+		Iterable<SubTransaction> subTransactions = subTransactionFactory
 				.getSubTransactions(transaction);
 		for (SubTransaction subTransaction : subTransactions)
 			root.findOrCreate(resolver.resolve(subTransaction.getGroup())).add(

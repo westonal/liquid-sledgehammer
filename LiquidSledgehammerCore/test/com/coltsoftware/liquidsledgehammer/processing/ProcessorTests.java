@@ -10,6 +10,7 @@ import com.coltsoftware.liquidsledgehammer.collections.AliasPathResolver;
 import com.coltsoftware.liquidsledgehammer.collections.FinancialTransactionList;
 import com.coltsoftware.liquidsledgehammer.collections.FinancialTreeNode;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
+import com.coltsoftware.liquidsledgehammer.subtransactions.SubTransactionFactory;
 
 public final class ProcessorTests extends MoneyTestBase {
 
@@ -20,7 +21,7 @@ public final class ProcessorTests extends MoneyTestBase {
 	@Before
 	public void setup() {
 		resolver = new AliasPathResolver();
-		processor = new Processor(resolver);
+		processor = new Processor(resolver, new SubTransactionFactory());
 		root = new FinancialTreeNode();
 	}
 
@@ -80,8 +81,8 @@ public final class ProcessorTests extends MoneyTestBase {
 				.getSubTransactions()));
 		assertEquals(gbp(10000), root.findOrCreate("External.Holiday")
 				.getTotalValue());
-		assertEquals(gbp(30000),
-				root.findOrCreate("External.Clothing.Headwear").getTotalValue());
+		assertEquals(gbp(30000), root
+				.findOrCreate("External.Clothing.Headwear").getTotalValue());
 		assertEquals(gbp(40000), root.getTotalValue());
 	}
 

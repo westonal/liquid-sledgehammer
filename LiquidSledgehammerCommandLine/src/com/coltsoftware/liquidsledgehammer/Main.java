@@ -12,6 +12,7 @@ import com.coltsoftware.liquidsledgehammer.collections.FinancialTreeNode;
 import com.coltsoftware.liquidsledgehammer.model.SubTransaction;
 import com.coltsoftware.liquidsledgehammer.processing.Processor;
 import com.coltsoftware.liquidsledgehammer.sources.FinancialTransactionSource;
+import com.coltsoftware.liquidsledgehammer.subtransactions.SubTransactionFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -21,7 +22,7 @@ public class Main {
 		File f = new File("C:\\Temp\\Transactions");
 		ArrayList<FinancialTransactionSource> sources = PathSourceWalker
 				.loadAllSourcesBelowPath(f.toPath());
-		Processor processor = new Processor(createAliasPathResolver(f));
+		Processor processor = new Processor(createAliasPathResolver(f), new SubTransactionFactory());
 		FinancialTreeNode root = new FinancialTreeNode();
 		for (FinancialTransactionSource source : sources)
 			processor.populateTree(source, root);
