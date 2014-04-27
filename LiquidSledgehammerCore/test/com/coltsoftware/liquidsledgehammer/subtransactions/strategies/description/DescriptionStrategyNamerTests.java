@@ -47,7 +47,7 @@ public final class DescriptionStrategyNamerTests {
 		when(strat.matches(any(String.class))).thenReturn(true);
 		assertTrue(namedStrat.matches("Desc"));
 	}
-	
+
 	@Test
 	public void return_value_used_false() {
 		when(strat.matches(any(String.class))).thenReturn(false);

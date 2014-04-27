@@ -90,4 +90,15 @@ public final class DescriptionMatchingStrategyTests extends MoneyTestBase {
 		strategy.add(descStrat2);
 		assertEquals("", strategy.unassigned(builder.build()));
 	}
+
+	@Test
+	public void alternative_description() {
+		NamedDescriptionStrategy descStrat1 = mock(NamedDescriptionStrategy.class);
+		when(descStrat1.getGroupName()).thenReturn("g1");
+		when(descStrat1.matches(any(String.class))).thenReturn(true);
+		strategy.add(descStrat1);
+		assertEquals("g1",
+				strategy.unassigned(builder.description("alt desc").build()));
+		verify(descStrat1, times(1)).matches("alt desc");
+	}
 }

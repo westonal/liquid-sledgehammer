@@ -13,7 +13,7 @@ public final class DescriptionMatchingStrategy implements
 	@Override
 	public String unassigned(FinancialTransaction transaction) {
 		for (NamedDescriptionStrategy descStrat : descStrats) {
-			if (descStrat.matches("Desc"))
+			if (descStrat.matches(transaction.getDescription()))
 				return descStrat.getGroupName();
 		}
 		return "";
