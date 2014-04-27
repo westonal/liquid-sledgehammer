@@ -20,7 +20,7 @@ public final class ContainsDescriptionStrategy implements DescriptionStrategy {
 			if (description.contains(match))
 				return true;
 		}
-		return true;
+		return false;
 	}
 
 	public void addMatch(String match) {

@@ -67,4 +67,22 @@ public final class ContainsDescriptionStrategyTest {
 		assertTrue(strat.unassigned("a oNe"));
 	}
 
+	@Test
+	public void no_match_two_items() {
+		strat.addMatch("ONE");
+		strat.addMatch("two");
+		assertFalse(strat.unassigned("a"));
+	}
+
+	@Test
+	public void can_read_group_name() {
+		assertEquals("groupName", strat.getGroupName());
+	}
+
+	@Test
+	public void can_read_group_name_alternative() {
+		assertEquals("the group name", new ContainsDescriptionStrategy(
+				"the group name").getGroupName());
+	}
+
 }
