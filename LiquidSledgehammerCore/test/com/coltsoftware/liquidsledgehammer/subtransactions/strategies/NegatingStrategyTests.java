@@ -19,19 +19,7 @@ public final class NegatingStrategyTests {
 	@Before
 	public void setup() {
 		strat = mock(DescriptionStrategy.class);
-		when(strat.getGroupName()).thenReturn("groupName");
 		negated = NotDescriptionStrategy.negate(strat);
-	}
-
-	@Test
-	public void name_is_passed_through() {
-		assertEquals("groupName", negated.getGroupName());
-	}
-
-	@Test
-	public void name_is_passed_through_alternative_name() {
-		when(strat.getGroupName()).thenReturn("name of group");
-		assertEquals("name of group", negated.getGroupName());
 	}
 
 	@Test

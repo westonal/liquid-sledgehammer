@@ -7,15 +7,10 @@ public final class IncludeExcludeDescriptionStrategy implements
 	private final ContainsDescriptionStrategy excludesList;
 	private final DescriptionStrategy excludes;
 
-	public IncludeExcludeDescriptionStrategy(String groupName) {
-		contains = new ContainsDescriptionStrategy(groupName);
-		excludesList = new ContainsDescriptionStrategy(groupName);
+	public IncludeExcludeDescriptionStrategy() {
+		contains = new ContainsDescriptionStrategy();
+		excludesList = new ContainsDescriptionStrategy();
 		excludes = NotDescriptionStrategy.negate(excludesList);
-	}
-
-	@Override
-	public String getGroupName() {
-		return contains.getGroupName();
 	}
 
 	@Override

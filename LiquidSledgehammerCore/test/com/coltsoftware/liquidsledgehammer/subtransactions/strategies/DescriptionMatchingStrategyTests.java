@@ -1,15 +1,20 @@
 package com.coltsoftware.liquidsledgehammer.subtransactions.strategies;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
-import static org.mockito.Mockito.*;
 
 import com.coltsoftware.liquidsledgehammer.MoneyTestBase;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction.Builder;
-import com.coltsoftware.liquidsledgehammer.subtransactions.strategies.description.DescriptionStrategy;
+import com.coltsoftware.liquidsledgehammer.subtransactions.strategies.description.NamedDescriptionStrategy;
 
 public final class DescriptionMatchingStrategyTests extends MoneyTestBase {
 	private Builder builder;
@@ -29,7 +34,7 @@ public final class DescriptionMatchingStrategyTests extends MoneyTestBase {
 
 	@Test
 	public void refers_description_to_first_child() {
-		DescriptionStrategy descStrat = mock(DescriptionStrategy.class);
+		NamedDescriptionStrategy descStrat = mock(NamedDescriptionStrategy.class);
 		strategy.add(descStrat);
 		when(descStrat.getGroupName()).thenReturn("grp");
 		when(descStrat.matches(any(String.class))).thenReturn(true);
@@ -39,8 +44,8 @@ public final class DescriptionMatchingStrategyTests extends MoneyTestBase {
 
 	@Test
 	public void refers_description_to_first_and_second_child() {
-		DescriptionStrategy descStrat1 = mock(DescriptionStrategy.class);
-		DescriptionStrategy descStrat2 = mock(DescriptionStrategy.class);
+		NamedDescriptionStrategy descStrat1 = mock(NamedDescriptionStrategy.class);
+		NamedDescriptionStrategy descStrat2 = mock(NamedDescriptionStrategy.class);
 		strategy.add(descStrat1);
 		strategy.add(descStrat2);
 		strategy.unassigned(builder.build());
@@ -50,8 +55,8 @@ public final class DescriptionMatchingStrategyTests extends MoneyTestBase {
 
 	@Test
 	public void if_first_child_returns_that_value_is_used() {
-		DescriptionStrategy descStrat1 = mock(DescriptionStrategy.class);
-		DescriptionStrategy descStrat2 = mock(DescriptionStrategy.class);
+		NamedDescriptionStrategy descStrat1 = mock(NamedDescriptionStrategy.class);
+		NamedDescriptionStrategy descStrat2 = mock(NamedDescriptionStrategy.class);
 		when(descStrat1.getGroupName()).thenReturn("g1");
 		when(descStrat2.getGroupName()).thenReturn("g2");
 		when(descStrat1.matches(any(String.class))).thenReturn(true);
@@ -65,8 +70,8 @@ public final class DescriptionMatchingStrategyTests extends MoneyTestBase {
 
 	@Test
 	public void if_first_child_returns_null_second_child_returns() {
-		DescriptionStrategy descStrat1 = mock(DescriptionStrategy.class);
-		DescriptionStrategy descStrat2 = mock(DescriptionStrategy.class);
+		NamedDescriptionStrategy descStrat1 = mock(NamedDescriptionStrategy.class);
+		NamedDescriptionStrategy descStrat2 = mock(NamedDescriptionStrategy.class);
 		when(descStrat1.getGroupName()).thenReturn("g1");
 		when(descStrat2.getGroupName()).thenReturn("g2");
 		when(descStrat2.matches(any(String.class))).thenReturn(true);
@@ -79,8 +84,8 @@ public final class DescriptionMatchingStrategyTests extends MoneyTestBase {
 
 	@Test
 	public void default_value_used_if_all_children_return_null() {
-		DescriptionStrategy descStrat1 = mock(DescriptionStrategy.class);
-		DescriptionStrategy descStrat2 = mock(DescriptionStrategy.class);
+		NamedDescriptionStrategy descStrat1 = mock(NamedDescriptionStrategy.class);
+		NamedDescriptionStrategy descStrat2 = mock(NamedDescriptionStrategy.class);
 		strategy.add(descStrat1);
 		strategy.add(descStrat2);
 		assertEquals("", strategy.unassigned(builder.build()));

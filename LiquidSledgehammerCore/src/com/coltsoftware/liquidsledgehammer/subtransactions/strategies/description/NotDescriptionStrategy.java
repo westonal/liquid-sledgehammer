@@ -13,11 +13,6 @@ public final class NotDescriptionStrategy implements DescriptionStrategy {
 	}
 
 	@Override
-	public String getGroupName() {
-		return strategy.getGroupName();
-	}
-
-	@Override
 	public boolean matches(String description) {
 		return !strategy.matches(description);
 	}

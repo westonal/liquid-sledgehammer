@@ -16,7 +16,7 @@ public final class NotContainsDescriptionStrategyTest {
 
 	@Before
 	public void setup() {
-		strat = new ContainsDescriptionStrategy("groupName");
+		strat = new ContainsDescriptionStrategy();
 		testStrat = NotDescriptionStrategy.negate(strat);
 	}
 

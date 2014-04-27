@@ -11,24 +11,12 @@ public final class IncludeExcludeDescriptionStrategyTests {
 
 	@Before
 	public void setup() {
-		strat = new IncludeExcludeDescriptionStrategy("name");
+		strat = new IncludeExcludeDescriptionStrategy();
 	}
 
 	@Test
 	public void default_value() {
 		assertFalse(strat.matches("a"));
-	}
-
-	@Test
-	public void get_name() {
-		assertEquals("name", strat.getGroupName());
-	}
-
-	@Test
-	public void get_name_alt() {
-		assertEquals("alt Name",
-				new IncludeExcludeDescriptionStrategy("alt Name")
-						.getGroupName());
 	}
 
 	@Test

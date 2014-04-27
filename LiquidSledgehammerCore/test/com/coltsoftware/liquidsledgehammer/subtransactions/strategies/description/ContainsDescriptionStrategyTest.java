@@ -13,7 +13,7 @@ public final class ContainsDescriptionStrategyTest {
 
 	@Before
 	public void setup() {
-		strat = new ContainsDescriptionStrategy("groupName");
+		strat = new ContainsDescriptionStrategy();
 	}
 
 	@Test
@@ -72,17 +72,6 @@ public final class ContainsDescriptionStrategyTest {
 		strat.addMatch("ONE");
 		strat.addMatch("two");
 		assertFalse(strat.matches("a"));
-	}
-
-	@Test
-	public void can_read_group_name() {
-		assertEquals("groupName", strat.getGroupName());
-	}
-
-	@Test
-	public void can_read_group_name_alternative() {
-		assertEquals("the group name", new ContainsDescriptionStrategy(
-				"the group name").getGroupName());
 	}
 
 }
