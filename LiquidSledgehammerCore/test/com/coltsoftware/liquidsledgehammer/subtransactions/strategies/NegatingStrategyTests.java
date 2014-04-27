@@ -3,6 +3,9 @@ package com.coltsoftware.liquidsledgehammer.subtransactions.strategies;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.coltsoftware.liquidsledgehammer.subtransactions.strategies.description.DescriptionStrategy;
+import com.coltsoftware.liquidsledgehammer.subtransactions.strategies.description.NotDescriptionStrategy;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

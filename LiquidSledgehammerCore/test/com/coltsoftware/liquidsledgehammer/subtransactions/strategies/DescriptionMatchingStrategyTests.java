@@ -9,6 +9,7 @@ import static org.mockito.Mockito.*;
 import com.coltsoftware.liquidsledgehammer.MoneyTestBase;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction.Builder;
+import com.coltsoftware.liquidsledgehammer.subtransactions.strategies.description.DescriptionStrategy;
 
 public final class DescriptionMatchingStrategyTests extends MoneyTestBase {
 	private Builder builder;

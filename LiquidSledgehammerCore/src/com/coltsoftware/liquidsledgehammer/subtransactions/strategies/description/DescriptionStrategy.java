@@ -1,4 +1,4 @@
-package com.coltsoftware.liquidsledgehammer.subtransactions.strategies;
+package com.coltsoftware.liquidsledgehammer.subtransactions.strategies.description;
 
 public interface DescriptionStrategy {
 
