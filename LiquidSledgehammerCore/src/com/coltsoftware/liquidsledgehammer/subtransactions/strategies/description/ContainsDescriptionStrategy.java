@@ -12,7 +12,7 @@ public final class ContainsDescriptionStrategy implements DescriptionStrategy {
 	}
 
 	@Override
-	public boolean unassigned(String description) {
+	public boolean matches(String description) {
 		if (description == null)
 			return false;
 		description = description.toLowerCase();

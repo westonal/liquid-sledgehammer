@@ -18,60 +18,60 @@ public final class ContainsDescriptionStrategyTest {
 
 	@Test
 	public void null_and_no_matchers_returns_false() {
-		assertFalse(strat.unassigned(null));
+		assertFalse(strat.matches(null));
 	}
 
 	@Test
 	public void null_and_any_matchers_returns_false() {
 		strat.addMatch("one");
-		assertFalse(strat.unassigned(null));
+		assertFalse(strat.matches(null));
 	}
 
 	@Test
 	public void exact_match() {
 		strat.addMatch("one");
-		assertTrue(strat.unassigned("one"));
+		assertTrue(strat.matches("one"));
 	}
 
 	@Test
 	public void in_exact_match() {
 		strat.addMatch("one");
-		assertTrue(strat.unassigned("aoneb"));
+		assertTrue(strat.matches("aoneb"));
 	}
 
 	@Test
 	public void two_in_exact_match() {
 		strat.addMatch("one");
 		strat.addMatch("two");
-		assertTrue(strat.unassigned("aoneb"));
+		assertTrue(strat.matches("aoneb"));
 	}
 
 	@Test
 	public void two_in_exact_match_on_second() {
 		strat.addMatch("one");
 		strat.addMatch("two");
-		assertTrue(strat.unassigned("atwob"));
+		assertTrue(strat.matches("atwob"));
 	}
 
 	@Test
 	public void two_in_exact_match_by_case_on_second() {
 		strat.addMatch("one");
 		strat.addMatch("two");
-		assertTrue(strat.unassigned("atWob"));
+		assertTrue(strat.matches("atWob"));
 	}
 
 	@Test
 	public void one_in_exact_match_by_case_on_first() {
 		strat.addMatch("ONE");
 		strat.addMatch("two");
-		assertTrue(strat.unassigned("a oNe"));
+		assertTrue(strat.matches("a oNe"));
 	}
 
 	@Test
 	public void no_match_two_items() {
 		strat.addMatch("ONE");
 		strat.addMatch("two");
-		assertFalse(strat.unassigned("a"));
+		assertFalse(strat.matches("a"));
 	}
 
 	@Test

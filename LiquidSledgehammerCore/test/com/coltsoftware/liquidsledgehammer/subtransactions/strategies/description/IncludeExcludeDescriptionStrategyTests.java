@@ -16,33 +16,33 @@ public final class IncludeExcludeDescriptionStrategyTests {
 
 	@Test
 	public void default_value() {
-		assertFalse(strat.unassigned("a"));
+		assertFalse(strat.matches("a"));
 	}
 
 	@Test
 	public void simple_includes() {
 		strat.addInclude("abc");
-		assertTrue(strat.unassigned("abc"));
+		assertTrue(strat.matches("abc"));
 	}
 
 	@Test
 	public void simple_includes_false() {
 		strat.addInclude("abc");
-		assertFalse(strat.unassigned("a"));
+		assertFalse(strat.matches("a"));
 	}
 
 	@Test
 	public void simple_includes_two() {
 		strat.addInclude("abc");
 		strat.addInclude("def");
-		assertTrue(strat.unassigned("abc"));
+		assertTrue(strat.matches("abc"));
 	}
 	
 	@Test
 	public void simple_includes_two_substring() {
 		strat.addInclude("abc");
 		strat.addInclude("def");
-		assertTrue(strat.unassigned("-abcd"));
+		assertTrue(strat.matches("-abcd"));
 	}
 	
 	@Test
@@ -50,7 +50,7 @@ public final class IncludeExcludeDescriptionStrategyTests {
 		strat.addInclude("abc");
 		strat.addInclude("def");
 		strat.addExclude("-abcd");
-		assertFalse(strat.unassigned("-abcd"));
+		assertFalse(strat.matches("-abcd"));
 	}
 
 }

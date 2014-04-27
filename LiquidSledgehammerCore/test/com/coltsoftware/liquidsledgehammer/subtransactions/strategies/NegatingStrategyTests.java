@@ -36,26 +36,26 @@ public final class NegatingStrategyTests {
 
 	@Test
 	public void false_is_returned_as_true() {
-		when(strat.unassigned(any(String.class))).thenReturn(true);
-		assertFalse(negated.unassigned("desc"));
+		when(strat.matches(any(String.class))).thenReturn(true);
+		assertFalse(negated.matches("desc"));
 	}
 
 	@Test
 	public void true_is_returned_as_false() {
-		when(strat.unassigned(any(String.class))).thenReturn(false);
-		assertTrue(negated.unassigned("desc"));
+		when(strat.matches(any(String.class))).thenReturn(false);
+		assertTrue(negated.matches("desc"));
 	}
 
 	@Test
 	public void description_is_passed() {
-		negated.unassigned("desc");
-		verify(strat, times(1)).unassigned("desc");
+		negated.matches("desc");
+		verify(strat, times(1)).matches("desc");
 	}
 
 	@Test
 	public void description_is_passed_alternative() {
-		negated.unassigned("Alt");
-		verify(strat, times(1)).unassigned("Alt");
+		negated.matches("Alt");
+		verify(strat, times(1)).matches("Alt");
 	}
 
 }

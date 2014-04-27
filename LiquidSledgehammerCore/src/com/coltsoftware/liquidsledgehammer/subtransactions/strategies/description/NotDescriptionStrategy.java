@@ -18,8 +18,8 @@ public final class NotDescriptionStrategy implements DescriptionStrategy {
 	}
 
 	@Override
-	public boolean unassigned(String description) {
-		return !strategy.unassigned(description);
+	public boolean matches(String description) {
+		return !strategy.matches(description);
 	}
 
 }

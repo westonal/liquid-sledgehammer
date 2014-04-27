@@ -4,6 +4,6 @@ public interface DescriptionStrategy {
 
 	String getGroupName();
 	
-	boolean unassigned(String description);
+	boolean matches(String description);
 
 }

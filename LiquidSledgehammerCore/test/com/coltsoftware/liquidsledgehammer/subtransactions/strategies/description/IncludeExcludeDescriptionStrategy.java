@@ -20,9 +20,9 @@ public final class IncludeExcludeDescriptionStrategy implements
 	}
 
 	@Override
-	public boolean unassigned(String description) {
-		return contains.unassigned(description)
-				&& excludes.unassigned(description);
+	public boolean matches(String description) {
+		return contains.matches(description)
+				&& excludes.matches(description);
 	}
 
 	public void addInclude(String include) {
