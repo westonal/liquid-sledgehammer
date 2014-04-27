@@ -172,5 +172,13 @@ public final class GroupPatternParserTests extends MoneyTestBase {
 		assertEquals(Money.fromString("25", euro), groupValues.get("two"));
 		assertEquals(Money.fromString("155", euro), groupValues.getUnassigned());
 	}
+	
+	@Test
+	public void group_values_push_remaining_for_zero() {
+		GroupValues groupValues = getValues(usd(0), null);
+		assertEquals(0, count(groupValues));
+		groupValues.pushRemainingToGroup("TEST");
+		assertEquals(0, count(groupValues));
+	}
 
 }

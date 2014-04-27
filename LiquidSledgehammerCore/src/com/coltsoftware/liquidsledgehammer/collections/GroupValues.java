@@ -27,7 +27,11 @@ public final class GroupValues implements Iterable<String> {
 		return value == null ? Money.Zero : value;
 	}
 
-	void pushRemainingToGroup(String groupName) {
+	public void pushRemainingToGroup(String groupName) {
+		if (unassigned.isZero())
+			return;
+		if ("".equals(groupName))
+			return;
 		pushToGroup(groupName, unassigned);
 	}
 
