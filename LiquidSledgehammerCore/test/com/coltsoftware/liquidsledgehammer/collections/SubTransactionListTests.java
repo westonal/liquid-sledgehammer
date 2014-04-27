@@ -12,14 +12,17 @@ import com.coltsoftware.liquidsledgehammer.collections.SubTransactionList;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.model.Money;
 import com.coltsoftware.liquidsledgehammer.model.SubTransaction;
+import com.coltsoftware.liquidsledgehammer.subtransactions.SubTransactionFactory;
 
 public final class SubTransactionListTests extends MoneyTestBase {
 
 	private SubTransactionList ftl;
 
 	private static SubTransaction makeSubTransaction(Money value) {
-		return new FinancialTransaction.Builder().date(2014, 3, 1).value(value)
-				.build().getSubTransactions().iterator().next();
+		FinancialTransaction transaction = new FinancialTransaction.Builder()
+				.date(2014, 3, 1).value(value).build();
+		return new SubTransactionFactory().getSubTransactions(transaction)
+				.iterator().next();
 	}
 
 	@Before

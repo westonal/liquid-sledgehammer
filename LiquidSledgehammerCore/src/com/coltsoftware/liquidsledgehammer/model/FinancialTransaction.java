@@ -1,12 +1,8 @@
 package com.coltsoftware.liquidsledgehammer.model;
 
-import java.util.ArrayList;
 import java.util.Currency;
 
 import org.joda.time.LocalDate;
-
-import com.coltsoftware.liquidsledgehammer.collections.GroupPatternParser;
-import com.coltsoftware.liquidsledgehammer.collections.GroupValues;
 
 public final class FinancialTransaction {
 
@@ -90,13 +86,5 @@ public final class FinancialTransaction {
 
 	public String getGroupPattern() {
 		return groupPattern;
-	}
-
-	public Iterable<SubTransaction> getSubTransactions() {
-		ArrayList<SubTransaction> arrayList = new ArrayList<SubTransaction>();
-		GroupValues values = new GroupPatternParser().getGroupValues(this);
-		for (String group : values)
-			arrayList.add(new SubTransaction(this, group, values.get(group)));
-		return arrayList;
 	}
 }

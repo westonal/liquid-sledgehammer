@@ -5,6 +5,7 @@ import com.coltsoftware.liquidsledgehammer.collections.FinancialTreeNode;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.model.SubTransaction;
 import com.coltsoftware.liquidsledgehammer.sources.FinancialTransactionSource;
+import com.coltsoftware.liquidsledgehammer.subtransactions.SubTransactionFactory;
 
 public final class Processor {
 
@@ -22,7 +23,9 @@ public final class Processor {
 
 	private void addTransaction(FinancialTreeNode root,
 			FinancialTransaction transaction) {
-		for (SubTransaction subTransaction : transaction.getSubTransactions())
+		Iterable<SubTransaction> subTransactions = new SubTransactionFactory()
+				.getSubTransactions(transaction);
+		for (SubTransaction subTransaction : subTransactions)
 			root.findOrCreate(resolver.resolve(subTransaction.getGroup())).add(
 					subTransaction);
 	}
