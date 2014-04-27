@@ -15,14 +15,12 @@ public final class IncludeExcludeDescriptionStrategy implements
 
 	@Override
 	public String getGroupName() {
-		// TODO Auto-generated method stub
-		return null;
+		return contains.getGroupName();
 	}
 
 	@Override
 	public boolean matches(String description) {
-		return contains.matches(description)
-				&& excludes.matches(description);
+		return contains.matches(description) && excludes.matches(description);
 	}
 
 	public void addInclude(String include) {

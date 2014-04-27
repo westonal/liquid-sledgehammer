@@ -20,6 +20,18 @@ public final class IncludeExcludeDescriptionStrategyTests {
 	}
 
 	@Test
+	public void get_name() {
+		assertEquals("name", strat.getGroupName());
+	}
+
+	@Test
+	public void get_name_alt() {
+		assertEquals("alt Name",
+				new IncludeExcludeDescriptionStrategy("alt Name")
+						.getGroupName());
+	}
+
+	@Test
 	public void simple_includes() {
 		strat.addInclude("abc");
 		assertTrue(strat.matches("abc"));
@@ -37,14 +49,14 @@ public final class IncludeExcludeDescriptionStrategyTests {
 		strat.addInclude("def");
 		assertTrue(strat.matches("abc"));
 	}
-	
+
 	@Test
 	public void simple_includes_two_substring() {
 		strat.addInclude("abc");
 		strat.addInclude("def");
 		assertTrue(strat.matches("-abcd"));
 	}
-	
+
 	@Test
 	public void simple_includes_excludes_substring() {
 		strat.addInclude("abc");
