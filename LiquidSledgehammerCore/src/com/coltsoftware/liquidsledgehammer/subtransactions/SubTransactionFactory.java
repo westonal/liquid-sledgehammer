@@ -27,7 +27,8 @@ public class SubTransactionFactory {
 	}
 
 	public void setUnassignedValueStrategy(UnassignedValueStrategy strategy) {
-		this.strategy = strategy;
+		this.strategy = strategy != null ? strategy
+				: NullUnassignedStrategy.INSTANCE;
 	}
 
 }

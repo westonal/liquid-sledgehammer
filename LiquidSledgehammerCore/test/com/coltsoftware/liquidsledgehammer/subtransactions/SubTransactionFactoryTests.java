@@ -70,4 +70,12 @@ public class SubTransactionFactoryTests extends MoneyTestBase {
 		verify(strategy, never()).unassigned(transaction);
 	}
 
+	@Test
+	public void handles_null_being_set_as_strategy() {
+		FinancialTransaction transaction = builder.value(usd(20)).build();
+		stf.setUnassignedValueStrategy(null);
+		stf.getSubTransactions(transaction);
+		verify(strategy, never()).unassigned(transaction);
+	}
+
 }
