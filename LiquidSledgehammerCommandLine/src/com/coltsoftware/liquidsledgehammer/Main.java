@@ -13,6 +13,11 @@ import com.coltsoftware.liquidsledgehammer.model.SubTransaction;
 import com.coltsoftware.liquidsledgehammer.processing.Processor;
 import com.coltsoftware.liquidsledgehammer.sources.FinancialTransactionSource;
 import com.coltsoftware.liquidsledgehammer.subtransactions.SubTransactionFactory;
+import com.coltsoftware.liquidsledgehammer.subtransactions.strategies.DescriptionMatchingStrategy;
+import com.coltsoftware.liquidsledgehammer.subtransactions.strategies.description.DescriptionStrategy;
+import com.coltsoftware.liquidsledgehammer.subtransactions.strategies.description.DescriptionStrategyNamer;
+import com.coltsoftware.liquidsledgehammer.subtransactions.strategies.description.IncludeExcludeDescriptionStrategy;
+import com.coltsoftware.liquidsledgehammer.subtransactions.strategies.description.NamedDescriptionStrategy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -22,7 +27,8 @@ public class Main {
 		File f = new File("C:\\Temp\\Transactions");
 		ArrayList<FinancialTransactionSource> sources = PathSourceWalker
 				.loadAllSourcesBelowPath(f.toPath());
-		Processor processor = new Processor(createAliasPathResolver(f), new SubTransactionFactory());
+		Processor processor = new Processor(createAliasPathResolver(f),
+				createSubTransactionFactory(f));
 		FinancialTreeNode root = new FinancialTreeNode();
 		for (FinancialTransactionSource source : sources)
 			processor.populateTree(source, root);
@@ -32,6 +38,53 @@ public class Main {
 		outputJson(root, "output");
 		outputJson(root.findOrCreate("External"), "external");
 		outputJson(root.findOrCreate("Error"), "error");
+	}
+
+	private static SubTransactionFactory createSubTransactionFactory(File path)
+			throws IOException {
+		DescriptionMatchingStrategy strategy = new DescriptionMatchingStrategy();
+
+		path = new File(path, "..\\groups.json");
+
+		FileReader reader = new FileReader(path);
+		try {
+			GroupJson[] groups = new Gson().fromJson(reader, GroupJson[].class);
+			for (GroupJson group : groups) {
+				DescriptionStrategy descStrat = createStratForGroup(group);
+				if (descStrat == null)
+					continue;
+				NamedDescriptionStrategy named = DescriptionStrategyNamer.name(
+						group.uniqueName, descStrat);
+				strategy.add(named);
+			}
+		} finally {
+			reader.close();
+		}
+
+		SubTransactionFactory subTransactionFactory = new SubTransactionFactory();
+
+		subTransactionFactory.setUnassignedValueStrategy(strategy);
+		return subTransactionFactory;
+	}
+
+	private static DescriptionStrategy createStratForGroup(GroupJson group) {
+		if (group.matchStrings == null && group.excludeStrings == null
+				|| group.matchStrings.length == 0
+				&& group.excludeStrings.length == 0)
+			return null;
+
+		IncludeExcludeDescriptionStrategy strat = new IncludeExcludeDescriptionStrategy();
+
+		if (group.matchStrings != null) {
+			for (String s : group.matchStrings)
+				strat.addInclude(s);
+		}
+		if (group.excludeStrings != null) {
+			for (String s : group.excludeStrings)
+				strat.addExclude(s);
+		}
+
+		return strat;
 	}
 
 	private static AliasPathResolver createAliasPathResolver(File path)
@@ -127,5 +180,7 @@ public class Main {
 	public static class GroupJson {
 		public String path;
 		public String uniqueName;
+		public String[] matchStrings;
+		public String[] excludeStrings;
 	}
 }
