@@ -19,7 +19,7 @@ public final class ContainsDescriptionStrategy implements DescriptionStrategy {
 	}
 
 	public void addMatch(String match) {
-		if (match == null || "".equals(match))
+		if (match == null || match.trim().equals(""))
 			throw new InvalidDescriptionException();
 		matches.add(match.toLowerCase());
 	}

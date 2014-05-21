@@ -84,4 +84,17 @@ public final class ContainsDescriptionStrategyTest {
 		strat.addMatch(null);
 	}
 
+	@Test(expected = InvalidDescriptionException.class)
+	public void doesnt_allow_whitespace_strings() {
+		strat.addMatch(" \t   ");
+	}
+
+	@Test
+	public void matches_are_not_trimmed() {
+		strat.addMatch(" o  ");
+		assertTrue(strat.matches("a o  b"));
+		assertFalse(strat.matches("a o b"));
+		assertFalse(strat.matches("ao  b"));
+	}
+
 }
