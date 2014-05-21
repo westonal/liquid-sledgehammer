@@ -74,4 +74,14 @@ public final class ContainsDescriptionStrategyTest {
 		assertFalse(strat.matches("a"));
 	}
 
+	@Test(expected = InvalidDescriptionException.class)
+	public void doesnt_allow_empty_strings() {
+		strat.addMatch("");
+	}
+
+	@Test(expected = InvalidDescriptionException.class)
+	public void doesnt_allow_null_strings() {
+		strat.addMatch(null);
+	}
+
 }

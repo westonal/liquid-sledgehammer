@@ -19,6 +19,8 @@ public final class ContainsDescriptionStrategy implements DescriptionStrategy {
 	}
 
 	public void addMatch(String match) {
+		if (match == null || "".equals(match))
+			throw new InvalidDescriptionException();
 		matches.add(match.toLowerCase());
 	}
 
