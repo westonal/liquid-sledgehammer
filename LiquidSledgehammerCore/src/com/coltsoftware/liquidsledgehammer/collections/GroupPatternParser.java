@@ -19,7 +19,7 @@ public final class GroupPatternParser {
 		HashMap<String, Money> rawValues = new HashMap<String, Money>();
 
 		Currency currency = value.getCurrency();
-		for (String group : groupPattern.split(",\\s*"))
+		for (String group : groupPattern.split("\\s*,\\s*"))
 			processGroup(rawValues, groupValues, group, currency, value);
 
 		if (!Money.allSameSign(rawValues.values()))
