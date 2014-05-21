@@ -180,5 +180,14 @@ public final class GroupPatternParserTests extends MoneyTestBase {
 		groupValues.pushRemainingToGroup("TEST");
 		assertEquals(0, count(groupValues));
 	}
+	
+	@Test
+	public void groups_can_have_spaces_after_the_comma() {
+		GroupValues groupValues = getValues(euro(10000), "one=10, two=30");
+		assertEquals(3, count(groupValues));
+		assertEquals(Money.fromString("10", euro), groupValues.get("one"));
+		assertEquals(Money.fromString("30", euro), groupValues.get("two"));
+		assertEquals(Money.fromString("60", euro), groupValues.getUnassigned());
+	}
 
 }
