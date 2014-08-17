@@ -1,14 +1,17 @@
 package com.coltsoftware.liquidsledgehammer;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+
+import org.joda.time.LocalDate;
 
 import com.coltsoftware.liquidsledgehammer.collections.AliasPathResolver;
 import com.coltsoftware.liquidsledgehammer.collections.FinancialTreeNode;
+import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.model.SubTransaction;
 import com.coltsoftware.liquidsledgehammer.processing.Processor;
 import com.coltsoftware.liquidsledgehammer.sources.FinancialTransactionSource;
@@ -122,7 +125,8 @@ public class Main {
 		String json = new GsonBuilder().setPrettyPrinting().create()
 				.toJson(treeNode);
 		// Output.output(json);
-		FileWriter writer = new FileWriter("c:\\Temp\\" + name + ".json");
+		File path = new File(new File(outPath), name + ".json");
+		FileWriter writer = new FileWriter(path.getPath());
 		try {
 			writer.write(json);
 		} finally {
@@ -134,8 +138,7 @@ public class Main {
 		TreeNode treeNode = new TreeNode();
 		treeNode.name = root.getName();
 		treeNode.value = root.getTotalValue().toString();
-		// treeNode.transactions =
-		// createTransactions(root.getSubTransactions());
+		treeNode.transactions = createTransactions(root.getSubTransactions());
 		treeNode.children = createTreeNodeChildren(root);
 		return treeNode;
 	}
@@ -151,7 +154,9 @@ public class Main {
 	private static SubTransactionNode createSubTransactionNode(
 			SubTransaction node) {
 		SubTransactionNode result = new SubTransactionNode();
-		result.description = node.getTransaction().getDescription();
+		FinancialTransaction transaction = node.getTransaction();
+		result.date = transaction.getDate().toString("yyyy-MM-dd");		
+		result.description = transaction.getDescription();
 		result.value = node.getValue().toString();
 		return result;
 	}
@@ -173,6 +178,7 @@ public class Main {
 
 	@SuppressWarnings("unused")
 	public static class SubTransactionNode {
+		private String date;
 		private String description;
 		private String value;
 	}
