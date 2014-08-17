@@ -11,6 +11,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 
 import com.coltsoftware.liquidsledgehammer.json.JsonStreamTransactionSource;
+import com.coltsoftware.liquidsledgehammer.model.FinancialTransactionSourceInformation;
 import com.coltsoftware.liquidsledgehammer.sources.FinancialTransactionSource;
 
 public final class PathSourceWalker {
@@ -53,12 +54,19 @@ public final class PathSourceWalker {
 		return sources;
 	}
 
-	protected static FinancialTransactionSource loadSource(Path file)
+	protected static FinancialTransactionSource loadSource(final Path file)
 			throws IOException {
 		Output.output("Loading " + file);
 		InputStream stream = new FileInputStream(file.toFile());
 		try {
-			return JsonStreamTransactionSource.fromStream(stream);
+			return JsonStreamTransactionSource.fromStream(stream,
+					new FinancialTransactionSourceInformation() {
+
+						@Override
+						public String getName() {
+							return file.getParent().getFileName().toString();
+						}
+					});
 		} finally {
 			stream.close();
 		}

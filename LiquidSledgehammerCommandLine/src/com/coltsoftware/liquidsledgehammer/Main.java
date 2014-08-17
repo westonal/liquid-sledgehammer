@@ -155,7 +155,8 @@ public class Main {
 			SubTransaction node) {
 		SubTransactionNode result = new SubTransactionNode();
 		FinancialTransaction transaction = node.getTransaction();
-		result.date = transaction.getDate().toString("yyyy-MM-dd");		
+		result.date = transaction.getDate().toString("yyyy-MM-dd");
+		result.source = transaction.getSource().getName();
 		result.description = transaction.getDescription();
 		result.value = node.getValue().toString();
 		return result;
@@ -179,6 +180,7 @@ public class Main {
 	@SuppressWarnings("unused")
 	public static class SubTransactionNode {
 		private String date;
+		private String source;
 		private String description;
 		private String value;
 	}
