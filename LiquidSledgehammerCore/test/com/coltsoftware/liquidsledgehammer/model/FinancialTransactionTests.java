@@ -131,4 +131,20 @@ public final class FinancialTransactionTests extends MoneyTestBase {
 		assertEquals("Bank ABC", transaction.getSource().getName());
 	}
 
+	@Test
+	public void can_calculate_the_age_of_transaction_in_days() {
+		LocalDate today = new LocalDate();
+		LocalDate tenDaysAgo = today.minusDays(10);
+		FinancialTransaction transaction = builder.date(tenDaysAgo).build();
+		assertEquals(10, transaction.getAgeInDays());
+	}
+
+	@Test
+	public void can_calculate_the_age_of_transaction_in_days_two() {
+		LocalDate today = new LocalDate();
+		LocalDate twoWeeksAgo = today.minusDays(14);
+		FinancialTransaction transaction = builder.date(twoWeeksAgo).build();
+		assertEquals(14, transaction.getAgeInDays());
+	}
+
 }

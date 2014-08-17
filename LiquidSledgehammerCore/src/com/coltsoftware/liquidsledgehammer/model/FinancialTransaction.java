@@ -2,6 +2,7 @@ package com.coltsoftware.liquidsledgehammer.model;
 
 import java.util.Currency;
 
+import org.joda.time.Interval;
 import org.joda.time.LocalDate;
 
 public final class FinancialTransaction {
@@ -55,7 +56,11 @@ public final class FinancialTransaction {
 		}
 
 		public Builder date(int year, int month, int day) {
-			date = new LocalDate(year, month, day);
+			return date(new LocalDate(year, month, day));
+		}
+
+		public Builder date(LocalDate date) {
+			this.date = date;
 			return this;
 		}
 
@@ -101,5 +106,11 @@ public final class FinancialTransaction {
 
 	public FinancialTransactionSourceInformation getSource() {
 		return source;
+	}
+
+	public int getAgeInDays() {
+		LocalDate now = new LocalDate();
+		return (int) new Interval(getDate().toDateTimeAtCurrentTime(),
+				now.toDateTimeAtCurrentTime()).toDuration().getStandardDays();
 	}
 }
