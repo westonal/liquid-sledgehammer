@@ -11,6 +11,7 @@ import com.coltsoftware.liquidsledgehammer.collections.GroupValues;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.model.Money;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction.Builder;
+import com.coltsoftware.liquidsledgehammer.model.NullFinancialTransactionSourceInformation;
 
 public final class GroupPatternParserTests extends MoneyTestBase {
 
@@ -19,7 +20,9 @@ public final class GroupPatternParserTests extends MoneyTestBase {
 
 	@Before
 	public void setup() {
-		builder = new FinancialTransaction.Builder().date(2014, 5, 1);
+		builder = new FinancialTransaction.Builder().source(
+				NullFinancialTransactionSourceInformation.INSTANCE).date(2014,
+				5, 1);
 		gvg = new GroupPatternParser();
 	}
 
@@ -154,7 +157,7 @@ public final class GroupPatternParserTests extends MoneyTestBase {
 		assertEquals(Money.fromString("25", euro), groupValues.get("two"));
 		assertEquals(Money.fromString("25", euro), groupValues.getUnassigned());
 	}
-	
+
 	@Test
 	public void two_percentages_allowed_different_percentages() {
 		GroupValues groupValues = getValues(euro(10000), "one=10%,two=30%");
@@ -163,7 +166,7 @@ public final class GroupPatternParserTests extends MoneyTestBase {
 		assertEquals(Money.fromString("30", euro), groupValues.get("two"));
 		assertEquals(Money.fromString("60", euro), groupValues.getUnassigned());
 	}
-	
+
 	@Test
 	public void fractional_percentages_allowed() {
 		GroupValues groupValues = getValues(euro(20000), "one=10%,two=12.5%");
@@ -172,7 +175,7 @@ public final class GroupPatternParserTests extends MoneyTestBase {
 		assertEquals(Money.fromString("25", euro), groupValues.get("two"));
 		assertEquals(Money.fromString("155", euro), groupValues.getUnassigned());
 	}
-	
+
 	@Test
 	public void group_values_push_remaining_for_zero() {
 		GroupValues groupValues = getValues(usd(0), null);
@@ -180,7 +183,7 @@ public final class GroupPatternParserTests extends MoneyTestBase {
 		groupValues.pushRemainingToGroup("TEST");
 		assertEquals(0, count(groupValues));
 	}
-	
+
 	@Test
 	public void groups_can_have_spaces_after_the_comma() {
 		GroupValues groupValues = getValues(euro(10000), "one=10, two=30");
@@ -189,7 +192,7 @@ public final class GroupPatternParserTests extends MoneyTestBase {
 		assertEquals(Money.fromString("30", euro), groupValues.get("two"));
 		assertEquals(Money.fromString("60", euro), groupValues.getUnassigned());
 	}
-	
+
 	@Test
 	public void groups_can_have_spaces_before_the_comma() {
 		GroupValues groupValues = getValues(euro(10000), "one=10 ,two=30");

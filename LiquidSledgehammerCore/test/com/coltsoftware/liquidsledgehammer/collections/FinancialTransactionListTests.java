@@ -11,14 +11,16 @@ import com.coltsoftware.liquidsledgehammer.MoneyTestBase;
 import com.coltsoftware.liquidsledgehammer.collections.FinancialTransactionList;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.model.Money;
+import com.coltsoftware.liquidsledgehammer.model.NullFinancialTransactionSourceInformation;
 
 public final class FinancialTransactionListTests extends MoneyTestBase {
 
 	private FinancialTransactionList ftl;
 
 	private static FinancialTransaction makeTransaction(Money value) {
-		return new FinancialTransaction.Builder().date(2014, 3, 1).value(value)
-				.build();
+		return new FinancialTransaction.Builder()
+				.source(NullFinancialTransactionSourceInformation.INSTANCE)
+				.date(2014, 3, 1).value(value).build();
 	}
 
 	@Before

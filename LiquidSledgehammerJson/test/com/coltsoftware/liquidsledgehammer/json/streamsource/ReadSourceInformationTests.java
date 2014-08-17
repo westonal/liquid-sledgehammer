@@ -4,19 +4,21 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Iterator;
 
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.coltsoftware.liquidsledgehammer.json.JsonStreamTransactionSource;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
+import com.coltsoftware.liquidsledgehammer.model.FinancialTransactionSourceInformation;
 import com.coltsoftware.liquidsledgehammer.model.NullFinancialTransactionSourceInformation;
 import com.coltsoftware.liquidsledgehammer.sources.FinancialTransactionSource;
 
-public final class ValuesWithoutQuotesTests extends StreamSourceTestBase {
+public final class ReadSourceInformationTests extends StreamSourceTestBase {
 
 	@Override
 	protected String getAssetName() {
-		return "valuesWithoutQuotes.json";
+		return "statement.json";
 	}
 
 	private FinancialTransactionSource source;
@@ -26,7 +28,13 @@ public final class ValuesWithoutQuotesTests extends StreamSourceTestBase {
 	public void setup() {
 		super.setup();
 		source = JsonStreamTransactionSource.fromStream(stream,
-				NullFinancialTransactionSourceInformation.INSTANCE);
+				new FinancialTransactionSourceInformation() {
+
+					@Override
+					public String getName() {
+						return "A bank";
+					}
+				});
 	}
 
 	@Test
@@ -35,17 +43,11 @@ public final class ValuesWithoutQuotesTests extends StreamSourceTestBase {
 	}
 
 	@Test
-	public void can_read_values() {
+	public void can_read_source_name() {
 		Iterator<FinancialTransaction> iterator = source.iterator();
 		FinancialTransaction transaction = iterator.next();
-		assertEquals(local(123), transaction.getValue());
-	}
-
-	@Test
-	public void can_read_negative_value() {
-		Iterator<FinancialTransaction> iterator = source.iterator();
-		iterator.next();
-		FinancialTransaction transaction = iterator.next();
-		assertEquals(local(-4567), transaction.getValue());
+		assertEquals("A bank", transaction.getSource().getName());
+		transaction = iterator.next();
+		assertEquals("A bank", transaction.getSource().getName());
 	}
 }

@@ -10,13 +10,15 @@ public final class FinancialTransaction {
 	private final String description;
 	private final LocalDate date;
 	private final String groupPattern;
+	private FinancialTransactionSourceInformation source;
 
-	private FinancialTransaction(Money value, String description,
-			LocalDate date, String groupPattern) {
+	private FinancialTransaction(FinancialTransactionSourceInformation source,
+			Money value, String description, LocalDate date, String groupPattern) {
 		this.value = value;
 		this.description = description;
 		this.date = date;
 		this.groupPattern = groupPattern;
+		this.source = source;
 	}
 
 	public Money getValue() {
@@ -29,13 +31,22 @@ public final class FinancialTransaction {
 		private String description = "";
 		private LocalDate date;
 		private String groupPattern;
+		private FinancialTransactionSourceInformation source;
 
 		public FinancialTransaction build() {
 			if (date == null)
 				throw new FinancialTransactionConstructionException();
 
-			return new FinancialTransaction(moneyValue, description, date,
-					groupPattern);
+			if (source == null)
+				throw new FinancialTransactionConstructionException();
+
+			return new FinancialTransaction(source, moneyValue, description,
+					date, groupPattern);
+		}
+
+		public Builder source(FinancialTransactionSourceInformation source) {
+			this.source = source;
+			return this;
 		}
 
 		public Builder description(String description) {
@@ -86,5 +97,9 @@ public final class FinancialTransaction {
 
 	public String getGroupPattern() {
 		return groupPattern;
+	}
+
+	public FinancialTransactionSourceInformation getSource() {
+		return source;
 	}
 }

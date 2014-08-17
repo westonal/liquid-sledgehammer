@@ -4,9 +4,9 @@ import org.junit.Test;
 
 import com.coltsoftware.liquidsledgehammer.json.JsonException;
 import com.coltsoftware.liquidsledgehammer.json.JsonStreamTransactionSource;
+import com.coltsoftware.liquidsledgehammer.model.NullFinancialTransactionSourceInformation;
 
-public final class RequiresDateTests extends
-		StreamSourceTestBase {
+public final class RequiresDateTests extends StreamSourceTestBase {
 
 	@Override
 	protected String getAssetName() {
@@ -15,6 +15,7 @@ public final class RequiresDateTests extends
 
 	@Test(expected = JsonException.class)
 	public void must_have_dates() {
-		JsonStreamTransactionSource.fromStream(stream);
+		JsonStreamTransactionSource.fromStream(stream,
+				NullFinancialTransactionSourceInformation.INSTANCE);
 	}
 }

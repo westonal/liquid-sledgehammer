@@ -7,9 +7,10 @@ import org.junit.Test;
 
 import com.coltsoftware.liquidsledgehammer.MoneyTestBase;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
+import com.coltsoftware.liquidsledgehammer.model.NullFinancialTransactionSourceInformation;
 import com.coltsoftware.liquidsledgehammer.subtransactions.strategies.NullUnassignedStrategy;
 
-public final class NullUnassignedStrategyTests extends MoneyTestBase{
+public final class NullUnassignedStrategyTests extends MoneyTestBase {
 
 	private NullUnassignedStrategy strategy;
 
@@ -22,10 +23,12 @@ public final class NullUnassignedStrategyTests extends MoneyTestBase{
 	public void returns_empty_string_for_null() {
 		assertEquals("", strategy.unassigned(null));
 	}
-	
+
 	@Test
 	public void returns_empty_string_for_non_null() {
-		FinancialTransaction transaction = new FinancialTransaction.Builder().date(2014, 5, 1).value(usd(20)).build();
+		FinancialTransaction transaction = new FinancialTransaction.Builder()
+				.source(NullFinancialTransactionSourceInformation.INSTANCE)
+				.date(2014, 5, 1).value(usd(20)).build();
 		assertEquals("", strategy.unassigned(transaction));
 	}
 

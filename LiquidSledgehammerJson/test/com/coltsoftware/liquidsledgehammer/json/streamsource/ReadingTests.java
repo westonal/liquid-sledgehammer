@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.coltsoftware.liquidsledgehammer.json.JsonStreamTransactionSource;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
+import com.coltsoftware.liquidsledgehammer.model.NullFinancialTransactionSourceInformation;
 import com.coltsoftware.liquidsledgehammer.sources.FinancialTransactionSource;
 
 public final class ReadingTests extends StreamSourceTestBase {
@@ -25,7 +26,8 @@ public final class ReadingTests extends StreamSourceTestBase {
 	@Override
 	public void setup() {
 		super.setup();
-		source = JsonStreamTransactionSource.fromStream(stream);
+		source = JsonStreamTransactionSource.fromStream(stream,
+				NullFinancialTransactionSourceInformation.INSTANCE);
 	}
 
 	@Test

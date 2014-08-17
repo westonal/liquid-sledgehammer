@@ -8,6 +8,7 @@ import org.joda.time.LocalDate;
 import com.coltsoftware.liquidsledgehammer.collections.FinancialTransactionList;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction.Builder;
+import com.coltsoftware.liquidsledgehammer.model.FinancialTransactionSourceInformation;
 import com.coltsoftware.liquidsledgehammer.sources.FinancialTransactionSource;
 import com.google.gson.Gson;
 
@@ -51,21 +52,25 @@ public final class JsonStreamTransactionSource {
 	private JsonStreamTransactionSource() {
 	}
 
-	public static FinancialTransactionSource fromStream(InputStream stream) {
+	public static FinancialTransactionSource fromStream(InputStream stream,
+			FinancialTransactionSourceInformation sourceInformation) {
 		FinancialTransactionList financialTransactionList = new FinancialTransactionList();
 
 		Statement data = new Gson().fromJson(new InputStreamReader(stream),
 				Statement.class);
 
 		for (StatementEntry entry : data.getEntries())
-			financialTransactionList.add(entryToFinancialTransaction(entry));
+			financialTransactionList.add(entryToFinancialTransaction(entry,
+					sourceInformation));
 
 		return financialTransactionList;
 	}
 
 	private static FinancialTransaction entryToFinancialTransaction(
-			StatementEntry entry) {
-		Builder builder = new FinancialTransaction.Builder();
+			StatementEntry entry,
+			FinancialTransactionSourceInformation sourceInformation) {
+		Builder builder = new FinancialTransaction.Builder()
+				.source(sourceInformation);
 		entry.populateBuilder(builder);
 		return builder.build();
 	}

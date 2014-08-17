@@ -9,6 +9,7 @@ import org.junit.Test;
 import com.coltsoftware.liquidsledgehammer.MoneyTestBase;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.model.Money;
+import com.coltsoftware.liquidsledgehammer.model.NullFinancialTransactionSourceInformation;
 import com.coltsoftware.liquidsledgehammer.model.SubTransaction;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction.Builder;
 import com.coltsoftware.liquidsledgehammer.subtransactions.SubTransactionFactory;
@@ -19,7 +20,9 @@ public final class SubTransactionTests extends MoneyTestBase {
 
 	@Before
 	public void setup() {
-		builder = new FinancialTransaction.Builder().date(2014, 5, 1);
+		builder = new FinancialTransaction.Builder().source(
+				NullFinancialTransactionSourceInformation.INSTANCE).date(2014,
+				5, 1);
 	}
 
 	private Iterable<SubTransaction> getSubTransactions(

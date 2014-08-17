@@ -16,7 +16,9 @@ public final class FinancialTransactionTests extends MoneyTestBase {
 
 	@Before
 	public void setup() {
-		builder = new FinancialTransaction.Builder().date(2014, 5, 1);
+		builder = new FinancialTransaction.Builder().source(
+				NullFinancialTransactionSourceInformation.INSTANCE).date(2014,
+				5, 1);
 	}
 
 	@Test
@@ -102,6 +104,31 @@ public final class FinancialTransactionTests extends MoneyTestBase {
 	@Test(expected = FinancialTransactionConstructionException.class)
 	public void cant_change_currency_if_number_of_decimal_places_differes() {
 		builder.currency(usd).value("99").currency(yen).build();
+	}
+
+	@Test(expected = FinancialTransactionConstructionException.class)
+	public void requires_a_source() {
+		new FinancialTransaction.Builder().date(2014, 5, 1).build();
+	}
+
+	@Test
+	public void FinancialTransactionSourceInformation_name_is_empty() {
+		FinancialTransaction transaction = builder.build();
+		assertEquals("", transaction.getSource().getName());
+	}
+
+	@Test
+	public void can_read_source_information() {
+		FinancialTransaction transaction = new FinancialTransaction.Builder()
+				.source(new FinancialTransactionSourceInformation() {
+
+					@Override
+					public String getName() {
+						return "Bank ABC";
+					}
+
+				}).date(2014, 5, 1).build();
+		assertEquals("Bank ABC", transaction.getSource().getName());
 	}
 
 }

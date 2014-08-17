@@ -9,6 +9,7 @@ import static org.mockito.Mockito.*;
 
 import com.coltsoftware.liquidsledgehammer.MoneyTestBase;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
+import com.coltsoftware.liquidsledgehammer.model.NullFinancialTransactionSourceInformation;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction.Builder;
 import com.coltsoftware.liquidsledgehammer.model.SubTransaction;
 import com.coltsoftware.liquidsledgehammer.subtransactions.strategies.UnassignedValueStrategy;
@@ -21,8 +22,9 @@ public class SubTransactionFactoryTests extends MoneyTestBase {
 
 	@Before
 	public void setup() {
-		builder = new FinancialTransaction.Builder().description("Desc").date(
-				2014, 5, 1);
+		builder = new FinancialTransaction.Builder()
+				.source(NullFinancialTransactionSourceInformation.INSTANCE)
+				.description("Desc").date(2014, 5, 1);
 		stf = new SubTransactionFactory();
 		strategy = mock(UnassignedValueStrategy.class);
 		when(strategy.unassigned(any(FinancialTransaction.class))).thenReturn(
