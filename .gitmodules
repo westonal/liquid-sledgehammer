@@ -1,0 +1,3 @@
+[submodule "RectangleAreaGraph"]
+	path = RectangleAreaGraph
+	url = https://github.com/westonized/RectangleAreaGraph.git
