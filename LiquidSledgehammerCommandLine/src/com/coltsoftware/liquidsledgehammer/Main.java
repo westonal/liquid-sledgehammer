@@ -1,11 +1,20 @@
 package com.coltsoftware.liquidsledgehammer;
 
+import java.awt.Color;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+import java.awt.Paint;
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import org.joda.time.LocalDate;
 
@@ -21,6 +30,9 @@ import com.coltsoftware.liquidsledgehammer.subtransactions.strategies.descriptio
 import com.coltsoftware.liquidsledgehammer.subtransactions.strategies.description.DescriptionStrategyNamer;
 import com.coltsoftware.liquidsledgehammer.subtransactions.strategies.description.IncludeExcludeDescriptionStrategy;
 import com.coltsoftware.liquidsledgehammer.subtransactions.strategies.description.NamedDescriptionStrategy;
+import com.coltsoftware.rectangleareagraph.Rectangle;
+import com.coltsoftware.rectangleareagraph.RectangleSplit;
+import com.coltsoftware.rectangleareagraph.RectangleSplit.SplitResult;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -41,6 +53,60 @@ public class Main {
 		outputJson(root, "output");
 		outputJson(root.findOrCreate("External"), "external");
 		outputJson(root.findOrCreate("Error"), "error");
+		outputImage(root.findOrCreate("External"), "external");
+	}
+
+	private static void outputImage(FinancialTreeNode node, String fileName) {
+		RectangleSplit<FinancialTreeNode> rectangleSplit = new RectangleSplit<FinancialTreeNode>();
+		for (FinancialTreeNode subNode : node)
+			rectangleSplit
+					.addValue(
+							Math.abs((int) subNode.getTotalValue().getValue()),
+							subNode);
+		int width = 1024;
+		int height = 768;
+		List<SplitResult<FinancialTreeNode>> split = rectangleSplit
+				.split(new Rectangle(0, 0, width - 1, height - 1));
+		RenderedImage image = render(split, width, height);
+		saveImage(image, fileName);
+	}
+
+	private static RenderedImage render(
+			List<SplitResult<FinancialTreeNode>> split, int width, int height) {
+		BufferedImage bufferedImage = new BufferedImage(width, height,
+				BufferedImage.TYPE_INT_ARGB);
+		Graphics2D graphics = bufferedImage.createGraphics();
+		Paint p = Color.BLACK;
+		graphics.setPaint(p);
+		FontMetrics fontMetrics = graphics.getFontMetrics();
+		for (SplitResult<FinancialTreeNode> result : split) {
+			Rectangle rectangle = result.getRectangle();
+			graphics.drawRect(rectangle.getLeft(), rectangle.getTop(),
+					rectangle.getWidth(), rectangle.getHeight());
+			FinancialTreeNode tag = result.getTag();
+			int x = rectangle.getLeft() + rectangle.getWidth() / 2;
+			int y = rectangle.getTop() + rectangle.getHeight() / 2;
+			drawTextCentered(graphics, fontMetrics, tag.getName(), x, y);
+			drawTextCentered(graphics, fontMetrics, tag.getTotalValue()
+					.toString(), x, y + fontMetrics.getHeight());
+		}
+		return bufferedImage;
+	}
+
+	private static void drawTextCentered(Graphics2D graphics,
+			FontMetrics fontMetrics, String description, int x, int y) {
+		int stringWidth = fontMetrics.stringWidth(description);
+		graphics.drawChars(description.toCharArray(), 0, description.length(),
+				x - stringWidth / 2, y);
+	}
+
+	private static void saveImage(RenderedImage bufferedImage, String fileName) {
+		try {
+			File outputfile = new File(fileName + ".png");
+			ImageIO.write(bufferedImage, "png", outputfile);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private static SubTransactionFactory createSubTransactionFactory(File path)
