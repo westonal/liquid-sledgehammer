@@ -8,5 +8,6 @@
 
 # Eclipse
 .metadata
+.settings
 
 */bin/*
