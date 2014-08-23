@@ -137,7 +137,7 @@ public class RectDisplay extends View {
 		Object tag = parent != null ? parent.getTag() : null;
 		RectangleSplit<Object> rectangleSplit = dataSource.getData(tag);
 		List<SplitResult<Object>> list = rectangleSplit.split(new Rectangle(0,
-				0, getWidth() - 1, getHeight() - 1));
+				0, getWidth(), getHeight()));
 		if (list.isEmpty())
 			return null;
 		return new Split(parent, list);
