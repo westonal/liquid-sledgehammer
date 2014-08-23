@@ -67,6 +67,8 @@ public final class GraphDataSourceAdaptor implements GraphDataSource {
 				transaction.getValue()));
 		sb.append(String.format("Description: %s\n",
 				transaction.getDescription()));
+		sb.append(String.format("Source: %s\n", transaction.getSource()
+				.getName()));
 		sb.append(String.format("Sub transaction Value: %s\n",
 				subTransaction.getValue()));
 
