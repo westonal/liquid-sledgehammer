@@ -5,6 +5,8 @@ import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Paint;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -65,12 +67,31 @@ public class Main {
 		// contentPane.setLayout(null);
 		// frame.getContentPane().add(contentPane);
 
+		Container pane = new JPanel();
+		pane.setLayout(new GridBagLayout());
+		frame.setLayout(new GridBagLayout());
+
+		GridBagConstraints c = new GridBagConstraints();
+		// c.anchor = GridBagConstraints.PAGE_START;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.gridx = 0;
+		c.gridy = 0;
+		frame.add(new JButton("Back"), c);
+		c.gridx = 0;
+		c.gridy = 1;
+		// c.anchor = GridBagConstraints.PAGE_END;
+		frame.add(pane, c);
+
+		pane.add(new JButton("Back"), c);
+		pane.add(new JButton("Back"), c);
+
 		addComponents(frame.getContentPane());
 		frame.pack();
 		frame.setVisible(true);
 	}
 
-	private static String inPath = "Transactions\\";
+	private static String inPath = "C:\\Users\\Alan\\Documents\\SVN Finances\\JsonInput\\Transactions\\";
 
 	private static void addComponents(Container contentPane) throws IOException {
 		File f = new File(inPath);
@@ -88,39 +109,37 @@ public class Main {
 
 	private static void outputNodes(final FinancialTreeNode node,
 			final Container jFrame, final java.awt.Rectangle rectangle) {
-		JPanel contentPaneOuter = new JPanel();
-		// contentPaneOuter.setLayout(null);
-		JPanel contentPane = new JPanel();
-		contentPaneOuter.add(contentPane);
-		// contentPane.setLayout(null);
+		GridBagConstraints c = new GridBagConstraints();
+		jFrame.removeAll();
 		RectangleSplit<FinancialTreeNode> rectangleSplit = new RectangleSplit<FinancialTreeNode>();
 		for (FinancialTreeNode subNode : node)
 			rectangleSplit
 					.addValue(
 							Math.abs((int) subNode.getTotalValue().getValue()),
 							subNode);
-		int width = 1024;
-		int height = 768;
+		int width = 100;
+		int height = 100;
 		List<SplitResult<FinancialTreeNode>> split = rectangleSplit
 				.split(new Rectangle(0, 0, width - 1, height - 1));
-
-		JButton backButton = new JButton("Back");
-		backButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				outputNodes(node.getParent(), jFrame, rectangle);
-			}
-		});
-		contentPaneOuter.add(backButton);
+		//
+		// JButton backButton = new JButton("Back");
+		// backButton.addActionListener(new ActionListener() {
+		//
+		// @Override
+		// public void actionPerformed(ActionEvent e) {
+		// outputNodes(node.getParent(), jFrame, rectangle);
+		// }
+		// });
+		// contentPaneOuter.add(backButton);
+		// jFrame.add
 
 		for (final SplitResult<FinancialTreeNode> result : split) {
 			String buttonText = String.format("%s %s", result.getTag()
 					.getName(), result.getTag().getTotalValue());
 			JButton button = new JButton(buttonText);
 			Rectangle rectangle2 = result.getRectangle();
-			button.setBounds(rectangle2.getLeft(), rectangle2.getTop(),
-					rectangle2.getWidth(), rectangle2.getHeight());
+			// button.setBounds(rectangle2.getLeft(), rectangle2.getTop(),
+			// rectangle2.getWidth(), rectangle2.getHeight());
 			button.addActionListener(new ActionListener() {
 
 				@Override
@@ -129,12 +148,18 @@ public class Main {
 							jFrame, rectangle);
 				}
 			});
-			contentPane.add(button);
+			c.weightx = rectangle2.getWidth();
+			c.weighty = rectangle2.getHeight();
+			c.gridx = rectangle2.getLeft();
+			c.gridy = rectangle2.getTop();
+			c.gridwidth = rectangle2.getWidth();
+			c.gridheight = rectangle2.getHeight();
+			jFrame.add(button, c);
 		}
-		jFrame.removeAll();
-		jFrame.add(contentPaneOuter);
-		jFrame.revalidate();
-		jFrame.validate();
+		// jFrame.removeAll();
+		// jFrame.add(contentPane);
+		// contentPane.revalidate();
+		// jFrame.validate();
 	}
 
 	private static void outputImage(FinancialTreeNode node, String fileName) {
