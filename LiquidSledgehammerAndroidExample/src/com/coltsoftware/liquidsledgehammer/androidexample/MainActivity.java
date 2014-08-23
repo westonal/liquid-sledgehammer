@@ -94,7 +94,7 @@ public class MainActivity extends Activity {
 							.loadAllSourcesBelowPath(path);
 
 					GraphDataSource dataSource = new GraphDataSourceAdaptor(
-							loadAllSourcesBelowPath, finances);
+							getActivity(), loadAllSourcesBelowPath, finances);
 
 					rectDisplay.setDataSource(dataSource);
 					rectDisplay.setTagDrawer(new FinancialTagDrawer());
