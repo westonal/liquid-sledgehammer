@@ -30,6 +30,10 @@ public class RectDisplay extends View {
 
 	private final Stack<Split> backStack = new Stack<RectDisplay.Split>();
 
+	private TagDrawer tagDrawer = new BasicToStringTagDrawer();
+	private TagDrawer strokeTagDrawer = new StrokeTagDrawer();
+	private FillTagDrawer fillTagDrawer = new FillTagDrawer();
+
 	private class Split {
 		private SplitResult<Object> parent;
 
@@ -43,28 +47,20 @@ public class RectDisplay extends View {
 
 		public void draw(Canvas canvas) {
 			for (SplitResult<Object> rect : split) {
-				paint.setColor(fillColor);
-				paint.setStyle(Style.FILL);
 				Rectangle rectangle = rect.getRectangle();
 				Rect graphicsRect = toGraphicsRect(rectangle);
-				canvas.drawRect(graphicsRect, paint);
-				paint.setColor(0xff0000ff);
-				paint.setStyle(Style.STROKE);
-				canvas.drawRect(graphicsRect, paint);
 
 				canvas.save();
+				fillTagDrawer.setFillColor(fillColor);
+				fillTagDrawer.drawTag(canvas, graphicsRect, rect.getTag());
+				canvas.restore();
 
-				String text = rect.getTag().toString();
-				textPaint.getTextBounds(text, 0, text.length(), textBounds);
-				boolean rotateText = graphicsRect.width() < textBounds.width();
-				if (rotateText)
-					canvas.rotate(-90, graphicsRect.exactCenterX(),
-							graphicsRect.exactCenterY());
-				canvas.drawText(
-						text,
-						graphicsRect.exactCenterX() - textBounds.exactCenterX(),
-						graphicsRect.exactCenterY() - textBounds.exactCenterY(),
-						textPaint);
+				canvas.save();
+				tagDrawer.drawTag(canvas, graphicsRect, rect.getTag());
+				canvas.restore();
+
+				canvas.save();
+				strokeTagDrawer.drawTag(canvas, graphicsRect, rect.getTag());
 				canvas.restore();
 			}
 		}
@@ -83,9 +79,7 @@ public class RectDisplay extends View {
 
 	private Split split;
 	private Split split2;
-	private final Rect textBounds = new Rect();
 	private final Paint paint = new Paint();
-	private final Paint textPaint = new Paint();
 	protected float blend;
 	private ValueAnimator va;
 	private final Matrix matrix = new Matrix();
@@ -120,6 +114,9 @@ public class RectDisplay extends View {
 		}
 		split.draw(canvas);
 		if (split2 != null) {
+			paint.setStyle(Style.FILL);
+			paint.setARGB((int) (255 * blend), 0, 0, 0);
+			canvas.drawPaint(paint);
 			float invBlend = 1f - blend;
 			Rectangle source = split2.parent.getRectangle();
 			float sx = source.getWidth() / (float) getWidth();
