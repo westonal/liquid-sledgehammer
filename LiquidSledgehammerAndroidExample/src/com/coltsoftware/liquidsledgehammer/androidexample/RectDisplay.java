@@ -2,6 +2,7 @@ package com.coltsoftware.liquidsledgehammer.androidexample;
 
 import java.util.List;
 import java.util.Random;
+import java.util.Stack;
 
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
@@ -17,7 +18,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.coltsoftware.rectangleareagraph.Rectangle;
 import com.coltsoftware.rectangleareagraph.RectangleSplit;
@@ -27,8 +28,13 @@ public class RectDisplay extends View {
 
 	private static final String TAG = "RectDisplay";
 
+	private final Stack<Split> backStack = new Stack<RectDisplay.Split>();
+
 	private class Split {
-		public Split(List<SplitResult<Object>> split) {
+		private SplitResult<Object> parent;
+
+		public Split(SplitResult<Object> parent, List<SplitResult<Object>> split) {
+			this.parent = parent;
 			this.split = split;
 		}
 
@@ -76,7 +82,6 @@ public class RectDisplay extends View {
 	}
 
 	private Split split;
-	private SplitResult<Object> animating;
 	private Split split2;
 	private final Rect textBounds = new Rect();
 	private final Paint paint = new Paint();
@@ -114,9 +119,9 @@ public class RectDisplay extends View {
 				return;
 		}
 		split.draw(canvas);
-		if (split2 != null && animating != null) {
+		if (split2 != null) {
 			float invBlend = 1f - blend;
-			Rectangle source = animating.getRectangle();
+			Rectangle source = split2.parent.getRectangle();
 			float sx = source.getWidth() / (float) getWidth();
 			float sy = source.getHeight() / (float) getHeight();
 			matrix.setScale(sx * invBlend + blend, sy * invBlend + blend);
@@ -127,10 +132,11 @@ public class RectDisplay extends View {
 		}
 	}
 
-	private Split calculateSplit(Object tag) {
+	private Split calculateSplit(SplitResult<Object> parent) {
+		Object tag = parent != null ? parent.getTag() : null;
 		RectangleSplit<Object> rectangleSplit = dataSource.getData(tag);
-		Split split = new Split(rectangleSplit.split(new Rectangle(0, 0,
-				getWidth() - 1, getHeight() - 1)));
+		Split split = new Split(parent, rectangleSplit.split(new Rectangle(0,
+				0, getWidth() - 1, getHeight() - 1)));
 		split.setFillColor(0xff000000 + new Random().nextInt(0xffffff));
 		return split;
 	}
@@ -162,9 +168,9 @@ public class RectDisplay extends View {
 				Log.d(TAG,
 						String.format("Clicked %s (%s)",
 								findItemAt.getRectangle(), findItemAt.getTag()));
-				animating = findItemAt;
-				split2 = calculateSplit(findItemAt.getTag());
-				animateToNewItem();
+				split2 = calculateSplit(findItemAt);
+				backStack.push(split);
+				animateToNewItem(false);
 			}
 			return true;
 		}
@@ -175,11 +181,12 @@ public class RectDisplay extends View {
 		return va != null && va.isRunning();
 	}
 
-	private void animateToNewItem() {
+	private void animateToNewItem(final boolean reverse) {
 		if (va != null)
 			va.cancel();
-		va = ValueAnimator.ofFloat(0f, 1f);
-		va.setInterpolator(new AccelerateInterpolator());
+		va = reverse ? ValueAnimator.ofFloat(1f, 0f) : ValueAnimator.ofFloat(
+				0f, 1f);
+		va.setInterpolator(new AccelerateDecelerateInterpolator());
 		va.addUpdateListener(new AnimatorUpdateListener() {
 
 			@Override
@@ -202,7 +209,9 @@ public class RectDisplay extends View {
 
 			@Override
 			public void onAnimationEnd(Animator animation) {
-				split = split2;
+				if (!reverse) {
+					split = split2;
+				}
 				split2 = null;
 				invalidate();
 			}
@@ -219,6 +228,18 @@ public class RectDisplay extends View {
 		if (split == null)
 			return null;
 		return split.findItemAt(x, y);
+	}
+
+	public boolean back() {
+		if (backStack.isEmpty())
+			return false;
+		if (isAnimating())
+			return true;
+		Split poppedSplit = backStack.pop();
+		split2 = split;
+		split = poppedSplit;
+		animateToNewItem(true);
+		return true;
 	}
 
 }

@@ -1,7 +1,6 @@
 package com.coltsoftware.liquidsledgehammer.androidexample;
 
 import android.app.Activity;
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
 
 public class MainActivity extends Activity {
 
@@ -42,6 +40,12 @@ public class MainActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (!((RectDisplay) (findViewById(R.id.rectDisplay1))).back())
+			super.onBackPressed();
 	}
 
 	/**
