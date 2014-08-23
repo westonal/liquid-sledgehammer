@@ -1,9 +1,15 @@
 package com.coltsoftware.liquidsledgehammer.androidexample;
 
 import java.util.List;
+import java.util.Random;
 
+import android.animation.Animator;
+import android.animation.Animator.AnimatorListener;
+import android.animation.ValueAnimator;
+import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
@@ -11,6 +17,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
 
 import com.coltsoftware.rectangleareagraph.Rectangle;
 import com.coltsoftware.rectangleareagraph.RectangleSplit;
@@ -19,9 +27,46 @@ import com.coltsoftware.rectangleareagraph.RectangleSplit.SplitResult;
 public class RectDisplay extends View {
 
 	private static final String TAG = "RectDisplay";
-	private RectangleSplit<String> rectangleSplit;
-	private List<SplitResult<String>> split;
-	private Paint paint = new Paint();
+
+	private class Split {
+		public Split(List<SplitResult<String>> split) {
+			this.split = split;
+		}
+
+		private List<SplitResult<String>> split;
+		private int fillColor = 0xff00ff00;
+
+		public void draw(Canvas canvas) {
+			for (SplitResult<String> rect : split) {
+				paint.setColor(fillColor);
+				paint.setStyle(Style.FILL);
+				Rect graphicsRect = toGraphicsRect(rect.getRectangle());
+				canvas.drawRect(graphicsRect, paint);
+				paint.setColor(0xff0000ff);
+				paint.setStyle(Style.STROKE);
+				canvas.drawRect(graphicsRect, paint);
+			}
+		}
+
+		public SplitResult<String> findItemAt(int x, int y) {
+			for (SplitResult<String> rect : split)
+				if (rect.getRectangle().inside(x, y))
+					return rect;
+			return null;
+		}
+
+		public void setFillColor(int fillColor) {
+			this.fillColor = fillColor;
+		}
+	}
+
+	private Split split;
+	private SplitResult<String> animating;
+	private Split split2;
+	private final Paint paint = new Paint();
+	protected float blend;
+	private ValueAnimator va;
+	private final Matrix matrix = new Matrix();
 
 	public RectDisplay(Context context) {
 		super(context);
@@ -39,23 +84,39 @@ public class RectDisplay extends View {
 	}
 
 	private void init() {
-		rectangleSplit = new RectangleSplit<String>();
-		rectangleSplit.addValue(10, "A");
-		rectangleSplit.addValue(20, "B");
-		rectangleSplit.addValue(40, "C");
-		rectangleSplit.addValue(70, "D");
+
 	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
 		canvas.drawColor(0xff00ff00);
-		if (split == null)
-			split = rectangleSplit.split(new Rectangle(0, 0, getWidth() - 1,
-					getHeight() - 1));
-		paint.setColor(0xff0000ff);
-		paint.setStyle(Style.STROKE);
-		for (SplitResult<String> rect : split)
-			canvas.drawRect(toGraphicsRect(rect.getRectangle()), paint);
+		if (split == null) {
+			split = calculateSplit();
+		}
+		split.draw(canvas);
+		if (split2 != null && animating != null) {
+			float invBlend = 1f - blend;
+			Rectangle source = animating.getRectangle();
+			float sx = source.getWidth() / (float) getWidth();
+			float sy = source.getHeight() / (float) getHeight();
+			matrix.setScale(sx * invBlend + blend, sy * invBlend + blend);
+			matrix.postTranslate(source.getLeft() * invBlend, source.getTop()
+					* invBlend);
+			canvas.concat(matrix);
+			split2.draw(canvas);
+		}
+	}
+
+	private Split calculateSplit() {
+		RectangleSplit<String> rectangleSplit = new RectangleSplit<String>();
+		rectangleSplit.addValue(10, "A");
+		rectangleSplit.addValue(20, "B");
+		rectangleSplit.addValue(40, "C");
+		rectangleSplit.addValue(70, "D");
+		Split split = new Split(rectangleSplit.split(new Rectangle(0, 0,
+				getWidth() - 1, getHeight() - 1)));
+		split.setFillColor(0xff000000 + new Random().nextInt(0xffffff));
+		return split;
 	}
 
 	private Rect toGraphicsRect(Rectangle rectangle) {
@@ -73,28 +134,75 @@ public class RectDisplay extends View {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
-			return true;
+			return !isAnimating();
 		}
 		if (event.getActionMasked() == MotionEvent.ACTION_UP) {
+			if (isAnimating())
+				return false;
 			int x = (int) event.getX();
 			int y = (int) event.getY();
 			SplitResult<String> findItemAt = findItemAt(x, y);
-			if (findItemAt != null)
+			if (findItemAt != null) {
 				Log.d(TAG,
 						String.format("Clicked %s (%s)",
 								findItemAt.getRectangle(), findItemAt.getTag()));
+				animating = findItemAt;
+				split2 = calculateSplit();
+				animateToNewItem();
+			}
 			return true;
 		}
 		return super.onTouchEvent(event);
 	}
 
+	private boolean isAnimating() {
+		return va != null && va.isRunning();
+	}
+
+	private void animateToNewItem() {
+		if (va != null)
+			va.cancel();
+		va = ValueAnimator.ofFloat(0f, 1f);
+		va.setInterpolator(new AccelerateInterpolator());
+		va.addUpdateListener(new AnimatorUpdateListener() {
+
+			@Override
+			public void onAnimationUpdate(ValueAnimator animation) {
+				float value = ((Float) animation.getAnimatedValue())
+						.floatValue();
+				blend = value;
+				invalidate();
+			}
+		});
+		va.addListener(new AnimatorListener() {
+
+			@Override
+			public void onAnimationStart(Animator animation) {
+			}
+
+			@Override
+			public void onAnimationRepeat(Animator animation) {
+			}
+
+			@Override
+			public void onAnimationEnd(Animator animation) {
+				split = split2;
+				split2 = null;
+				invalidate();
+			}
+
+			@Override
+			public void onAnimationCancel(Animator animation) {
+
+			}
+		});
+		va.start();
+	}
+
 	private SplitResult<String> findItemAt(int x, int y) {
 		if (split == null)
 			return null;
-		for (SplitResult<String> rect : split)
-			if (rect.getRectangle().inside(x, y))
-				return rect;
-		return null;
+		return split.findItemAt(x, y);
 	}
 
 }
