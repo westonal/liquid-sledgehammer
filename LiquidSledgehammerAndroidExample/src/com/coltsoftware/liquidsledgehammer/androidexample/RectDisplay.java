@@ -1,7 +1,6 @@
 package com.coltsoftware.liquidsledgehammer.androidexample;
 
 import java.util.List;
-import java.util.Random;
 import java.util.Stack;
 
 import android.animation.Animator;
@@ -138,9 +137,11 @@ public class RectDisplay extends View {
 	private Split calculateSplit(SplitResult<Object> parent) {
 		Object tag = parent != null ? parent.getTag() : null;
 		RectangleSplit<Object> rectangleSplit = dataSource.getData(tag);
-		Split split = new Split(parent, rectangleSplit.split(new Rectangle(0,
-				0, getWidth() - 1, getHeight() - 1)));
-		return split;
+		List<SplitResult<Object>> list = rectangleSplit.split(new Rectangle(0,
+				0, getWidth() - 1, getHeight() - 1));
+		if (list.isEmpty())
+			return null;
+		return new Split(parent, list);
 	}
 
 	private Rect toGraphicsRect(Rectangle rectangle) {
@@ -171,8 +172,10 @@ public class RectDisplay extends View {
 						String.format("Clicked %s (%s)",
 								findItemAt.getRectangle(), findItemAt.getTag()));
 				split2 = calculateSplit(findItemAt);
-				backStack.push(split);
-				animateToNewItem(false);
+				if (split2 != null) {
+					backStack.push(split);
+					animateToNewItem(false);
+				}
 			}
 			return true;
 		}

@@ -4,6 +4,8 @@ import android.graphics.Paint;
 
 import com.coltsoftware.liquidsledgehammer.androidexample.FillTagDrawer;
 import com.coltsoftware.liquidsledgehammer.collections.FinancialTreeNode;
+import com.coltsoftware.liquidsledgehammer.model.Money;
+import com.coltsoftware.liquidsledgehammer.model.SubTransaction;
 
 public final class FinancialFillTagDrawer extends FillTagDrawer {
 
@@ -11,15 +13,25 @@ public final class FinancialFillTagDrawer extends FillTagDrawer {
 	protected void tagToPaint(Object tag, Paint paint) {
 		if (tag instanceof FinancialTreeNode) {
 			FinancialTreeNode node = (FinancialTreeNode) tag;
-			int value = (int) node.getTotalValue().getValue();
-			float r = value / 10000f;
-			float g = value / 1000f;
-			float b = value / 100f;
+			valueToColor(paint, node.getTotalValue());
+			return;
+		}
 
-			paint.setARGB(255, (int) (255 * r), (int) (255 * g),
-					(int) (255 * b));
-		} else
-			super.tagToPaint(tag, paint);
+		if (tag instanceof SubTransaction) {
+			SubTransaction node = (SubTransaction) tag;
+			valueToColor(paint, node.getValue());
+			return;
+		}
+
+		super.tagToPaint(tag, paint);
+	}
+
+	private void valueToColor(Paint paint, Money money) {
+		int value = (int) Math.abs(money.getValue());
+		float r = value / 10000f;
+		float g = value / 1000f;
+		float b = value / 100f;
+		paint.setARGB(255, (int) (255 * r), (int) (255 * g), (int) (255 * b));
 	}
 
 }

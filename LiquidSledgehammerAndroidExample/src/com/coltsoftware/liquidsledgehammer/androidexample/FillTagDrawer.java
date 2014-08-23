@@ -8,7 +8,7 @@ import android.graphics.Paint.Style;
 public class FillTagDrawer implements TagDrawer {
 
 	private final Paint paint = new Paint();
-	private int fillColor = 0xff00ff00;
+	private int fillColor = 0xff00ffff;
 
 	@Override
 	public void drawTag(Canvas canvas, Rect area, Object tag) {

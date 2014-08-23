@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import com.coltsoftware.liquidsledgehammer.androidexample.GraphDataSource;
 import com.coltsoftware.liquidsledgehammer.collections.FinancialTreeNode;
+import com.coltsoftware.liquidsledgehammer.model.SubTransaction;
 import com.coltsoftware.liquidsledgehammer.processing.Processor;
 import com.coltsoftware.liquidsledgehammer.sources.FinancialTransactionSource;
 import com.coltsoftware.rectangleareagraph.RectangleSplit;
@@ -50,6 +51,11 @@ public final class GraphDataSourceAdaptor implements GraphDataSource {
 		for (FinancialTreeNode child : node)
 			rectangleSplit.addValue(
 					(int) Math.abs(child.getTotalValue().getValue()), child);
+
+		for (SubTransaction subTransaction : node.getSubTransactions())
+			rectangleSplit.addValue(
+					(int) Math.abs(subTransaction.getValue().getValue()),
+					subTransaction);
 	}
 
 }
