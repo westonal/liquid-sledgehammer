@@ -129,11 +129,7 @@ public class RectDisplay extends View {
 			matrix.postTranslate(source.getLeft() * invBlend, source.getTop()
 					* invBlend);
 			canvas.concat(matrix);
-			canvas.saveLayerAlpha(0, 0, getWidth(), getHeight(),
-					(int) (255 * (0.5f + 0.5f * blend)),
-					Canvas.HAS_ALPHA_LAYER_SAVE_FLAG);
 			split2.draw(canvas);
-			canvas.restore();
 		}
 	}
 
