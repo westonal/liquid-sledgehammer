@@ -1,8 +1,18 @@
 package com.coltsoftware.liquidsledgehammer.androidexample;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import com.coltsoftware.liquidsledgehammer.androidexample.truedata.GraphDataSourceAdaptor;
+import com.coltsoftware.liquidsledgehammer.androidexample.truedata.PathSourceWalker;
+import com.coltsoftware.liquidsledgehammer.sources.FinancialTransactionSource;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,6 +20,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class MainActivity extends Activity {
+
+	private static final String TAG = "MainActivity";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +56,8 @@ public class MainActivity extends Activity {
 
 	@Override
 	public void onBackPressed() {
-		if (!((RectDisplay) (findViewById(R.id.rectDisplay1))).back())
+		RectDisplay display = (RectDisplay) findViewById(R.id.rectDisplay1);
+		if (!((display.back())))
 			super.onBackPressed();
 	}
 
@@ -61,7 +74,36 @@ public class MainActivity extends Activity {
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_main, container,
 					false);
+			loadData(rootView);
 			return rootView;
+		}
+
+		private void loadData(View rootView) {
+			RectDisplay rectDisplay = (RectDisplay) (rootView
+					.findViewById(R.id.rectDisplay1));
+
+			try {
+				File path = new File(Environment.getExternalStorageDirectory(),
+						"Fin");
+				Log.d(TAG, path.toString());
+				if (path.exists()) {
+					ArrayList<FinancialTransactionSource> loadAllSourcesBelowPath = PathSourceWalker
+							.loadAllSourcesBelowPath(path);
+
+					GraphDataSource dataSource = new GraphDataSourceAdaptor(
+							loadAllSourcesBelowPath, path);
+
+					rectDisplay.setDataSource(dataSource);
+
+				} else {
+					Log.w(TAG, "Path does not exist");
+					for (File child : Environment.getExternalStorageDirectory()
+							.listFiles())
+						Log.w(TAG, child.toString());
+				}
+			} catch (IOException e) {
+				Log.e(TAG, e.toString());
+			}
 		}
 	}
 

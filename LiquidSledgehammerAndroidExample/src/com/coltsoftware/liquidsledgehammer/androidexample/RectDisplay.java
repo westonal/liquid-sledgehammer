@@ -101,6 +101,17 @@ public class RectDisplay extends View {
 		init();
 	}
 
+	public void setDataSource(GraphDataSource dataSource) {
+		if (this.dataSource == dataSource)
+			return;
+		this.dataSource = dataSource;
+		split = null;
+		split2 = null;
+		if (va != null)
+			va.cancel();
+		invalidate();
+	}
+
 	private void init() {
 	}
 

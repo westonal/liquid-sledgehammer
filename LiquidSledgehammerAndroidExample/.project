@@ -32,6 +32,16 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>jsonsrc</name>
+			<type>2</type>
+			<locationURI>WORKSPACE_LOC/LiquidSledgehammerJson/src</locationURI>
+		</link>
+		<link>
+			<name>lssrc</name>
+			<type>2</type>
+			<locationURI>WORKSPACE_LOC/LiquidSledgehammerCore/src</locationURI>
+		</link>
+		<link>
 			<name>rectLibrarySource</name>
 			<type>2</type>
 			<locationURI>WORKSPACE_LOC/RectangleAreaGraph/RectAreaLibrary/src</locationURI>
