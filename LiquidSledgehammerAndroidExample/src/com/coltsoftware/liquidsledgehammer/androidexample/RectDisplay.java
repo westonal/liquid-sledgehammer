@@ -18,7 +18,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
 
 import com.coltsoftware.rectangleareagraph.Rectangle;
 import com.coltsoftware.rectangleareagraph.RectangleSplit;
@@ -29,15 +28,15 @@ public class RectDisplay extends View {
 	private static final String TAG = "RectDisplay";
 
 	private class Split {
-		public Split(List<SplitResult<String>> split) {
+		public Split(List<SplitResult<Object>> split) {
 			this.split = split;
 		}
 
-		private List<SplitResult<String>> split;
+		private List<SplitResult<Object>> split;
 		private int fillColor = 0xff00ff00;
 
 		public void draw(Canvas canvas) {
-			for (SplitResult<String> rect : split) {
+			for (SplitResult<Object> rect : split) {
 				paint.setColor(fillColor);
 				paint.setStyle(Style.FILL);
 				Rect graphicsRect = toGraphicsRect(rect.getRectangle());
@@ -48,8 +47,8 @@ public class RectDisplay extends View {
 			}
 		}
 
-		public SplitResult<String> findItemAt(int x, int y) {
-			for (SplitResult<String> rect : split)
+		public SplitResult<Object> findItemAt(int x, int y) {
+			for (SplitResult<Object> rect : split)
 				if (rect.getRectangle().inside(x, y))
 					return rect;
 			return null;
@@ -61,12 +60,14 @@ public class RectDisplay extends View {
 	}
 
 	private Split split;
-	private SplitResult<String> animating;
+	private SplitResult<Object> animating;
 	private Split split2;
 	private final Paint paint = new Paint();
 	protected float blend;
 	private ValueAnimator va;
 	private final Matrix matrix = new Matrix();
+
+	private GraphDataSource dataSource = new FakeDataSource();
 
 	public RectDisplay(Context context) {
 		super(context);
@@ -84,7 +85,6 @@ public class RectDisplay extends View {
 	}
 
 	private void init() {
-
 	}
 
 	@Override
@@ -92,6 +92,8 @@ public class RectDisplay extends View {
 		canvas.drawColor(0xff00ff00);
 		if (split == null) {
 			split = calculateSplit();
+			if (split == null)
+				return;
 		}
 		split.draw(canvas);
 		if (split2 != null && animating != null) {
@@ -108,11 +110,8 @@ public class RectDisplay extends View {
 	}
 
 	private Split calculateSplit() {
-		RectangleSplit<String> rectangleSplit = new RectangleSplit<String>();
-		rectangleSplit.addValue(10, "A");
-		rectangleSplit.addValue(20, "B");
-		rectangleSplit.addValue(40, "C");
-		rectangleSplit.addValue(70, "D");
+		Object tag = null;
+		RectangleSplit<Object> rectangleSplit = dataSource.getData(tag);
 		Split split = new Split(rectangleSplit.split(new Rectangle(0, 0,
 				getWidth() - 1, getHeight() - 1)));
 		split.setFillColor(0xff000000 + new Random().nextInt(0xffffff));
@@ -141,7 +140,7 @@ public class RectDisplay extends View {
 				return false;
 			int x = (int) event.getX();
 			int y = (int) event.getY();
-			SplitResult<String> findItemAt = findItemAt(x, y);
+			SplitResult<Object> findItemAt = findItemAt(x, y);
 			if (findItemAt != null) {
 				Log.d(TAG,
 						String.format("Clicked %s (%s)",
@@ -199,7 +198,7 @@ public class RectDisplay extends View {
 		va.start();
 	}
 
-	private SplitResult<String> findItemAt(int x, int y) {
+	private SplitResult<Object> findItemAt(int x, int y) {
 		if (split == null)
 			return null;
 		return split.findItemAt(x, y);
