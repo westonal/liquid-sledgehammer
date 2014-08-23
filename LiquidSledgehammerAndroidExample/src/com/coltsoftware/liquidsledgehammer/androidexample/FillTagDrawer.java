@@ -12,7 +12,11 @@ public final class FillTagDrawer implements TagDrawer {
 
 	@Override
 	public void drawTag(Canvas canvas, Rect area, Object tag) {
-		paint.setColor(fillColor);
+		if (tag instanceof FakeDataSource.Item) {
+			paint.setColor(((FakeDataSource.Item) tag).getColor());
+		} else {
+			paint.setColor(fillColor);
+		}
 		paint.setStyle(Style.FILL);
 		canvas.drawRect(area, paint);
 	}
