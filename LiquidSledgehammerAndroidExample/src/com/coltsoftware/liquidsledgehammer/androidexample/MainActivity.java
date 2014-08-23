@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -56,11 +57,21 @@ public class MainActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	private long backTimer;
+
 	@Override
 	public void onBackPressed() {
 		RectDisplay display = (RectDisplay) findViewById(R.id.rectDisplay1);
-		if (!((display.back())))
-			super.onBackPressed();
+		if (!display.back()) {
+			long currentTimeMillis = System.currentTimeMillis();
+			if (currentTimeMillis - backTimer < 5000)
+				super.onBackPressed();
+			else {
+				backTimer = currentTimeMillis;
+				Toast.makeText(this, "Press back again to exit",
+						Toast.LENGTH_SHORT).show();
+			}
+		}
 	}
 
 	/**
