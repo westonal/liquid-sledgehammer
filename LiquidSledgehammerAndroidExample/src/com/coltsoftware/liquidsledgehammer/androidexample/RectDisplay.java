@@ -250,4 +250,8 @@ public class RectDisplay extends View {
 		return true;
 	}
 
+	public void setTagDrawer(TagDrawer tagDrawer) {
+		this.tagDrawer = tagDrawer;
+	}
+
 }

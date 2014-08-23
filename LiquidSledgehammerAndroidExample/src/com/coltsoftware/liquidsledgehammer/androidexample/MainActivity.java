@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.coltsoftware.liquidsledgehammer.androidexample.truedata.FinancialTagDrawer;
 import com.coltsoftware.liquidsledgehammer.androidexample.truedata.GraphDataSourceAdaptor;
 import com.coltsoftware.liquidsledgehammer.androidexample.truedata.PathSourceWalker;
 import com.coltsoftware.liquidsledgehammer.sources.FinancialTransactionSource;
@@ -83,17 +84,19 @@ public class MainActivity extends Activity {
 					.findViewById(R.id.rectDisplay1));
 
 			try {
-				File path = new File(Environment.getExternalStorageDirectory(),
-						"Fin");
+				File finances = new File(
+						Environment.getExternalStorageDirectory(), "Fin");
+				File path = new File(finances, "Transactions");
 				Log.d(TAG, path.toString());
 				if (path.exists()) {
 					ArrayList<FinancialTransactionSource> loadAllSourcesBelowPath = PathSourceWalker
 							.loadAllSourcesBelowPath(path);
 
 					GraphDataSource dataSource = new GraphDataSourceAdaptor(
-							loadAllSourcesBelowPath, path);
+							loadAllSourcesBelowPath, finances);
 
 					rectDisplay.setDataSource(dataSource);
+					rectDisplay.setTagDrawer(new FinancialTagDrawer());
 
 				} else {
 					Log.w(TAG, "Path does not exist");

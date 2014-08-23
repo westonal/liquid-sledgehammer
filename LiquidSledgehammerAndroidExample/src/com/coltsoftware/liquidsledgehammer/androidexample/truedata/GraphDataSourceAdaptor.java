@@ -18,6 +18,7 @@ public final class GraphDataSourceAdaptor implements GraphDataSource {
 
 	private final Random rand = new Random(123);
 	private final ArrayList<FinancialTransactionSource> sources;
+	private final FinancialTreeNode root;
 
 	public GraphDataSourceAdaptor(
 			ArrayList<FinancialTransactionSource> sources, File path)
@@ -27,7 +28,7 @@ public final class GraphDataSourceAdaptor implements GraphDataSource {
 		Processor processor = new Processor(
 				FileToGroupAliasResolver.createAliasPathResolver(path),
 				FileToGroupAliasResolver.createSubTransactionFactory(path));
-		FinancialTreeNode root = new FinancialTreeNode();
+		root = new FinancialTreeNode();
 		for (FinancialTransactionSource source : sources)
 			processor.populateTree(source, root);
 
@@ -35,13 +36,30 @@ public final class GraphDataSourceAdaptor implements GraphDataSource {
 
 	@Override
 	public RectangleSplit<Object> getData(Object tag) {
+		if (tag == null) {
+			tag = root;
+		}
 
 		RectangleSplit<Object> rectangleSplit = new RectangleSplit<Object>();
-		int objects = rand.nextInt(50) + 3;
-		for (int i = 0; i < objects; i++)
-			rectangleSplit.addValue(rand.nextInt(100) + 5, new Item(i,
-					randomColor()));
+
+		if (tag instanceof FinancialTreeNode) {
+			FinancialTreeNode node = (FinancialTreeNode) tag;
+			addFinancialNodeData(rectangleSplit, node);
+		}
+
+		// RectangleSplit<Object> rectangleSplit = new RectangleSplit<Object>();
+		// int objects = rand.nextInt(50) + 3;
+		// for (int i = 0; i < objects; i++)
+		// rectangleSplit.addValue(rand.nextInt(100) + 5, new Item(i,
+		// randomColor()));
 		return rectangleSplit;
+	}
+
+	private void addFinancialNodeData(RectangleSplit<Object> rectangleSplit,
+			FinancialTreeNode node) {
+		for (FinancialTreeNode child : node)
+			rectangleSplit.addValue(
+					(int) Math.abs(child.getTotalValue().getValue()), child);
 	}
 
 	private int randomColor() {
