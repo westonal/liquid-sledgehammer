@@ -79,7 +79,10 @@ public class MainActivity extends Activity {
 	 */
 	public static class PlaceholderFragment extends Fragment {
 
+		private GraphDataSourceAdaptor dataSource;
+
 		public PlaceholderFragment() {
+			setRetainInstance(true);
 		}
 
 		@Override
@@ -87,29 +90,25 @@ public class MainActivity extends Activity {
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_main, container,
 					false);
-			loadData(rootView);
+			if (dataSource == null)
+				loadData(rootView);
+
+			applyDataSource(rootView, dataSource);
 			return rootView;
 		}
 
 		private void loadData(View rootView) {
-			RectDisplay rectDisplay = (RectDisplay) (rootView
-					.findViewById(R.id.rectDisplay1));
-
 			try {
 				File finances = new File(
 						Environment.getExternalStorageDirectory(), "Fin");
 				File path = new File(finances, "Transactions");
 				Log.d(TAG, path.toString());
 				if (path.exists()) {
-					ArrayList<FinancialTransactionSource> loadAllSourcesBelowPath = PathSourceWalker
+					ArrayList<FinancialTransactionSource> sources = PathSourceWalker
 							.loadAllSourcesBelowPath(path);
 
-					GraphDataSource dataSource = new GraphDataSourceAdaptor(
-							getActivity(), loadAllSourcesBelowPath, finances);
-
-					rectDisplay.setDataSource(dataSource);
-					rectDisplay.setTagDrawer(new FinancialTagDrawer());
-					rectDisplay.setTagFillDrawer(new FinancialFillTagDrawer());
+					dataSource = new GraphDataSourceAdaptor(getActivity(),
+							sources, finances);
 
 				} else {
 					Log.w(TAG, "Path does not exist");
@@ -120,6 +119,14 @@ public class MainActivity extends Activity {
 			} catch (IOException e) {
 				Log.e(TAG, e.toString());
 			}
+		}
+
+		private void applyDataSource(View rootView, GraphDataSource dataSource) {
+			RectDisplay rectDisplay = (RectDisplay) (rootView
+					.findViewById(R.id.rectDisplay1));
+			rectDisplay.setDataSource(dataSource);
+			rectDisplay.setTagDrawer(new FinancialTagDrawer());
+			rectDisplay.setTagFillDrawer(new FinancialFillTagDrawer());
 		}
 	}
 
