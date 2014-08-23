@@ -13,10 +13,13 @@ import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 public class RectDisplay extends View {
 
+	private static final String TAG = "RectDisplay";
 	private RectangleSplit<String> rectangleSplit;
 	private List<SplitResult<String>> split;
 	private Paint paint = new Paint();
@@ -66,6 +69,19 @@ public class RectDisplay extends View {
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		split = null;
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+			Log.d(TAG, "DOWN");
+			return true;
+		}
+		if (event.getActionMasked() == MotionEvent.ACTION_UP) {
+			Log.d(TAG, "UP");
+			return true;
+		}
+		return super.onTouchEvent(event);
 	}
 
 }
