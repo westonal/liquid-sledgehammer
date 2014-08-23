@@ -39,11 +39,27 @@ public class RectDisplay extends View {
 			for (SplitResult<Object> rect : split) {
 				paint.setColor(fillColor);
 				paint.setStyle(Style.FILL);
-				Rect graphicsRect = toGraphicsRect(rect.getRectangle());
+				Rectangle rectangle = rect.getRectangle();
+				Rect graphicsRect = toGraphicsRect(rectangle);
 				canvas.drawRect(graphicsRect, paint);
 				paint.setColor(0xff0000ff);
 				paint.setStyle(Style.STROKE);
 				canvas.drawRect(graphicsRect, paint);
+
+				canvas.save();
+
+				String text = rect.getTag().toString();
+				textPaint.getTextBounds(text, 0, text.length(), textBounds);
+				boolean rotateText = graphicsRect.width() < textBounds.width();
+				if (rotateText)
+					canvas.rotate(-90, graphicsRect.exactCenterX(),
+							graphicsRect.exactCenterY());
+				canvas.drawText(
+						text,
+						graphicsRect.exactCenterX() - textBounds.exactCenterX(),
+						graphicsRect.exactCenterY() - textBounds.exactCenterY(),
+						textPaint);
+				canvas.restore();
 			}
 		}
 
@@ -62,7 +78,9 @@ public class RectDisplay extends View {
 	private Split split;
 	private SplitResult<Object> animating;
 	private Split split2;
+	private final Rect textBounds = new Rect();
 	private final Paint paint = new Paint();
+	private final Paint textPaint = new Paint();
 	protected float blend;
 	private ValueAnimator va;
 	private final Matrix matrix = new Matrix();
@@ -91,7 +109,7 @@ public class RectDisplay extends View {
 	protected void onDraw(Canvas canvas) {
 		canvas.drawColor(0xff00ff00);
 		if (split == null) {
-			split = calculateSplit();
+			split = calculateSplit(null);
 			if (split == null)
 				return;
 		}
@@ -109,8 +127,7 @@ public class RectDisplay extends View {
 		}
 	}
 
-	private Split calculateSplit() {
-		Object tag = null;
+	private Split calculateSplit(Object tag) {
 		RectangleSplit<Object> rectangleSplit = dataSource.getData(tag);
 		Split split = new Split(rectangleSplit.split(new Rectangle(0, 0,
 				getWidth() - 1, getHeight() - 1)));
@@ -146,7 +163,7 @@ public class RectDisplay extends View {
 						String.format("Clicked %s (%s)",
 								findItemAt.getRectangle(), findItemAt.getTag()));
 				animating = findItemAt;
-				split2 = calculateSplit();
+				split2 = calculateSplit(findItemAt.getTag());
 				animateToNewItem();
 			}
 			return true;
