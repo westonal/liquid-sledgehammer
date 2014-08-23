@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.coltsoftware.liquidsledgehammer.androidexample.truedata.FinancialFillTagDrawer;
 import com.coltsoftware.liquidsledgehammer.androidexample.truedata.FinancialTagDrawer;
 import com.coltsoftware.liquidsledgehammer.androidexample.truedata.GraphDataSourceAdaptor;
 import com.coltsoftware.liquidsledgehammer.androidexample.truedata.PathSourceWalker;
@@ -97,6 +98,7 @@ public class MainActivity extends Activity {
 
 					rectDisplay.setDataSource(dataSource);
 					rectDisplay.setTagDrawer(new FinancialTagDrawer());
+					rectDisplay.setTagFillDrawer(new FinancialFillTagDrawer());
 
 				} else {
 					Log.w(TAG, "Path does not exist");

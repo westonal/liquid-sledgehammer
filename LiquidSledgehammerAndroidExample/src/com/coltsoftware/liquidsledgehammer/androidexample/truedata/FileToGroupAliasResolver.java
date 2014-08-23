@@ -13,15 +13,18 @@ import com.coltsoftware.liquidsledgehammer.subtransactions.strategies.descriptio
 import com.coltsoftware.liquidsledgehammer.subtransactions.strategies.description.NamedDescriptionStrategy;
 import com.google.gson.Gson;
 
-public class FileToGroupAliasResolver {
+public final class FileToGroupAliasResolver {
 
-	public static AliasPathResolver createAliasPathResolver(File path)
-			throws IOException {
+	private final File groupsFile;
+
+	public FileToGroupAliasResolver(File groupsFile) {
+		this.groupsFile = groupsFile;
+	}
+
+	public AliasPathResolver createAliasPathResolver() throws IOException {
 		AliasPathResolver aliasPathResolver = new AliasPathResolver();
 
-		path = new File(path, "groups.json");
-
-		FileReader reader = new FileReader(path);
+		FileReader reader = new FileReader(groupsFile);
 		try {
 			GroupJson[] groups = new Gson().fromJson(reader, GroupJson[].class);
 			for (GroupJson group : groups)
@@ -33,13 +36,11 @@ public class FileToGroupAliasResolver {
 		return aliasPathResolver;
 	}
 
-	public static SubTransactionFactory createSubTransactionFactory(File path)
+	public SubTransactionFactory createSubTransactionFactory()
 			throws IOException {
 		DescriptionMatchingStrategy strategy = new DescriptionMatchingStrategy();
 
-		path = new File(path, "groups.json");
-
-		FileReader reader = new FileReader(path);
+		FileReader reader = new FileReader(groupsFile);
 		try {
 			GroupJson[] groups = new Gson().fromJson(reader, GroupJson[].class);
 			for (GroupJson group : groups) {

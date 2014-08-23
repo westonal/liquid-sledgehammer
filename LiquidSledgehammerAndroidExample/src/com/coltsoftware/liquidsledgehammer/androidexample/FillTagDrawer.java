@@ -5,20 +5,24 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Paint.Style;
 
-public final class FillTagDrawer implements TagDrawer {
+public class FillTagDrawer implements TagDrawer {
 
 	private final Paint paint = new Paint();
 	private int fillColor = 0xff00ff00;
 
 	@Override
 	public void drawTag(Canvas canvas, Rect area, Object tag) {
+		paint.setStyle(Style.FILL);
+		tagToPaint(tag, paint);
+		canvas.drawRect(area, paint);
+	}
+
+	protected void tagToPaint(Object tag, Paint paint) {
 		if (tag instanceof FakeDataSource.Item) {
 			paint.setColor(((FakeDataSource.Item) tag).getColor());
 		} else {
 			paint.setColor(fillColor);
 		}
-		paint.setStyle(Style.FILL);
-		canvas.drawRect(area, paint);
 	}
 
 	public void setFillColor(int fillColor) {

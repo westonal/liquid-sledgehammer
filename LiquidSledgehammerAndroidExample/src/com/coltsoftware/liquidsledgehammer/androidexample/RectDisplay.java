@@ -20,6 +20,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
+import com.coltsoftware.liquidsledgehammer.androidexample.truedata.FinancialFillTagDrawer;
 import com.coltsoftware.rectangleareagraph.Rectangle;
 import com.coltsoftware.rectangleareagraph.RectangleSplit;
 import com.coltsoftware.rectangleareagraph.RectangleSplit.SplitResult;
@@ -32,7 +33,7 @@ public class RectDisplay extends View {
 
 	private TagDrawer tagDrawer = new BasicToStringTagDrawer();
 	private TagDrawer strokeTagDrawer = new StrokeTagDrawer();
-	private FillTagDrawer fillTagDrawer = new FillTagDrawer();
+	private TagDrawer fillTagDrawer = new FillTagDrawer();
 
 	private class Split {
 		private SplitResult<Object> parent;
@@ -43,7 +44,6 @@ public class RectDisplay extends View {
 		}
 
 		private List<SplitResult<Object>> split;
-		private int fillColor = 0xff00ff00;
 
 		public void draw(Canvas canvas) {
 			for (SplitResult<Object> rect : split) {
@@ -51,7 +51,6 @@ public class RectDisplay extends View {
 				Rect graphicsRect = toGraphicsRect(rectangle);
 
 				canvas.save();
-				fillTagDrawer.setFillColor(fillColor);
 				fillTagDrawer.drawTag(canvas, graphicsRect, rect.getTag());
 				canvas.restore();
 
@@ -70,10 +69,6 @@ public class RectDisplay extends View {
 				if (rect.getRectangle().inside(x, y))
 					return rect;
 			return null;
-		}
-
-		public void setFillColor(int fillColor) {
-			this.fillColor = fillColor;
 		}
 	}
 
@@ -145,7 +140,6 @@ public class RectDisplay extends View {
 		RectangleSplit<Object> rectangleSplit = dataSource.getData(tag);
 		Split split = new Split(parent, rectangleSplit.split(new Rectangle(0,
 				0, getWidth() - 1, getHeight() - 1)));
-		split.setFillColor(0xff000000 + new Random().nextInt(0xffffff));
 		return split;
 	}
 
@@ -252,6 +246,10 @@ public class RectDisplay extends View {
 
 	public void setTagDrawer(TagDrawer tagDrawer) {
 		this.tagDrawer = tagDrawer;
+	}
+
+	public void setTagFillDrawer(FinancialFillTagDrawer financialFillTagDrawer) {
+		this.fillTagDrawer = financialFillTagDrawer;
 	}
 
 }
