@@ -111,7 +111,6 @@ public class RectDisplay extends View {
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		canvas.drawColor(0xff00ff00);
 		if (split == null) {
 			split = calculateSplit(null);
 			if (split == null)

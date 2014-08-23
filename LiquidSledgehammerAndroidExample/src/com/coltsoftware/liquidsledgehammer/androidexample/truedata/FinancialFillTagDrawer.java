@@ -28,9 +28,9 @@ public final class FinancialFillTagDrawer extends FillTagDrawer {
 
 	private void valueToColor(Paint paint, Money money) {
 		int value = (int) Math.abs(money.getValue());
-		float r = value / 10000f;
-		float g = value / 1000f;
-		float b = value / 100f;
+		float r = 0.5f + 0.5f * value / 10000f;
+		float g = 0.5f + 0.5f * value / 1000f;
+		float b = 0.5f + 0.5f * value / 100f;
 		paint.setARGB(255, (int) (255 * r), (int) (255 * g), (int) (255 * b));
 	}
 
