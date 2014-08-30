@@ -54,6 +54,7 @@ public class Main {
 		outputJson(root.findOrCreate("External"), "external");
 		outputJson(root.findOrCreate("Error"), "error");
 		outputImage(root.findOrCreate("External"), "external");
+		new CSVOutput(root.findOrCreate("External"), outPath, "External.csv");
 	}
 
 	private static void outputImage(FinancialTreeNode node, String fileName) {
