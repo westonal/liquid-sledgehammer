@@ -43,4 +43,24 @@ public final class MoneyFormattingTests extends MoneyTestBase {
 		assertEquals("JPY 234", yen(234).toString());
 	}
 
+	@Test
+	public void can_format_gbp_money_without_symbol() {
+		assertEquals("1.34", gbp(134).toStringNoSymbol());
+	}
+
+	@Test
+	public void can_format_negative_euro_money_without_symbol() {
+		assertEquals("-0.34", euro(-34).toStringNoSymbol());
+	}
+
+	@Test
+	public void can_format_large_value_gbp_money_with_thousand_seperators() {
+		assertEquals("£ 1,340.00", gbp(134000).toString());
+	}
+
+	@Test
+	public void can_format_large_value_gbp_money_without_thousand_seperators() {
+		assertEquals("1340.00", gbp(134000).toStringNoSymbol());
+	}
+
 }

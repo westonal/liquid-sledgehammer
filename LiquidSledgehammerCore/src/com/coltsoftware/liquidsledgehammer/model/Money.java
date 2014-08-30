@@ -84,16 +84,7 @@ public final class Money {
 
 	@Override
 	public String toString() {
-		int defaultFractionDigits = currency.getDefaultFractionDigits();
-		NumberFormat format = NumberFormat.getInstance();
-		format.setMinimumFractionDigits(defaultFractionDigits);
-		format.setMaximumFractionDigits(defaultFractionDigits);
-		double divider = getDecimalFraction(defaultFractionDigits);
-		double displayValue = Math.abs(value) / divider;
-		String sign = value < 0 ? "-" : "";
-		return String.format("%s%s %s", sign,
-				currency.getSymbol(Locale.getDefault()),
-				format.format(displayValue));
+		return toString(true);
 	}
 
 	private static double getDecimalFraction(int defaultFractionDigits) {
@@ -165,4 +156,23 @@ public final class Money {
 		return true;
 	}
 
+	public String toStringNoSymbol() {
+		return toString(false);
+	}
+
+	private String toString(boolean symbol) {
+		int defaultFractionDigits = currency.getDefaultFractionDigits();
+		NumberFormat format = NumberFormat.getInstance();
+		if (!symbol)
+			format.setGroupingUsed(false);
+		format.setMinimumFractionDigits(defaultFractionDigits);
+		format.setMaximumFractionDigits(defaultFractionDigits);
+		double divider = getDecimalFraction(defaultFractionDigits);
+		double displayValue = Math.abs(value) / divider;
+		String sign = value < 0 ? "-" : "";
+		String valueString = format.format(displayValue);
+		return symbol ? String.format("%s%s %s", sign,
+				currency.getSymbol(Locale.getDefault()), valueString) : String
+				.format("%s%s", sign, valueString);
+	}
 }
