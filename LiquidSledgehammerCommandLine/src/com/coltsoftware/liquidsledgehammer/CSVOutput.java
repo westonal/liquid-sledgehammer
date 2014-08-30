@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import com.coltsoftware.liquidsledgehammer.collections.AliasPathResolver;
 import com.coltsoftware.liquidsledgehammer.collections.FinancialTreeNode;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.model.Money;
@@ -18,9 +19,12 @@ public class CSVOutput {
 
 	private final FinancialTreeNode root;
 	private final ArrayList<String> data = new ArrayList<String>();
+	private final AliasPathResolver aliasPathResolver;
 
-	public CSVOutput(FinancialTreeNode root, String path, String fileName) {
+	public CSVOutput(FinancialTreeNode root,
+			AliasPathResolver aliasPathResolver, String path, String fileName) {
 		this.root = root;
+		this.aliasPathResolver = aliasPathResolver;
 		File file = new File(new File(path), fileName);
 		writeHeader();
 		writeNode(root);
@@ -44,6 +48,8 @@ public class CSVOutput {
 		sb.append("Value");
 		sb.append(",");
 		sb.append("Adjusted Value");
+		sb.append(",");
+		sb.append("Group");
 		sb.append(",");
 		data.add(sb.toString());
 	}
@@ -98,6 +104,8 @@ public class CSVOutput {
 		sb.append(csvEncode(transaction.getValue()));
 		sb.append(",");
 		sb.append(csvEncode(subTransaction.getValue()));
+		sb.append(",");
+		sb.append(csvEscape(aliasPathResolver.resolve(subTransaction.getGroup())));
 		sb.append(",");
 		data.add(sb.toString());
 	}

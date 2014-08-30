@@ -42,7 +42,8 @@ public class Main {
 		File f = new File("C:\\Temp\\Transactions");
 		ArrayList<FinancialTransactionSource> sources = PathSourceWalker
 				.loadAllSourcesBelowPath(f.toPath());
-		Processor processor = new Processor(createAliasPathResolver(f),
+		AliasPathResolver aliasPathResolver = createAliasPathResolver(f);		
+		Processor processor = new Processor(aliasPathResolver,
 				createSubTransactionFactory(f));
 		FinancialTreeNode root = new FinancialTreeNode();
 		for (FinancialTransactionSource source : sources)
@@ -55,6 +56,7 @@ public class Main {
 		outputJson(root.findOrCreate("Error"), "error");
 		outputImage(root.findOrCreate("External"), "external");
 		new CSVOutput(root.findOrCreate("External"), outPath, "External.csv");
+		new CSVOutput(root.findOrCreate("External"), aliasPathResolver, outPath, "External.csv");
 	}
 
 	private static void outputImage(FinancialTreeNode node, String fileName) {
