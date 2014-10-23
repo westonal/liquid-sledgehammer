@@ -56,7 +56,7 @@ public final class TransactionDateFilter {
 		}
 	}
 
-	public static abstract class SingleDateFilter implements TransactionFilter {
+	private static abstract class SingleDateFilter implements TransactionFilter {
 
 		protected final LocalDate date;
 
@@ -65,7 +65,7 @@ public final class TransactionDateFilter {
 		}
 	}
 
-	public static class MinDateFilter extends SingleDateFilter {
+	private static class MinDateFilter extends SingleDateFilter {
 
 		private MinDateFilter(LocalDate minimumDate) {
 			super(minimumDate);
@@ -77,7 +77,7 @@ public final class TransactionDateFilter {
 		}
 	}
 
-	public static class MaxDateFilter extends SingleDateFilter {
+	private static class MaxDateFilter extends SingleDateFilter {
 
 		private MaxDateFilter(LocalDate maximumDate) {
 			super(maximumDate);
