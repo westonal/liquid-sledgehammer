@@ -23,6 +23,11 @@ public final class LogicTransactionFilter {
 		return new NotTransactionFilter(filter);
 	}
 
+	public static TransactionFilter xor(TransactionFilter lhsFilter,
+			TransactionFilter rhsFilter) {
+		return new XOrTransactionFilter(lhsFilter, rhsFilter);
+	}
+
 	private static abstract class BinaryOperatorTransactionFilter implements
 			TransactionFilter {
 
@@ -61,6 +66,20 @@ public final class LogicTransactionFilter {
 		@Override
 		public boolean allow(FinancialTransaction transaction) {
 			return lhsFilter.allow(transaction) || rhsFilter.allow(transaction);
+		}
+	}
+
+	private static class XOrTransactionFilter extends
+			BinaryOperatorTransactionFilter {
+
+		public XOrTransactionFilter(TransactionFilter lhsFilter,
+				TransactionFilter rhsFilter) {
+			super(lhsFilter, rhsFilter);
+		}
+
+		@Override
+		public boolean allow(FinancialTransaction transaction) {
+			return lhsFilter.allow(transaction) ^ rhsFilter.allow(transaction);
 		}
 	}
 
