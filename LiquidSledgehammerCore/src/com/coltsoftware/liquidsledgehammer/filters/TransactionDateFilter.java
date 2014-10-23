@@ -33,26 +33,26 @@ public final class TransactionDateFilter {
 			return new TransactionDateFilter.MinDateFilter(minimumDate);
 		}
 
-		public Builder setMinimumDate(int year, int month, int day) {
-			return setMinimumDate(ymdToLocalDate(year, month, day));
+		public Builder minimumDate(int year, int month, int day) {
+			return minimumDate(ymdToLocalDate(year, month, day));
 		}
 
-		private LocalDate ymdToLocalDate(int year, int month, int day) {
-			return new LocalDate(year, month, day);
-		}
-
-		public Builder setMinimumDate(LocalDate date) {
+		public Builder minimumDate(LocalDate date) {
 			this.minimumDate = date;
 			return this;
 		}
 
-		public Builder setMaximumDate(int year, int month, int day) {
-			return setMaximumDate(ymdToLocalDate(year, month, day));
+		public Builder maximumDate(int year, int month, int day) {
+			return maximumDate(ymdToLocalDate(year, month, day));
 		}
 
-		public Builder setMaximumDate(LocalDate date) {
+		public Builder maximumDate(LocalDate date) {
 			this.maximumDate = date;
 			return this;
+		}
+
+		private LocalDate ymdToLocalDate(int year, int month, int day) {
+			return new LocalDate(year, month, day);
 		}
 	}
 
