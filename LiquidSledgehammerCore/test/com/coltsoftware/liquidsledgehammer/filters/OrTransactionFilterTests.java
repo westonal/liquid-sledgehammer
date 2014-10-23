@@ -8,7 +8,7 @@ import static org.mockito.Mockito.*;
 
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 
-public final class AndTransactionFilterTests extends TransactionFilterTestBase {
+public final class OrTransactionFilterTests extends TransactionFilterTestBase {
 
 	private FinancialTransaction transaction;
 
@@ -19,32 +19,32 @@ public final class AndTransactionFilterTests extends TransactionFilterTestBase {
 
 	@Test
 	public void true_and_true_allows() {
-		assertTrue(LogicTransactionFilter.and(BooleanTransactionFilter.TRUE,
+		assertTrue(LogicTransactionFilter.or(BooleanTransactionFilter.TRUE,
 				BooleanTransactionFilter.TRUE).allow(transaction));
 	}
 
 	@Test
-	public void true_and_false_does_not_allow() {
-		assertFalse(LogicTransactionFilter.and(BooleanTransactionFilter.TRUE,
+	public void true_and_false_allows() {
+		assertTrue(LogicTransactionFilter.or(BooleanTransactionFilter.TRUE,
 				BooleanTransactionFilter.FALSE).allow(transaction));
 	}
 
 	@Test
-	public void false_and_true_does_not_allow() {
-		assertFalse(LogicTransactionFilter.and(BooleanTransactionFilter.FALSE,
+	public void false_and_true_allows() {
+		assertTrue(LogicTransactionFilter.or(BooleanTransactionFilter.FALSE,
 				BooleanTransactionFilter.TRUE).allow(transaction));
 	}
 
 	@Test
 	public void false_and_false_does_not_allow() {
-		assertFalse(LogicTransactionFilter.and(BooleanTransactionFilter.FALSE,
+		assertFalse(LogicTransactionFilter.or(BooleanTransactionFilter.FALSE,
 				BooleanTransactionFilter.FALSE).allow(transaction));
 	}
 
 	@Test
-	public void short_circuit_rhs_if_lhs_is_false() {
+	public void short_circuit_rhs_if_lhs_is_true() {
 		TransactionFilter rhsMock = mock(TransactionFilter.class);
-		assertFalse(LogicTransactionFilter.and(BooleanTransactionFilter.FALSE,
+		assertTrue(LogicTransactionFilter.or(BooleanTransactionFilter.TRUE,
 				rhsMock).allow(transaction));
 		verify(rhsMock, never()).allow(any(FinancialTransaction.class));
 	}
