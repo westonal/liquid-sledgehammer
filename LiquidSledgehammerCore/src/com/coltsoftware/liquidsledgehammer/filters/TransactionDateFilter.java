@@ -1,5 +1,7 @@
 package com.coltsoftware.liquidsledgehammer.filters;
 
+import static com.coltsoftware.liquidsledgehammer.filters.LogicTransactionFilter.and;
+
 import org.joda.time.LocalDate;
 
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
@@ -12,12 +14,23 @@ public final class TransactionDateFilter {
 
 		public TransactionFilter build() {
 			if (maximumDate != null && minimumDate != null)
-				return NullTransactionFilter.INSTANCE;
+				return and(createMinDateFilter(), createMaxDateFilter());
+
 			if (maximumDate != null)
-				return new TransactionDateFilter.MaxDateFilter(maximumDate);
+				return createMaxDateFilter();
+
 			if (minimumDate != null)
-				return new TransactionDateFilter.MinDateFilter(minimumDate);
-			return NullTransactionFilter.INSTANCE;
+				return createMinDateFilter();
+
+			return BooleanTransactionFilter.TRUE;
+		}
+
+		private TransactionFilter createMaxDateFilter() {
+			return new TransactionDateFilter.MaxDateFilter(maximumDate);
+		}
+
+		private TransactionFilter createMinDateFilter() {
+			return new TransactionDateFilter.MinDateFilter(minimumDate);
 		}
 
 		public Builder setMinimumDate(int year, int month, int day) {
