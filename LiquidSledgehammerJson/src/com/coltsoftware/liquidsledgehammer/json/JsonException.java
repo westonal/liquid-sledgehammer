@@ -4,6 +4,6 @@ import com.coltsoftware.liquidsledgehammer.BaseException;
 
 public final class JsonException extends BaseException {
 
-	private static final long serialVersionUID = -2134564005086900529L;
+	private static final long serialVersionUID = 1L;
 
 }

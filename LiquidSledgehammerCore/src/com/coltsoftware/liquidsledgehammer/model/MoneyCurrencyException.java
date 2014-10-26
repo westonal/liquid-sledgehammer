@@ -4,6 +4,6 @@ import com.coltsoftware.liquidsledgehammer.BaseException;
 
 public final class MoneyCurrencyException extends BaseException {
 
-	private static final long serialVersionUID = 7673728265835455396L;
+	private static final long serialVersionUID = 1L;
 
 }
