@@ -14,22 +14,40 @@ public final class TransactionDateFilter {
 
 		public TransactionFilter build() {
 			if (maximumDate != null && minimumDate != null)
-				return and(createMinDateFilter(), createMaxDateFilter());
+				return buildRangeFilter();
 
 			if (maximumDate != null)
-				return createMaxDateFilter();
+				return buildMaxDateFilter();
 
 			if (minimumDate != null)
-				return createMinDateFilter();
+				return buildMinDateFilter();
 
 			return BooleanTransactionFilter.TRUE;
 		}
 
-		private TransactionFilter createMaxDateFilter() {
+		protected TransactionFilter buildRangeFilter() {
+			checkDateRangeValid();
+
+			if (minimumDate.equals(maximumDate))
+				return createExactDateFilter();
+
+			return and(buildMinDateFilter(), buildMaxDateFilter());
+		}
+
+		protected void checkDateRangeValid() {
+			if (minimumDate.compareTo(maximumDate) > 0)
+				throw new DateRangeException();
+		}
+
+		private ExactDateFilter createExactDateFilter() {
+			return new ExactDateFilter(minimumDate);
+		}
+
+		private TransactionFilter buildMaxDateFilter() {
 			return new TransactionDateFilter.MaxDateFilter(maximumDate);
 		}
 
-		private TransactionFilter createMinDateFilter() {
+		private TransactionFilter buildMinDateFilter() {
 			return new TransactionDateFilter.MinDateFilter(minimumDate);
 		}
 
@@ -51,6 +69,14 @@ public final class TransactionDateFilter {
 			return this;
 		}
 
+		public Builder exactDate(int year, int month, int day) {
+			return exactDate(ymdToLocalDate(year, month, day));
+		}
+
+		public Builder exactDate(LocalDate date) {
+			return minimumDate(date).maximumDate(date);
+		}
+
 		private LocalDate ymdToLocalDate(int year, int month, int day) {
 			return new LocalDate(year, month, day);
 		}
@@ -58,11 +84,19 @@ public final class TransactionDateFilter {
 
 	private static abstract class SingleDateFilter implements TransactionFilter {
 
-		protected final LocalDate date;
+		private final LocalDate date;
 
 		private SingleDateFilter(LocalDate date) {
 			this.date = date;
 		}
+
+		@Override
+		public boolean allow(FinancialTransaction transaction) {
+			int compared = transaction.getDate().compareTo(date);
+			return evaluateCompareValue(compared);
+		}
+
+		protected abstract boolean evaluateCompareValue(int compared);
 	}
 
 	private static class MinDateFilter extends SingleDateFilter {
@@ -72,8 +106,8 @@ public final class TransactionDateFilter {
 		}
 
 		@Override
-		public boolean allow(FinancialTransaction transaction) {
-			return transaction.getDate().compareTo(date) >= 0;
+		protected boolean evaluateCompareValue(int compared) {
+			return compared >= 0;
 		}
 	}
 
@@ -84,8 +118,20 @@ public final class TransactionDateFilter {
 		}
 
 		@Override
-		public boolean allow(FinancialTransaction transaction) {
-			return transaction.getDate().compareTo(date) <= 0;
+		protected boolean evaluateCompareValue(int compared) {
+			return compared <= 0;
+		}
+	}
+
+	private static class ExactDateFilter extends SingleDateFilter {
+
+		private ExactDateFilter(LocalDate date) {
+			super(date);
+		}
+
+		@Override
+		protected boolean evaluateCompareValue(int compared) {
+			return compared == 0;
 		}
 	}
 

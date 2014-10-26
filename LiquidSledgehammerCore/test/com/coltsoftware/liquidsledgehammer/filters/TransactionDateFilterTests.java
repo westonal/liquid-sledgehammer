@@ -141,4 +141,27 @@ public final class TransactionDateFilterTests extends TransactionFilterTestBase 
 		assertFalse(f.allow(newForDate(2013, 9, 11)));
 	}
 
+	@Test
+	public void exact_date_allows_exact_match_on_max() {
+		TransactionFilter f = builder.exactDate(2013, 9, 10).build();
+		assertTrue(f.allow(newForDate(2013, 9, 10)));
+	}
+
+	@Test
+	public void exact_date_disallows_day_before() {
+		TransactionFilter f = builder.exactDate(2013, 9, 10).build();
+		assertFalse(f.allow(newForDate(2013, 9, 9)));
+	}
+
+	@Test
+	public void exact_date_disallows_day_after() {
+		TransactionFilter f = builder.exactDate(2013, 9, 10).build();
+		assertFalse(f.allow(newForDate(2013, 9, 11)));
+	}
+
+	@Test(expected=DateRangeException.class)
+	public void cant_build_invalid_date_range() {
+		builder.minimumDate(2012, 8, 2).maximumDate(2012, 8, 1).build();
+	}
+
 }
