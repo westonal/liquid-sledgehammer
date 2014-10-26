@@ -1,33 +1,47 @@
 package com.coltsoftware.liquidsledgehammer.model;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Currency;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 public final class Money {
 
 	public static final Money Zero = new Money(0);
 	private final Currency currency;
-	private final long value;
+	private final long minorValue;
 
-	public Money(long value, Currency currency) {
-		this.value = value;
+	public Money(long minorValue, Currency currency) {
+		this.minorValue = minorValue;
 		this.currency = currency;
 	}
 
-	public Money(long value) {
-		this(value, defaultCurrency());
+	public Money(long minorValue) {
+		this(minorValue, defaultCurrency());
 	}
 
 	public static Money fromString(String value, Currency currency) {
-		int idx = value.lastIndexOf('.');
+		String noDecimals = removeDecimalFromCurrencyString(value, currency);
+		long minorValue = Long.parseLong(noDecimals);
+		return new Money(minorValue, currency);
+	}
+
+	protected static String removeDecimalFromCurrencyString(String value,
+			Currency currency) {
+		DecimalFormat format = (DecimalFormat) DecimalFormat.getInstance();
+		DecimalFormatSymbols symbols = format.getDecimalFormatSymbols();
+		char decimalSeparator = symbols.getDecimalSeparator();
+		char groupSeparator = symbols.getGroupingSeparator();
+		int idx = value.lastIndexOf(decimalSeparator);
 		int decimalPlacesSeen = 0;
 		if (idx > -1)
 			decimalPlacesSeen = value.length() - idx - 1;
 		value += zerosForCurrency(currency, decimalPlacesSeen);
-		value = value.replaceFirst("\\.", "");
-		long value2 = (long) (Double.parseDouble(value));
-		return new Money(value2, currency);
+		value = value.replaceFirst(Pattern.quote("" + decimalSeparator), "");
+		value = value.replace("" + groupSeparator, "");
+		return value;
 	}
 
 	private static String zerosForCurrency(Currency currency,
@@ -54,7 +68,7 @@ public final class Money {
 	}
 
 	public long getValue() {
-		return value;
+		return minorValue;
 	}
 
 	public Currency getCurrency() {
@@ -71,12 +85,13 @@ public final class Money {
 	public boolean equals(Money other) {
 		if (other == null)
 			return false;
-		return other.value == value && currency.equals(other.currency);
+		return other.minorValue == minorValue
+				&& currency.equals(other.currency);
 	}
 
 	@Override
 	public int hashCode() {
-		int hash = (int) value;
+		int hash = (int) minorValue;
 		hash *= 31;
 		hash += currency.hashCode();
 		return hash;
@@ -96,11 +111,11 @@ public final class Money {
 			return this;
 		if (isZero())
 			return otherValue.negate();
-		return add(otherValue, -otherValue.value);
+		return add(otherValue, -otherValue.minorValue);
 	}
 
 	public Money negate() {
-		return new Money(-value, currency);
+		return new Money(-minorValue, currency);
 	}
 
 	public Money add(Money otherValue) {
@@ -108,22 +123,22 @@ public final class Money {
 			return otherValue;
 		if (otherValue.isZero())
 			return this;
-		return add(otherValue, otherValue.value);
+		return add(otherValue, otherValue.minorValue);
 	}
 
 	private Money add(Money otherValue, long valueToAdd) {
 		if (!currency.equals(otherValue.currency))
 			throw new MoneyCurrencyException();
 
-		return new Money(value + valueToAdd, currency);
+		return new Money(minorValue + valueToAdd, currency);
 	}
 
 	public boolean isZero() {
-		return value == 0;
+		return minorValue == 0;
 	}
 
 	public boolean isNegative() {
-		return value < 0;
+		return minorValue < 0;
 	}
 
 	public boolean isPositive() {
@@ -168,8 +183,8 @@ public final class Money {
 		format.setMinimumFractionDigits(defaultFractionDigits);
 		format.setMaximumFractionDigits(defaultFractionDigits);
 		double divider = getDecimalFraction(defaultFractionDigits);
-		double displayValue = Math.abs(value) / divider;
-		String sign = value < 0 ? "-" : "";
+		double displayValue = Math.abs(minorValue) / divider;
+		String sign = minorValue < 0 ? "-" : "";
 		String valueString = format.format(displayValue);
 		return symbol ? String.format("%s%s %s", sign,
 				currency.getSymbol(Locale.getDefault()), valueString) : String

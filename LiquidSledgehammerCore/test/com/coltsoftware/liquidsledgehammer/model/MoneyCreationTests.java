@@ -2,6 +2,8 @@ package com.coltsoftware.liquidsledgehammer.model;
 
 import static org.junit.Assert.*;
 
+import java.util.Locale;
+
 import org.junit.Test;
 
 import com.coltsoftware.liquidsledgehammer.MoneyTestBase;
@@ -66,5 +68,27 @@ public final class MoneyCreationTests extends MoneyTestBase {
 		Money expected = usd(123980);
 		assertEquals(expected, Money.fromString("1239.8", usd));
 		assertEquals(expected, Money.fromString("1239.80", usd));
+	}
+
+	@Test(expected = NumberFormatException.class)
+	public void cant_create_with_two_decimal_points() {
+		Money.fromString("123.1.2", local);
+	}
+
+	@Test
+	public void fromstring_respects_locale_decimal_separator() {
+		Locale.setDefault(Locale.FRANCE);
+		assertEquals(euro(12312), Money.fromString("123,12"));
+	}
+
+	@Test
+	public void fromstring_respects_thousand_specifier() {
+		assertEquals(gbp(912312), Money.fromString("9,123.12"));
+	}
+
+	@Test
+	public void fromstring_respects_thousand_specifier_euro_germany() {
+		Locale.setDefault(Locale.GERMANY);
+		assertEquals(euro(912312), Money.fromString("9.123,12"));
 	}
 }
