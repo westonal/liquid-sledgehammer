@@ -4,8 +4,16 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.Iterator;
+import java.util.Locale;
+
+import org.junit.Before;
 
 public abstract class BaseTest {
+
+	@Before
+	public void setDefaultLocale() {
+		Locale.setDefault(Locale.UK);
+	}
 
 	protected static void assertNotEqual(Object a, Object b) {
 		assertFalse(equals(a, b));
