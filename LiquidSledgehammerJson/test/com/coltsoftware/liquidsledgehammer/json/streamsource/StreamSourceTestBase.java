@@ -8,7 +8,7 @@ import org.junit.Before;
 
 import com.coltsoftware.liquidsledgehammer.MoneyTestBase;
 
-public abstract class StreamSourceTestBase extends MoneyTestBase {
+public abstract class StreamSourceTestBase {
 
 	public static InputStream loadAsset(String assetName) {
 		InputStream stream = Thread.currentThread().getContextClassLoader()

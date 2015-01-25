@@ -7,6 +7,9 @@ import java.util.Iterator;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.coltsoftware.liquidsledgehammer.model.MoneyHelper.*;
+import static com.coltsoftware.liquidsledgehammer.IterableCounter.*;
+
 import com.coltsoftware.liquidsledgehammer.json.JsonStreamTransactionSource;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.model.NullFinancialTransactionSourceInformation;

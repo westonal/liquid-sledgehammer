@@ -1,36 +1,36 @@
 package com.coltsoftware.liquidsledgehammer;
 
-import java.util.Currency;
-import java.util.Locale;
-
 import com.coltsoftware.liquidsledgehammer.model.Money;
+import com.coltsoftware.liquidsledgehammer.model.MoneyHelper;
+
+import java.util.Currency;
 
 public abstract class MoneyTestBase extends BaseTest {
 
-	protected final Currency gbp = Currency.getInstance(Locale.UK);
-	protected final Currency usd = Currency.getInstance(Locale.US);
-	protected final Currency yen = Currency.getInstance(Locale.JAPAN);
-	protected final Currency euro = Currency.getInstance(Locale.GERMANY);
-	protected final Currency local = Currency.getInstance(Locale.getDefault());
+    protected final Currency gbp = MoneyHelper.gbp;
+    protected final Currency usd = MoneyHelper.usd;
+    protected final Currency yen = MoneyHelper.yen;
+    protected final Currency euro = MoneyHelper.euro;
+    protected final Currency local = MoneyHelper.local;
 
-	protected Money gbp(long pence) {
-		return new Money(pence, gbp);
-	}
+    protected Money gbp(long pence) {
+        return MoneyHelper.gbp(pence);
+    }
 
-	protected Money usd(long cents) {
-		return new Money(cents, usd);
-	}
+    protected Money usd(long cents) {
+        return MoneyHelper.usd(cents);
+    }
 
-	protected Money yen(long yenValue) {
-		return new Money(yenValue, yen);
-	}
+    protected Money yen(long yenValue) {
+        return MoneyHelper.yen(yenValue);
+    }
 
-	protected Money euro(long cents) {
-		return new Money(cents, euro);
-	}
+    protected Money euro(long cents) {
+        return MoneyHelper.euro(cents);
+    }
 
-	protected Money local(long minorUnit) {
-		return new Money(minorUnit, local);
-	}
+    protected Money local(long minorUnit) {
+        return MoneyHelper.local(minorUnit);
+    }
 
 }
