@@ -12,3 +12,7 @@
 */bin/*
 .settings
 gen
+.idea/
+LiquidSledgehammer/.gradle/
+*.iml
+build/
