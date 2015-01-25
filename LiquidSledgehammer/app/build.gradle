@@ -22,4 +22,7 @@ dependencies {
     compile 'com.android.support:support-v4:19.1.0'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'joda-time:joda-time:2.3'
+    compile project(':core')
+    compile project(':lsjson')
+    compile project(':rectangleareagraph')
 }
