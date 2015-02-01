@@ -12,3 +12,5 @@
 */bin/*
 .settings
 gen
+
+.recommenders/
