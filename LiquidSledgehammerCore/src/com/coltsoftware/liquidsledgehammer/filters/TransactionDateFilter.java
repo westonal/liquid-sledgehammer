@@ -4,6 +4,7 @@ import static com.coltsoftware.liquidsledgehammer.filters.LogicTransactionFilter
 
 import org.joda.time.LocalDate;
 
+import com.coltsoftware.liquidsledgehammer.filters.TransactionDateFilter.Builder;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 
 public final class TransactionDateFilter {
@@ -29,7 +30,7 @@ public final class TransactionDateFilter {
 			checkDateRangeValid();
 
 			if (minimumDate.equals(maximumDate))
-				return createExactDateFilter();
+				return buildExactDateFilter();
 
 			return and(buildMinDateFilter(), buildMaxDateFilter());
 		}
@@ -39,7 +40,7 @@ public final class TransactionDateFilter {
 				throw new DateRangeException();
 		}
 
-		private ExactDateFilter createExactDateFilter() {
+		private ExactDateFilter buildExactDateFilter() {
 			return new ExactDateFilter(minimumDate);
 		}
 
@@ -79,6 +80,11 @@ public final class TransactionDateFilter {
 
 		private LocalDate ymdToLocalDate(int year, int month, int day) {
 			return new LocalDate(year, month, day);
+		}
+
+		public Builder exactMonth(int year, int month) {
+			LocalDate start = ymdToLocalDate(year, month, 1);
+			return minimumDate(start).maximumDate(start.plusMonths(1).minusDays(1));
 		}
 	}
 
