@@ -49,6 +49,8 @@ public class CSVOutput {
 		sb.append(",");
 		sb.append("Adjusted Value");
 		sb.append(",");
+		sb.append("Balance");
+		sb.append(",");
 		sb.append("Group");
 		sb.append(",");
 		data.add(sb.toString());
@@ -80,8 +82,11 @@ public class CSVOutput {
 			}
 
 		});
-		for (SubTransaction subTransaction : allTransations)
-			writeNode(subTransaction);
+		Money balance = Money.Zero;
+		for (SubTransaction subTransaction : allTransations) {
+			balance = balance.add(subTransaction.getValue());
+			writeNode(subTransaction, balance);
+		}
 	}
 
 	private void addSubTransactions(ArrayList<SubTransaction> allTransations,
@@ -92,7 +97,7 @@ public class CSVOutput {
 			allTransations.add(subTransaction);
 	}
 
-	private void writeNode(SubTransaction subTransaction) {
+	private void writeNode(SubTransaction subTransaction, Money balance) {
 		FinancialTransaction transaction = subTransaction.getTransaction();
 		StringBuilder sb = new StringBuilder();
 		sb.append(transaction.getDate());
@@ -104,6 +109,8 @@ public class CSVOutput {
 		sb.append(csvEncode(transaction.getValue()));
 		sb.append(",");
 		sb.append(csvEncode(subTransaction.getValue()));
+		sb.append(",");
+		sb.append(csvEncode(balance));
 		sb.append(",");
 		sb.append(csvEscape(aliasPathResolver.resolve(subTransaction.getGroup())));
 		sb.append(",");
