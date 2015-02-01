@@ -1,17 +1,16 @@
 package com.coltsoftware.liquidsledgehammer.json.streamsource;
 
+import static com.coltsoftware.liquidsledgehammer.IterableCounter.count;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Iterator;
 
-import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.coltsoftware.liquidsledgehammer.json.JsonStreamTransactionSource;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransactionSourceInformation;
-import com.coltsoftware.liquidsledgehammer.model.NullFinancialTransactionSourceInformation;
 import com.coltsoftware.liquidsledgehammer.sources.FinancialTransactionSource;
 
 public final class ReadSourceInformationTests extends StreamSourceTestBase {
