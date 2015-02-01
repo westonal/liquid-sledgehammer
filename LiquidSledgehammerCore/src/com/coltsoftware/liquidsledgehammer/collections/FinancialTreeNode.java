@@ -75,4 +75,9 @@ public final class FinancialTreeNode implements Iterable<FinancialTreeNode> {
 		return children.iterator();
 	}
 
+	public void remove() {
+		parent.children.remove(this);
+		parent = null;
+	}
+
 }
