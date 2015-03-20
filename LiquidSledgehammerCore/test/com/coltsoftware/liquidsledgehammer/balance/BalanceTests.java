@@ -54,7 +54,7 @@ public final class BalanceTests extends MoneyTestBase {
 		Balance b = Balance.fromTransactionSource(ftl);
 		assertEquals(gbp(100), b.getBalance());
 		ftl.add(makeTransaction(gbp(50), 2015, 3, 20));
-		assertEquals(gbp(150), b.getBalance());
+		assertEquals(gbp(100), b.getBalance());
 	}
 
 	@Test
@@ -95,6 +95,39 @@ public final class BalanceTests extends MoneyTestBase {
 		assertEquals(gbp(70), b.getBalance(2015, 3, 21));
 		assertEquals(gbp(150), b.getBalance(2015, 3, 22));
 		assertEquals(gbp(310), b.getBalance(2015, 3, 23));
+		assertEquals(gbp(310), b.getBalance(2015, 3, 24));
+	}
+	
+	@Test
+	public void balance_on_date_between_transactions() {
+		ftl.add(makeTransaction(gbp(100), 2015, 3, 20));
+		ftl.add(makeTransaction(gbp(20), 2015, 3, 22));
+		Balance b = Balance.fromTransactionSource(ftl);
+		assertEquals(gbp(100), b.getBalance(2015, 3, 21));
+	}
+	
+	@Test
+	public void balance_on_date_after_transactions() {
+		ftl.add(makeTransaction(gbp(100), 2015, 3, 20));
+		ftl.add(makeTransaction(gbp(20), 2015, 3, 22));
+		Balance b = Balance.fromTransactionSource(ftl);
+		assertEquals(gbp(120), b.getBalance(2015, 3, 23));
+	}
+	
+	@Test
+	public void balance_on_date_before_transactions() {
+		ftl.add(makeTransaction(gbp(100), 2015, 3, 20));
+		ftl.add(makeTransaction(gbp(20), 2015, 3, 22));
+		Balance b = Balance.fromTransactionSource(ftl);
+		assertEquals(Money.Zero, b.getBalance(2015, 3, 10));
+	}
+	
+	@Test
+	public void balance_on_date_between_transactions_out_of_order() {
+		ftl.add(makeTransaction(gbp(20), 2015, 3, 22));
+		ftl.add(makeTransaction(gbp(100), 2015, 3, 20));
+		Balance b = Balance.fromTransactionSource(ftl);
+		assertEquals(gbp(100), b.getBalance(2015, 3, 21));
 	}
 
 }

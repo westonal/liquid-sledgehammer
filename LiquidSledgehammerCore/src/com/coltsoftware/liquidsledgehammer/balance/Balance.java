@@ -1,23 +1,41 @@
 package com.coltsoftware.liquidsledgehammer.balance;
 
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
 
 import org.joda.time.LocalDate;
 
-import com.coltsoftware.liquidsledgehammer.filters.TransactionDateFilter;
-import com.coltsoftware.liquidsledgehammer.filters.TransactionFilter;
-import com.coltsoftware.liquidsledgehammer.filters.iterator.FilteredIterator;
-import com.coltsoftware.liquidsledgehammer.filters.iterator.FilteredIterator.Filter;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.model.Money;
 import com.coltsoftware.liquidsledgehammer.sources.FinancialTransactionSource;
 
 public final class Balance {
 
-	private final FinancialTransactionSource source;
+	private final HashMap<LocalDate, Money> dailyBalances = new HashMap<LocalDate, Money>();
+	private final Money latestBalance;
 
 	public Balance(FinancialTransactionSource source) {
-		this.source = source;
+		List<FinancialTransaction> transactions = new ArrayList<FinancialTransaction>();
+		for (FinancialTransaction transaction : source)
+			transactions.add(transaction);
+
+		Collections.sort(transactions, new Comparator<FinancialTransaction>() {
+
+			@Override
+			public int compare(FinancialTransaction o1, FinancialTransaction o2) {
+				return o1.getDate().compareTo(o2.getDate());
+			}
+		});
+
+		Money result = Money.Zero;
+		for (FinancialTransaction transaction : transactions) {
+			result = result.add(transaction.getValue());
+			dailyBalances.put(transaction.getDate(), result);
+		}
+		latestBalance = result;
 	}
 
 	public static Balance fromTransactionSource(
@@ -26,10 +44,7 @@ public final class Balance {
 	}
 
 	public Money getBalance() {
-		Money result = Money.Zero;
-		for (FinancialTransaction transaction : source)
-			result = result.add(transaction.getValue());
-		return result;
+		return latestBalance;
 	}
 
 	public Money getBalance(int year, int month, int day) {
@@ -37,30 +52,22 @@ public final class Balance {
 	}
 
 	public Money getBalance(LocalDate localDate) {
-		TransactionFilter filter = new TransactionDateFilter.Builder()
-				.maximumDate(localDate).build();
-		FinancialTransactionSource filtered = filterSource(source, filter);
-		return fromTransactionSource(filtered).getBalance();
+		Money money = dailyBalances.get(localDate);
+		if (money == null)
+			return closestBalance(localDate);
+		return money;
 	}
 
-	private static FinancialTransactionSource filterSource(
-			final FinancialTransactionSource source,
-			final TransactionFilter filter) {
-		return new FinancialTransactionSource() {
-
-			@Override
-			public Iterator<FinancialTransaction> iterator() {
-
-				return new FilteredIterator<FinancialTransaction>(
-						source.iterator(), new Filter<FinancialTransaction>() {
-
-							@Override
-							public boolean filterTest(FinancialTransaction item) {
-								return filter.allow(item);
-							}
-						});
+	private Money closestBalance(LocalDate localDate) {
+		LocalDate closest = null;
+		for (LocalDate balanceDate : dailyBalances.keySet()) {
+			if (balanceDate.isBefore(localDate)
+					&& (closest == null || balanceDate.isAfter(closest))) {
+				closest = balanceDate;
 			}
-		};
+		}
+		if (closest == null)
+			return Money.Zero;
+		return dailyBalances.get(closest);
 	}
-
 }
