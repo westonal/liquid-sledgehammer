@@ -16,6 +16,8 @@ public final class Balance {
 
 	private final HashMap<LocalDate, Money> dailyBalances = new HashMap<LocalDate, Money>();
 	private final Money latestBalance;
+	private final LocalDate minDate;
+	private final LocalDate maxDate;
 
 	public Balance(FinancialTransactionSource source) {
 		List<FinancialTransaction> transactions = new ArrayList<FinancialTransaction>();
@@ -29,6 +31,14 @@ public final class Balance {
 				return o1.getDate().compareTo(o2.getDate());
 			}
 		});
+
+		if (!transactions.isEmpty()) {
+			minDate = transactions.get(0).getDate();
+			maxDate = transactions.get(transactions.size() - 1).getDate();
+		} else {
+			minDate = null;
+			maxDate = null;
+		}
 
 		Money result = Money.Zero;
 		for (FinancialTransaction transaction : transactions) {
@@ -72,22 +82,14 @@ public final class Balance {
 	}
 
 	public LocalDate getMinDate() {
-		LocalDate minDate = null;
-		for (LocalDate balanceDate : dailyBalances.keySet())
-			if (minDate == null || balanceDate.isBefore(minDate))
-				minDate = balanceDate;
 		if (minDate == null)
-			minDate = defaultMinMaxDate();
+			return defaultMinMaxDate();
 		return minDate;
 	}
 
 	public LocalDate getMaxDate() {
-		LocalDate maxDate = null;
-		for (LocalDate balanceDate : dailyBalances.keySet())
-			if (maxDate == null || balanceDate.isAfter(maxDate))
-				maxDate = balanceDate;
 		if (maxDate == null)
-			maxDate = defaultMinMaxDate();
+			return defaultMinMaxDate();
 		return maxDate;
 	}
 
