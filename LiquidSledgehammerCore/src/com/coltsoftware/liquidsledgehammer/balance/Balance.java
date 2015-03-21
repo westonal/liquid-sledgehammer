@@ -36,8 +36,8 @@ public final class Balance {
 			minDate = transactions.get(0).getDate();
 			maxDate = transactions.get(transactions.size() - 1).getDate();
 		} else {
-			minDate = null;
-			maxDate = null;
+			minDate = new LocalDate();
+			maxDate = minDate;
 		}
 
 		Money result = Money.Zero;
@@ -82,18 +82,10 @@ public final class Balance {
 	}
 
 	public LocalDate getMinDate() {
-		if (minDate == null)
-			return defaultMinMaxDate();
 		return minDate;
 	}
 
 	public LocalDate getMaxDate() {
-		if (maxDate == null)
-			return defaultMinMaxDate();
 		return maxDate;
-	}
-
-	protected LocalDate defaultMinMaxDate() {
-		return new LocalDate();
 	}
 }

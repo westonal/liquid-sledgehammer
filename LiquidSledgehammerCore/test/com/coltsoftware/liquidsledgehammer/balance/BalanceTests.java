@@ -144,7 +144,7 @@ public final class BalanceTests extends MoneyTestBase {
 		Balance b = Balance.fromTransactionSource(ftl);
 		assertEquals(new LocalDate(2014, 3, 20), b.getMinDate());
 	}
-	
+
 	@Test
 	public void min_date_of_source_out_of_order() {
 		ftl.add(makeTransaction(gbp(20), 2014, 3, 22));
@@ -152,7 +152,7 @@ public final class BalanceTests extends MoneyTestBase {
 		Balance b = Balance.fromTransactionSource(ftl);
 		assertEquals(new LocalDate(2014, 3, 20), b.getMinDate());
 	}
-	
+
 	@Test
 	public void min_date_of_source_future_dates() {
 		ftl.add(makeTransaction(gbp(100), 2099, 3, 20));
@@ -160,7 +160,7 @@ public final class BalanceTests extends MoneyTestBase {
 		Balance b = Balance.fromTransactionSource(ftl);
 		assertEquals(new LocalDate(2099, 3, 20), b.getMinDate());
 	}
-	
+
 	@Test
 	public void max_date_of_source() {
 		ftl.add(makeTransaction(gbp(100), 2014, 3, 20));
@@ -168,7 +168,7 @@ public final class BalanceTests extends MoneyTestBase {
 		Balance b = Balance.fromTransactionSource(ftl);
 		assertEquals(new LocalDate(2014, 3, 22), b.getMaxDate());
 	}
-	
+
 	@Test
 	public void max_date_of_source_out_of_order() {
 		ftl.add(makeTransaction(gbp(20), 2014, 3, 22));
@@ -176,7 +176,7 @@ public final class BalanceTests extends MoneyTestBase {
 		Balance b = Balance.fromTransactionSource(ftl);
 		assertEquals(new LocalDate(2014, 3, 22), b.getMaxDate());
 	}
-	
+
 	@Test
 	public void max_date_of_source_future_dates() {
 		ftl.add(makeTransaction(gbp(100), 2099, 3, 20));
@@ -185,4 +185,9 @@ public final class BalanceTests extends MoneyTestBase {
 		assertEquals(new LocalDate(2099, 3, 22), b.getMaxDate());
 	}
 
+	@Test
+	public void min_and_max_date_of_empty_source_are_same() {
+		Balance b = Balance.fromTransactionSource(ftl);
+		assertSame(b.getMinDate(), b.getMaxDate());
+	}
 }
