@@ -127,9 +127,7 @@ public final class Money {
 	}
 
 	private Money add(Money otherValue, long valueToAdd) {
-		if (!currency.equals(otherValue.currency))
-			throw new MoneyCurrencyException();
-
+		ensureCurrencyMatchOrThrow(otherValue);
 		return new Money(minorValue + valueToAdd, currency);
 	}
 
@@ -190,4 +188,20 @@ public final class Money {
 				currency.getSymbol(Locale.getDefault()), valueString) : String
 				.format("%s%s", sign, valueString);
 	}
+
+	public boolean greaterThan(Money otherValue) {
+		ensureCurrencyMatchOrThrow(otherValue);
+		return getValue() > otherValue.getValue();
+	}
+
+	public boolean lessThan(Money otherValue) {
+		ensureCurrencyMatchOrThrow(otherValue);
+		return getValue() < otherValue.getValue();
+	}
+
+	protected void ensureCurrencyMatchOrThrow(Money otherValue) {
+		if (!currency.equals(otherValue.currency))
+			throw new MoneyCurrencyException();
+	}
+
 }
