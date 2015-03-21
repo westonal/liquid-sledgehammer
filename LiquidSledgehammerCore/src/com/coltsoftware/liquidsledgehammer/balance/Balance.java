@@ -70,4 +70,28 @@ public final class Balance {
 			return Money.Zero;
 		return dailyBalances.get(closest);
 	}
+
+	public LocalDate getMinDate() {
+		LocalDate minDate = null;
+		for (LocalDate balanceDate : dailyBalances.keySet())
+			if (minDate == null || balanceDate.isBefore(minDate))
+				minDate = balanceDate;
+		if (minDate == null)
+			minDate = defaultMinMaxDate();
+		return minDate;
+	}
+
+	public LocalDate getMaxDate() {
+		LocalDate maxDate = null;
+		for (LocalDate balanceDate : dailyBalances.keySet())
+			if (maxDate == null || balanceDate.isAfter(maxDate))
+				maxDate = balanceDate;
+		if (maxDate == null)
+			maxDate = defaultMinMaxDate();
+		return maxDate;
+	}
+
+	protected LocalDate defaultMinMaxDate() {
+		return new LocalDate();
+	}
 }

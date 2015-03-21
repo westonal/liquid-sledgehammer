@@ -2,6 +2,7 @@ package com.coltsoftware.liquidsledgehammer.balance;
 
 import static org.junit.Assert.*;
 
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -63,14 +64,14 @@ public final class BalanceTests extends MoneyTestBase {
 		Balance b = Balance.fromTransactionSource(ftl);
 		assertEquals(Money.Zero, b.getBalance(2015, 3, 19));
 	}
-	
+
 	@Test
 	public void balance_on_date_of_transation() {
 		ftl.add(makeTransaction(gbp(100), 2015, 3, 20));
 		Balance b = Balance.fromTransactionSource(ftl);
 		assertEquals(gbp(100), b.getBalance(2015, 3, 20));
 	}
-	
+
 	@Test
 	public void balance_on_date_of_transation_and_previous_transactions() {
 		ftl.add(makeTransaction(gbp(100), 2015, 3, 20));
@@ -80,7 +81,7 @@ public final class BalanceTests extends MoneyTestBase {
 		Balance b = Balance.fromTransactionSource(ftl);
 		assertEquals(gbp(160), b.getBalance(2015, 3, 21));
 	}
-	
+
 	@Test
 	public void balance_on_every_day() {
 		ftl.add(makeTransaction(gbp(10), 2015, 3, 19));
@@ -97,7 +98,7 @@ public final class BalanceTests extends MoneyTestBase {
 		assertEquals(gbp(310), b.getBalance(2015, 3, 23));
 		assertEquals(gbp(310), b.getBalance(2015, 3, 24));
 	}
-	
+
 	@Test
 	public void balance_on_date_between_transactions() {
 		ftl.add(makeTransaction(gbp(100), 2015, 3, 20));
@@ -105,7 +106,7 @@ public final class BalanceTests extends MoneyTestBase {
 		Balance b = Balance.fromTransactionSource(ftl);
 		assertEquals(gbp(100), b.getBalance(2015, 3, 21));
 	}
-	
+
 	@Test
 	public void balance_on_date_after_transactions() {
 		ftl.add(makeTransaction(gbp(100), 2015, 3, 20));
@@ -113,7 +114,7 @@ public final class BalanceTests extends MoneyTestBase {
 		Balance b = Balance.fromTransactionSource(ftl);
 		assertEquals(gbp(120), b.getBalance(2015, 3, 23));
 	}
-	
+
 	@Test
 	public void balance_on_date_before_transactions() {
 		ftl.add(makeTransaction(gbp(100), 2015, 3, 20));
@@ -121,13 +122,67 @@ public final class BalanceTests extends MoneyTestBase {
 		Balance b = Balance.fromTransactionSource(ftl);
 		assertEquals(Money.Zero, b.getBalance(2015, 3, 10));
 	}
-	
+
 	@Test
 	public void balance_on_date_between_transactions_out_of_order() {
 		ftl.add(makeTransaction(gbp(20), 2015, 3, 22));
 		ftl.add(makeTransaction(gbp(100), 2015, 3, 20));
 		Balance b = Balance.fromTransactionSource(ftl);
 		assertEquals(gbp(100), b.getBalance(2015, 3, 21));
+	}
+
+	@Test
+	public void min_date_of_empty_source() {
+		Balance b = Balance.fromTransactionSource(ftl);
+		assertEquals(new LocalDate(), b.getMinDate());
+	}
+
+	@Test
+	public void min_date_of_source() {
+		ftl.add(makeTransaction(gbp(100), 2014, 3, 20));
+		ftl.add(makeTransaction(gbp(20), 2014, 3, 22));
+		Balance b = Balance.fromTransactionSource(ftl);
+		assertEquals(new LocalDate(2014, 3, 20), b.getMinDate());
+	}
+	
+	@Test
+	public void min_date_of_source_out_of_order() {
+		ftl.add(makeTransaction(gbp(20), 2014, 3, 22));
+		ftl.add(makeTransaction(gbp(100), 2014, 3, 20));
+		Balance b = Balance.fromTransactionSource(ftl);
+		assertEquals(new LocalDate(2014, 3, 20), b.getMinDate());
+	}
+	
+	@Test
+	public void min_date_of_source_future_dates() {
+		ftl.add(makeTransaction(gbp(100), 2099, 3, 20));
+		ftl.add(makeTransaction(gbp(20), 2099, 3, 22));
+		Balance b = Balance.fromTransactionSource(ftl);
+		assertEquals(new LocalDate(2099, 3, 20), b.getMinDate());
+	}
+	
+	@Test
+	public void max_date_of_source() {
+		ftl.add(makeTransaction(gbp(100), 2014, 3, 20));
+		ftl.add(makeTransaction(gbp(20), 2014, 3, 22));
+		Balance b = Balance.fromTransactionSource(ftl);
+		assertEquals(new LocalDate(2014, 3, 22), b.getMaxDate());
+	}
+	
+	@Test
+	public void max_date_of_source_out_of_order() {
+		ftl.add(makeTransaction(gbp(20), 2014, 3, 22));
+		ftl.add(makeTransaction(gbp(100), 2014, 3, 20));
+		Balance b = Balance.fromTransactionSource(ftl);
+		assertEquals(new LocalDate(2014, 3, 22), b.getMaxDate());
+	}
+	
+	@Test
+	public void max_date_of_source_future_dates() {
+		ftl.add(makeTransaction(gbp(100), 2099, 3, 20));
+		ftl.add(makeTransaction(gbp(20), 2099, 3, 22));
+		Balance b = Balance.fromTransactionSource(ftl);
+		assertEquals(new LocalDate(2099, 3, 22), b.getMaxDate());
 	}
 
 }
