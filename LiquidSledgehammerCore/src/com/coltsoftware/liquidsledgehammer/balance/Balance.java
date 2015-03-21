@@ -18,6 +18,8 @@ public final class Balance {
 	private final Money latestBalance;
 	private final LocalDate minDate;
 	private final LocalDate maxDate;
+	private final Money minBalance;
+	private final Money maxBalance;
 
 	public Balance(FinancialTransactionSource source) {
 		List<FinancialTransaction> transactions = new ArrayList<FinancialTransaction>();
@@ -40,11 +42,19 @@ public final class Balance {
 			maxDate = minDate;
 		}
 
+		Money min = Money.Zero;
+		Money max = Money.Zero;
 		Money result = Money.Zero;
 		for (FinancialTransaction transaction : transactions) {
 			result = result.add(transaction.getValue());
 			dailyBalances.put(transaction.getDate(), result);
+			if (result.greaterThan(max))
+				max = result;
+			if (result.lessThan(min))
+				min = result;
 		}
+		minBalance = min;
+		maxBalance = max;
 		latestBalance = result;
 	}
 
@@ -87,5 +97,13 @@ public final class Balance {
 
 	public LocalDate getMaxDate() {
 		return maxDate;
+	}
+
+	public Money getMinValue() {
+		return minBalance;
+	}
+
+	public Money getMaxValue() {
+		return maxBalance;
 	}
 }

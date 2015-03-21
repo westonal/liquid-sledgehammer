@@ -190,4 +190,95 @@ public final class BalanceTests extends MoneyTestBase {
 		Balance b = Balance.fromTransactionSource(ftl);
 		assertSame(b.getMinDate(), b.getMaxDate());
 	}
+
+	@Test
+	public void min_value_of_empty_source() {
+		Balance b = Balance.fromTransactionSource(ftl);
+		assertEquals(Money.Zero, b.getMinValue());
+	}
+
+	@Test
+	public void max_value_of_empty_source() {
+		Balance b = Balance.fromTransactionSource(ftl);
+		assertEquals(Money.Zero, b.getMaxValue());
+	}
+
+	@Test
+	public void min_value_of_single_entry_positive_source() {
+		ftl.add(makeTransaction(gbp(20), 2099, 3, 22));
+		Balance b = Balance.fromTransactionSource(ftl);
+		assertEquals(Money.Zero, b.getMinValue());
+	}
+
+	@Test
+	public void max_value_of_single_entry_positive_source() {
+		ftl.add(makeTransaction(gbp(20), 2099, 3, 22));
+		Balance b = Balance.fromTransactionSource(ftl);
+		assertEquals(gbp(20), b.getMaxValue());
+	}
+
+	@Test
+	public void min_value_of_single_entry_negative_source() {
+		ftl.add(makeTransaction(gbp(-20), 2099, 3, 22));
+		Balance b = Balance.fromTransactionSource(ftl);
+		assertEquals(gbp(-20), b.getMinValue());
+	}
+
+	@Test
+	public void max_value_of_single_entry_negative_source() {
+		ftl.add(makeTransaction(gbp(-20), 2099, 3, 22));
+		Balance b = Balance.fromTransactionSource(ftl);
+		assertEquals(Money.Zero, b.getMaxValue());
+	}
+
+	@Test
+	public void min_value_of_double_entry_positive_source() {
+		ftl.add(makeTransaction(gbp(20), 2099, 3, 22));
+		ftl.add(makeTransaction(gbp(30), 2099, 3, 23));
+		Balance b = Balance.fromTransactionSource(ftl);
+		assertEquals(Money.Zero, b.getMinValue());
+	}
+
+	@Test
+	public void max_value_of_double_entry_positive_source() {
+		ftl.add(makeTransaction(gbp(20), 2099, 3, 22));
+		ftl.add(makeTransaction(gbp(30), 2099, 3, 22));
+		Balance b = Balance.fromTransactionSource(ftl);
+		assertEquals(gbp(50), b.getMaxValue());
+	}
+
+	@Test
+	public void min_value_of_double_entry_negative_source() {
+		ftl.add(makeTransaction(gbp(-20), 2099, 3, 22));
+		ftl.add(makeTransaction(gbp(-30), 2099, 3, 23));
+		Balance b = Balance.fromTransactionSource(ftl);
+		assertEquals(gbp(-50), b.getMinValue());
+	}
+
+	@Test
+	public void max_value_of_double_entry_negative_source() {
+		ftl.add(makeTransaction(gbp(-20), 2099, 3, 22));
+		ftl.add(makeTransaction(gbp(-30), 2099, 3, 22));
+		Balance b = Balance.fromTransactionSource(ftl);
+		assertEquals(Money.Zero, b.getMaxValue());
+	}
+
+	@Test
+	public void min_max_value_of_double_entry_mixed_source() {
+		ftl.add(makeTransaction(gbp(20), 2099, 3, 22));
+		ftl.add(makeTransaction(gbp(-30), 2099, 3, 23));
+		Balance b = Balance.fromTransactionSource(ftl);
+		assertEquals(gbp(-10), b.getMinValue());
+		assertEquals(gbp(20), b.getMaxValue());
+	}
+
+	@Test
+	public void min_max_value_of_double_entry_mixed_source_negative_first() {
+		ftl.add(makeTransaction(gbp(-20), 2099, 3, 22));
+		ftl.add(makeTransaction(gbp(30), 2099, 3, 23));
+		Balance b = Balance.fromTransactionSource(ftl);
+		assertEquals(gbp(-20), b.getMinValue());
+		assertEquals(gbp(10), b.getMaxValue());
+	}
+
 }
