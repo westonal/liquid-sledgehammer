@@ -16,6 +16,11 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>cmdlibtest</name>
+			<type>2</type>
+			<location>PARENT-1-PROJECT_LOC/LiquidSledgehammerCommandLineLib/test</location>
+		</link>
+		<link>
 			<name>coretest</name>
 			<type>2</type>
 			<locationURI>PARENT-1-PROJECT_LOC/LiquidSledgehammerCore/test</locationURI>
