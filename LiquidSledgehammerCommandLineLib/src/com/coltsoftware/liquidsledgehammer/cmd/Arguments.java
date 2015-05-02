@@ -14,12 +14,14 @@ public final class Arguments {
 		this.args = args;
 	}
 
-	public boolean hasFlag(String flag) {
-		validateFlagArgument(flag);
-		String formattedFlag = formatFlag(flag);
-		for (String arg : args)
-			if (formattedFlag.equals(arg))
-				return true;
+	public boolean hasFlag(String... flags) {
+		validateFlagArguments(flags);
+		for (String flag : flags) {
+			String formattedFlag = formatFlag(flag);
+			for (String arg : args)
+				if (formattedFlag.equals(arg))
+					return true;
+		}
 		return false;
 	}
 

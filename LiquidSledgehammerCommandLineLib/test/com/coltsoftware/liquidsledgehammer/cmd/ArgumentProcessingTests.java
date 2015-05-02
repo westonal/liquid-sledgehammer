@@ -219,7 +219,7 @@ public final class ArgumentProcessingTests {
 		}
 	}
 
-	public static class SearchForMultiplePossibleArguments {
+	public static class FlagValueSearchForMultiplePossibleArguments {
 
 		private Arguments arguments;
 
@@ -251,6 +251,41 @@ public final class ArgumentProcessingTests {
 		@Test(expected = IllegalArgumentException.class)
 		public void checks_all_arguments_first() {
 			arguments.flagValue("a", "-b");
+		}
+	}
+
+	public static class HasFlagSearchForMultiplePossibleArguments {
+
+		private Arguments arguments;
+
+		@Before
+		public void setUp() {
+			arguments = Arguments.fromString("-a 1 -b 2 -c 3");
+		}
+
+		@Test
+		public void finds_in_pos_one() {
+			assertTrue(arguments.hasFlag("a", "b", "c"));
+		}
+
+		@Test
+		public void finds_in_pos_two() {
+			assertTrue(arguments.hasFlag("f", "b", "c"));
+		}
+
+		@Test
+		public void finds_in_pos_three() {
+			assertTrue(arguments.hasFlag("f", "g", "c"));
+		}
+
+		@Test
+		public void false_if_in_no_position() {
+			assertFalse(arguments.hasFlag("f", "g", "h"));
+		}
+
+		@Test(expected = IllegalArgumentException.class)
+		public void checks_all_arguments_first() {
+			arguments.hasFlag("a", "-b");
 		}
 	}
 
