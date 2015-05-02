@@ -260,7 +260,7 @@ public final class ArgumentProcessingTests {
 
 		@Before
 		public void setUp() {
-			arguments = Arguments.fromString("-a 1 -b 2 -c 3");
+			arguments = Arguments.fromString("-a -b -c");
 		}
 
 		@Test
