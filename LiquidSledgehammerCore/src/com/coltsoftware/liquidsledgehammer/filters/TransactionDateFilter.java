@@ -4,7 +4,6 @@ import static com.coltsoftware.liquidsledgehammer.filters.LogicTransactionFilter
 
 import org.joda.time.LocalDate;
 
-import com.coltsoftware.liquidsledgehammer.filters.TransactionDateFilter.Builder;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 
 public final class TransactionDateFilter {
