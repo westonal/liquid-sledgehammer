@@ -4,6 +4,7 @@ Financial transaction consolidation framework. Processes all your financial tran
 
 Many institutions provide similar functionailty where they decide that a transaction is groceries or fuel, but LS goes further:
 
+- All your bank accounts, credit cards etc. handled together
 - Nested groups allow you to sub divide spending
 - A single transaction can be split amoung different groups
 - Movements between your accounts can be excluded
