@@ -16,8 +16,8 @@ public final class BalanceTests extends ContextTestBase {
 
 	@Before
 	public void setUp() {
-		mock1 = createMockSourceFactory(1);
-		mock2 = createMockSourceFactory(2);
+		mock1 = createMockSourceFactory(1, "u1");
+		mock2 = createMockSourceFactory(2, "u2");
 		Context.registerSourceFactory("s1", mock1);
 		Context.registerSourceFactory("s2", mock2);
 		Arguments args = Arguments.fromString("-s1 thePath -s2 path2");

@@ -9,4 +9,6 @@ public interface SourceFactory {
 	ArrayList<FinancialTransactionSource> getSources(String argument,
 			Arguments otherArguments);
 
+	String getUsageLine();
+
 }

@@ -1,5 +1,6 @@
 package com.coltsoftware.liquidsledgehammer.cmd;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -40,5 +41,12 @@ public final class Context {
 	public static void registerSourceFactory(String name,
 			SourceFactory sourceFactory) {
 		sourceFactories.put(name, sourceFactory);
+	}
+
+	public static void printSources(PrintStream out) {
+		for (String sourceFactoryName : sourceFactories.keySet()) {
+			out.println(String.format("    -%s %s", sourceFactoryName,
+					sourceFactories.get(sourceFactoryName).getUsageLine()));
+		}
 	}
 }

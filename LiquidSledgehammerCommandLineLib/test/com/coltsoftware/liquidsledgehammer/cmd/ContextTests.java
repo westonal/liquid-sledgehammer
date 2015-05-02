@@ -2,10 +2,13 @@ package com.coltsoftware.liquidsledgehammer.cmd;
 
 import static org.junit.Assert.*;
 
+import java.io.PrintStream;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import com.coltsoftware.liquidsledgehammer.cmd.Arguments;
+
 import static org.mockito.Mockito.*;
 
 public final class ContextTests extends ContextTestBase {
@@ -16,8 +19,8 @@ public final class ContextTests extends ContextTestBase {
 
 	@Before
 	public void setUp() {
-		mock1 = createMockSourceFactory(1);
-		mock2 = createMockSourceFactory(2);
+		mock1 = createMockSourceFactory(1, "usage1");
+		mock2 = createMockSourceFactory(2, "usage2");
 		Context.registerSourceFactory("jsonin", mock1);
 		Context.registerSourceFactory("dbin", mock2);
 		args = Arguments.fromString("-jsonin thePath -dbin path2");
@@ -60,6 +63,14 @@ public final class ContextTests extends ContextTestBase {
 		Context.fromArgs(args);
 		verify(mock1).getSources("thePath", args);
 		verify(mock2).getSources("path2", args);
+	}
+
+	@Test
+	public void print_sources_for_usage() {
+		PrintStream printStream = mock(PrintStream.class);
+		Context.printSources(printStream);
+		verify(printStream).println("    -jsonin usage1");
+		verify(printStream).println("    -dbin usage2");
 	}
 
 }
