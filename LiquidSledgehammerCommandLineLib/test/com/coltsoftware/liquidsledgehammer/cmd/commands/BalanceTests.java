@@ -12,8 +12,7 @@ public final class BalanceTests {
 
 	@Before
 	public void setUp() {
-		context = Context.fromArgs(new Arguments(
-				new String[] { "-jsonin", "." }));
+		context = Context.fromArgs(Arguments.fromString("-jsonin ."));
 	}
 
 	@Test

@@ -13,7 +13,7 @@ public final class ContextTests {
 
 	@Before
 	public void setUp() {
-		args = new Arguments(new String[] { "-jsonin", "." });
+		args = Arguments.fromString("-jsonin .");
 	}
 
 	@Test
