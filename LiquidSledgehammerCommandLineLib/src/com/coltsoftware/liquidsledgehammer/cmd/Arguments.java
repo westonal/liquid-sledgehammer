@@ -6,6 +6,10 @@ public final class Arguments {
 
 	private final String[] args;
 
+	public static Arguments fromString(String argumentString) {		
+		return new Arguments(argumentString.split("\\s"));
+	}
+
 	public Arguments(String[] args) {
 		this.args = args;
 	}
@@ -42,5 +46,4 @@ public final class Arguments {
 		if (flag.startsWith(FLAG_PREFIX))
 			throw new IllegalArgumentException();
 	}
-
 }

@@ -188,4 +188,35 @@ public final class ArgumentProcessingTests {
 		}
 	}
 
+	public static class ArgumentsFromStringTests {
+
+		private Arguments arguments;
+
+		@Before
+		public void setUp() {
+			arguments = Arguments
+					.fromString("-input firstpath  -output secondpath -d ");
+		}
+
+		@Test
+		public void returns_firstpath() {
+			assertEquals("firstpath", arguments.flagValue("input"));
+		}
+
+		@Test
+		public void returns_secondpath() {
+			assertEquals("secondpath", arguments.flagValue("output"));
+		}
+
+		@Test
+		public void returns_null_if_flag_not_found() {
+			assertNull(arguments.flagValue("p"));
+		}
+
+		@Test
+		public void returns_true_if_has_flag() {
+			assertTrue(arguments.hasFlag("d"));
+		}
+	}
+
 }
