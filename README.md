@@ -35,3 +35,19 @@ Examples:
 - `petrol` the whole value of this transaction belongs in the group with the alias petrol
 - `food=-3.99,petrol` 3.99 belongs in food, the rest was petrol
 - `food=-3.99` 3.99 belongs in food, the rest assign automatically
+
+##Command line interface
+
+###Commands
+
+####Get balance
+
+Arguments
+
+Specify an input source, json only supported currently:
+
+    -jsonin &lt;jsonsourcepath&gt;
+
+Specify `Balance` as the command and optionally the source name:
+
+    -c/-command Balance [-s/-source &lt;sourcename&gt;]
