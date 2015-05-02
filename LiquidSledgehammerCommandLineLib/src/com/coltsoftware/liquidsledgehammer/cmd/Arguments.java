@@ -6,7 +6,7 @@ public final class Arguments {
 
 	private final String[] args;
 
-	public static Arguments fromString(String argumentString) {		
+	public static Arguments fromString(String argumentString) {
 		return new Arguments(argumentString.split("\\s"));
 	}
 
@@ -23,17 +23,24 @@ public final class Arguments {
 		return false;
 	}
 
-	public String flagValue(String flag) {
-		validateFlagArgument(flag);
-		String formattedFlag = formatFlag(flag);
-		for (int i = 0; i < args.length - 1; i++)
-			if (formattedFlag.equals(args[i]))
-				return args[i + 1];
+	public String flagValue(String... flags) {
+		validateFlagArguments(flags);
+		for (String flag : flags) {
+			String formattedFlag = formatFlag(flag);
+			for (int i = 0; i < args.length - 1; i++)
+				if (formattedFlag.equals(args[i]))
+					return args[i + 1];
+		}
 		return null;
 	}
 
 	protected static String formatFlag(String flag) {
 		return FLAG_PREFIX + flag;
+	}
+
+	protected static void validateFlagArguments(String... flags) {
+		for (String flag : flags)
+			validateFlagArgument(flag);
 	}
 
 	protected static void validateFlagArgument(String flag) {

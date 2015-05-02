@@ -219,4 +219,39 @@ public final class ArgumentProcessingTests {
 		}
 	}
 
+	public static class SearchForMultiplePossibleArguments {
+
+		private Arguments arguments;
+
+		@Before
+		public void setUp() {
+			arguments = Arguments.fromString("-a 1 -b 2 -c 3");
+		}
+
+		@Test
+		public void finds_a() {
+			assertEquals("1", arguments.flagValue("a", "b", "c"));
+		}
+
+		@Test
+		public void finds_b() {
+			assertEquals("2", arguments.flagValue("f", "b", "c"));
+		}
+
+		@Test
+		public void finds_c() {
+			assertEquals("3", arguments.flagValue("f", "g", "c"));
+		}
+
+		@Test
+		public void finds_null() {
+			assertNull(arguments.flagValue("f", "g", "h"));
+		}
+
+		@Test(expected = IllegalArgumentException.class)
+		public void checks_all_arguments_first() {
+			arguments.flagValue("a", "-b");
+		}
+	}
+
 }
