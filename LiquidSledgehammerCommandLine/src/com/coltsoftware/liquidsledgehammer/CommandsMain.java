@@ -4,7 +4,6 @@ import java.io.PrintStream;
 
 import com.coltsoftware.liquidsledgehammer.cmd.Arguments;
 import com.coltsoftware.liquidsledgehammer.cmd.Context;
-import com.coltsoftware.liquidsledgehammer.cmd.commands.BalanceCommand;
 
 public final class CommandsMain {
 
@@ -35,7 +34,7 @@ public final class CommandsMain {
 
 		String commandFlag = arguments.flagValue("c", "command");
 		if ("Balance".equals(commandFlag)) {
-			new LocalBalanceCommand(context).execute(System.out);
+			new LocalBalanceCommand(context).execute(arguments, System.out);
 		}
 	}
 
