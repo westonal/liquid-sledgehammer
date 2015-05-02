@@ -46,8 +46,8 @@ Arguments
 
 Specify an input source, json only supported currently:
 
-    -jsonin &lt;jsonsourcepath&gt;
+    -jsonin <jsonsourcepath>
 
 Specify `Balance` as the command and optionally the source name:
 
-    -c/-command Balance [-s/-source &lt;sourcename&gt;]
+    -c/-command Balance [-s/-source <sourcename>]
