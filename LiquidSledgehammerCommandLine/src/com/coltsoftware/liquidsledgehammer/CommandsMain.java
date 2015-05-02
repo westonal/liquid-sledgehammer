@@ -1,5 +1,7 @@
 package com.coltsoftware.liquidsledgehammer;
 
+import java.io.PrintStream;
+
 import com.coltsoftware.liquidsledgehammer.cmd.Arguments;
 import com.coltsoftware.liquidsledgehammer.cmd.Context;
 import com.coltsoftware.liquidsledgehammer.cmd.commands.BalanceCommand;
@@ -14,26 +16,26 @@ public final class CommandsMain {
 		try {
 			run(arguments);
 		} catch (Exception ex) {
-			printUsage();
-			System.out.println(ex.toString());
+			ex.printStackTrace();
+			printUsage(System.out);
 		}
 	}
 
-	private static void printUsage() {
-		System.out.println("Usage: ");
-		printSources();
+	private static void printUsage(PrintStream out) {
+		out.println("Usage: ");
+		printSources(out);
 	}
 
-	private static void printSources() {
-		Context.printSources(System.out);
+	private static void printSources(PrintStream out) {
+		Context.printSources(out);
 	}
 
 	protected static void run(Arguments arguments) {
 		Context context = Context.fromArgs(arguments);
 
-		String commandFlag = arguments.flagValue("-c", "-command");
+		String commandFlag = arguments.flagValue("c", "command");
 		if ("Balance".equals(commandFlag)) {
-			new BalanceCommand(context);
+			new LocalBalanceCommand(context).execute(System.out);
 		}
 	}
 
