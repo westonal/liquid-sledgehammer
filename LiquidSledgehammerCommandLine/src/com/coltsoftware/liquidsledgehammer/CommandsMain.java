@@ -32,6 +32,12 @@ public final class CommandsMain {
 	}
 
 	protected static void run(Arguments arguments, PrintStream out) {
+		String commandFlag = arguments.flagValue("c", "command");
+		if (commandFlag == null) {
+			printUsage(out);
+			return;
+		}
+
 		Context context = Context.fromArgs(arguments);
 
 		FinancialTransactionSource singleSource = PathSourceWalker
@@ -39,9 +45,6 @@ public final class CommandsMain {
 
 		singleSource = applyAllfilters(arguments, singleSource);
 
-		String commandFlag = arguments.flagValue("c", "command");
-		if (commandFlag == null)
-			printUsage(out);
 		for (String commandName : commands.keySet())
 			if (commandName.equals(commandFlag))
 				commands.get(commandName).execute(singleSource, arguments, out);
