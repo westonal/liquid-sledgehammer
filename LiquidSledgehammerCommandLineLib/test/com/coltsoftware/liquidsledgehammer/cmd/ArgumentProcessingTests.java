@@ -56,6 +56,41 @@ public final class ArgumentProcessingTests {
 			arguments.hasFlag("m ");
 		}
 	}
+	
+	public static class InvalidFlagValueQueries {
+
+		private Arguments arguments;
+
+		@Before
+		public void setUp() {
+			arguments = new Arguments(new String[] { "-m" });
+		}
+
+		@Test(expected = IllegalArgumentException.class)
+		public void throws_for_null_flag() {
+			arguments.flagValue(null);
+		}
+
+		@Test(expected = IllegalArgumentException.class)
+		public void throws_for_flag_if_specify_dash() {
+			arguments.flagValue("-m");
+		}
+
+		@Test(expected = IllegalArgumentException.class)
+		public void throws_for_empty_flag() {
+			arguments.flagValue("");
+		}
+
+		@Test(expected = IllegalArgumentException.class)
+		public void throws_for_pre_whitespace() {
+			arguments.flagValue(" m");
+		}
+
+		@Test(expected = IllegalArgumentException.class)
+		public void throws_for_post_whitespace() {
+			arguments.flagValue("m ");
+		}
+	}
 
 	public static class OneFlagArgument {
 
@@ -99,6 +134,51 @@ public final class ArgumentProcessingTests {
 		@Test
 		public void returns_false_for_other_flag() {
 			assertFalse(arguments.hasFlag("f3"));
+		}
+	}
+	
+	public static class OneValuedArgument {
+
+		private Arguments arguments;
+
+		@Before
+		public void setUp() {
+			arguments = new Arguments(new String[] { "-path", "somepath" });
+		}
+
+		@Test
+		public void returns_path() {
+			assertEquals("somepath", arguments.flagValue("path"));
+		}
+		
+		@Test
+		public void returns_null_if_flag_not_found() {
+			assertNull(arguments.flagValue("p"));
+		}
+	}
+	
+	public static class TwoValuedArgument {
+
+		private Arguments arguments;
+
+		@Before
+		public void setUp() {
+			arguments = new Arguments(new String[] { "-input", "firstpath", "-output", "secondpath" });
+		}
+
+		@Test
+		public void returns_firstpath() {
+			assertEquals("firstpath", arguments.flagValue("input"));
+		}
+		
+		@Test
+		public void returns_secondpath() {
+			assertEquals("secondpath", arguments.flagValue("output"));
+		}
+		
+		@Test
+		public void returns_null_if_flag_not_found() {
+			assertNull(arguments.flagValue("p"));
 		}
 	}
 

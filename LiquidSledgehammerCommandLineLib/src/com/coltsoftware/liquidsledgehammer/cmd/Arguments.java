@@ -12,11 +12,24 @@ public final class Arguments {
 
 	public boolean hasFlag(String flag) {
 		validateFlagArgument(flag);
-		String flagWithDash = FLAG_PREFIX + flag;
+		String formattedFlag = formatFlag(flag);
 		for (String arg : args)
-			if (flagWithDash.equals(arg))
+			if (formattedFlag.equals(arg))
 				return true;
 		return false;
+	}
+
+	public String flagValue(String flag) {
+		validateFlagArgument(flag);
+		String formattedFlag = formatFlag(flag);
+		for (int i = 0; i < args.length; i++)
+			if (formattedFlag.equals(args[i]))
+				return args[i + 1];
+		return null;
+	}
+
+	protected static String formatFlag(String flag) {
+		return FLAG_PREFIX + flag;
 	}
 
 	protected static void validateFlagArgument(String flag) {
