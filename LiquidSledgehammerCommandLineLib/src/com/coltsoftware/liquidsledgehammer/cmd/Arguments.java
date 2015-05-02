@@ -22,7 +22,7 @@ public final class Arguments {
 	public String flagValue(String flag) {
 		validateFlagArgument(flag);
 		String formattedFlag = formatFlag(flag);
-		for (int i = 0; i < args.length; i++)
+		for (int i = 0; i < args.length - 1; i++)
 			if (formattedFlag.equals(args[i]))
 				return args[i + 1];
 		return null;

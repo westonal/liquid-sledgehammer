@@ -56,14 +56,14 @@ public final class ArgumentProcessingTests {
 			arguments.hasFlag("m ");
 		}
 	}
-	
+
 	public static class InvalidFlagValueQueries {
 
 		private Arguments arguments;
 
 		@Before
 		public void setUp() {
-			arguments = new Arguments(new String[] { "-m" });
+			arguments = new Arguments(new String[] { "-m", "v", "-n" });
 		}
 
 		@Test(expected = IllegalArgumentException.class)
@@ -89,6 +89,11 @@ public final class ArgumentProcessingTests {
 		@Test(expected = IllegalArgumentException.class)
 		public void throws_for_post_whitespace() {
 			arguments.flagValue("m ");
+		}
+
+		@Test
+		public void returns_null_if_flag_has_no_value() {
+			assertNull(arguments.flagValue("n"));
 		}
 	}
 
@@ -136,7 +141,7 @@ public final class ArgumentProcessingTests {
 			assertFalse(arguments.hasFlag("f3"));
 		}
 	}
-	
+
 	public static class OneValuedArgument {
 
 		private Arguments arguments;
@@ -150,32 +155,33 @@ public final class ArgumentProcessingTests {
 		public void returns_path() {
 			assertEquals("somepath", arguments.flagValue("path"));
 		}
-		
+
 		@Test
 		public void returns_null_if_flag_not_found() {
 			assertNull(arguments.flagValue("p"));
 		}
 	}
-	
+
 	public static class TwoValuedArgument {
 
 		private Arguments arguments;
 
 		@Before
 		public void setUp() {
-			arguments = new Arguments(new String[] { "-input", "firstpath", "-output", "secondpath" });
+			arguments = new Arguments(new String[] { "-input", "firstpath",
+					"-output", "secondpath" });
 		}
 
 		@Test
 		public void returns_firstpath() {
 			assertEquals("firstpath", arguments.flagValue("input"));
 		}
-		
+
 		@Test
 		public void returns_secondpath() {
 			assertEquals("secondpath", arguments.flagValue("output"));
 		}
-		
+
 		@Test
 		public void returns_null_if_flag_not_found() {
 			assertNull(arguments.flagValue("p"));
