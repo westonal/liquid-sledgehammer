@@ -97,4 +97,8 @@ public final class Arguments {
 				result[idx++] = arg;
 		return result;
 	}
+
+	public String first() {
+		return args[0];
+	}
 }

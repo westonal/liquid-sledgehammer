@@ -376,4 +376,25 @@ public final class ArgumentProcessingTests {
 		}
 	}
 
+	public static class FirstArgument {
+
+		@Test
+		public void of_one() {
+			Arguments arguments = Arguments.fromString("arg0");
+			assertEquals("arg0", arguments.first());
+		}
+
+		@Test
+		public void of_two() {
+			Arguments arguments = Arguments.fromString("a b");
+			assertEquals("a", arguments.first());
+		}
+
+		@Test
+		public void of_zero() {
+			Arguments arguments = Arguments.fromString("");
+			assertEquals("", arguments.first());
+		}
+	}
+
 }
