@@ -61,7 +61,8 @@ Filter
 Specify `Balance` as the command and optionally the source name:
 
     -c/-command
-      ls	List tree
+      ls 	List tree
+      ls <PartialNodePath>	List tree under <PartialNodePath>
       List
       Balance
       prompt	Run the live prompt mode
@@ -70,7 +71,8 @@ Specify `Balance` as the command and optionally the source name:
 
 You can use live prompt to navigate the tree. The commands are similar to navigating a directory structure:
 
-    ls	List tree
+    ls 	List tree
+    ls <PartialNodePath>	List tree under <PartialNodePath>
     cd                  	Show node path
     cd <PartialNodePath>	Change tree node
     cd ..               	Change tree node to parent

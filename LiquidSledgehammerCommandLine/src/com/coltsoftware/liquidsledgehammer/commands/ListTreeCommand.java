@@ -9,11 +9,15 @@ import com.coltsoftware.liquidsledgehammer.collections.FinancialTreeNode;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.model.SubTransaction;
 
-public final class ListTreeCommand implements Command {
+public final class ListTreeCommand extends PathCommandBase implements Command {
 
 	@Override
 	public void execute(State state, Arguments arguments, PrintStream out) {
 		FinancialTreeNode treeNode = state.getCurrentNode();
+
+		String path = arguments.second();
+		treeNode = findPath(out, treeNode, path);
+
 		out.println(formatTopNode(treeNode));
 		for (FinancialTreeNode node : treeNode)
 			out.println(formatNode(node));
@@ -38,6 +42,7 @@ public final class ListTreeCommand implements Command {
 
 	@Override
 	public void printUsage(PrintStream out) {
-		out.println("    ls\tList tree");
+		out.println("    ls \tList tree");
+		out.println("    ls <PartialNodePath>\tList tree under <PartialNodePath>");
 	}
 }
