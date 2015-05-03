@@ -26,6 +26,8 @@ public final class FinancialTreeNode implements Iterable<FinancialTreeNode> {
 	}
 
 	public void add(FinancialTreeNode child) {
+		if ("".equals(child.getName()))
+			throw new TreeException();
 		if (child.getParent() != null)
 			throw new TreeException();
 		children.add(child);

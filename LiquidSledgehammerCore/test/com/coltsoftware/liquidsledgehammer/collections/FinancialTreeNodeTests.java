@@ -31,7 +31,7 @@ public final class FinancialTreeNodeTests extends FinancialTreeNodeTestsBase {
 
 	@Test
 	public void can_add_another_tree() {
-		FinancialTreeNode ftn = new FinancialTreeNode();
+		FinancialTreeNode ftn = new FinancialTreeNode("c1");
 		ftn.add(createSubTransaction(gbp(100)));
 		root.add(ftn);
 		assertEquals(0, count(root.getSubTransactions()));
@@ -40,8 +40,8 @@ public final class FinancialTreeNodeTests extends FinancialTreeNodeTestsBase {
 
 	@Test
 	public void can_add_two_other_trees() {
-		FinancialTreeNode ftn1 = new FinancialTreeNode();
-		FinancialTreeNode ftn2 = new FinancialTreeNode();
+		FinancialTreeNode ftn1 = new FinancialTreeNode("c1");
+		FinancialTreeNode ftn2 = new FinancialTreeNode("c2");
 		ftn1.add(createSubTransaction(yen(100)));
 		ftn2.add(createSubTransaction(yen(200)));
 		root.add(ftn1);
@@ -52,7 +52,7 @@ public final class FinancialTreeNodeTests extends FinancialTreeNodeTestsBase {
 
 	@Test
 	public void parent_after_add_tree() {
-		FinancialTreeNode ftn = new FinancialTreeNode();
+		FinancialTreeNode ftn = new FinancialTreeNode("c1");
 		root.add(ftn);
 		assertEquals(root, ftn.getParent());
 	}
@@ -67,7 +67,7 @@ public final class FinancialTreeNodeTests extends FinancialTreeNodeTestsBase {
 
 	@Test
 	public void can_iterate_one_child() {
-		FinancialTreeNode child1 = new FinancialTreeNode();
+		FinancialTreeNode child1 = new FinancialTreeNode("c1");
 		root.add(child1);
 		assertEquals(1, count(root));
 		assertSame(child1, root.iterator().next());
@@ -75,8 +75,8 @@ public final class FinancialTreeNodeTests extends FinancialTreeNodeTestsBase {
 
 	@Test
 	public void can_iterate_two_children() {
-		FinancialTreeNode child1 = new FinancialTreeNode();
-		FinancialTreeNode child2 = new FinancialTreeNode();
+		FinancialTreeNode child1 = new FinancialTreeNode("c1");
+		FinancialTreeNode child2 = new FinancialTreeNode("c2");
 		root.add(child1);
 		root.add(child2);
 		assertEquals(2, count(root));

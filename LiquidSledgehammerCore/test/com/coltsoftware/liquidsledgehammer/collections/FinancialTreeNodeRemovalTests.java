@@ -17,9 +17,9 @@ public final class FinancialTreeNodeRemovalTests extends
 	@Before
 	public void setup() {
 		super.setup();
-		ftn1 = new FinancialTreeNode();
-		ftn2 = new FinancialTreeNode();
-		ftn22 = new FinancialTreeNode();
+		ftn1 = new FinancialTreeNode("c1");
+		ftn2 = new FinancialTreeNode("c2");
+		ftn22 = new FinancialTreeNode("c3");
 		ftn1.add(createSubTransaction(yen(100)));
 		ftn2.add(createSubTransaction(yen(200)));
 		ftn22.add(createSubTransaction(yen(30)));
