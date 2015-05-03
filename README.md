@@ -64,4 +64,12 @@ Specify `Balance` as the command and optionally the source name:
       ls	List tree
       List
       Balance
+      prompt	Run the live prompt mode
+
+##Live prompt mode
+
+You can use live prompt to navigate the tree. The commands are similar to navigating a directory structure:
+
+    ls	List tree
+    cd <Node>	Change tree node
 

@@ -3,18 +3,15 @@ package com.coltsoftware.liquidsledgehammer.commands;
 import java.io.PrintStream;
 
 import com.coltsoftware.liquidsledgehammer.Command;
+import com.coltsoftware.liquidsledgehammer.State;
 import com.coltsoftware.liquidsledgehammer.balance.Balance;
 import com.coltsoftware.liquidsledgehammer.cmd.Arguments;
-import com.coltsoftware.liquidsledgehammer.collections.FinancialTreeNode;
-import com.coltsoftware.liquidsledgehammer.sources.FinancialTransactionSource;
 
 public final class LocalBalanceCommand implements Command {
 
 	@Override
-	public void execute(FinancialTreeNode root,
-			FinancialTransactionSource source, Arguments arguments,
-			PrintStream out) {
-		Balance balance = new Balance(source);
+	public void execute(State state, Arguments arguments, PrintStream out) {
+		Balance balance = new Balance(state.getSource());
 		out.println(balance.getBalance());
 	}
 

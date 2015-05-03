@@ -10,8 +10,10 @@ import com.coltsoftware.liquidsledgehammer.cmd.Arguments;
 import com.coltsoftware.liquidsledgehammer.cmd.Context;
 import com.coltsoftware.liquidsledgehammer.collections.AliasPathResolver;
 import com.coltsoftware.liquidsledgehammer.collections.FinancialTreeNode;
+import com.coltsoftware.liquidsledgehammer.commands.ChangeNodeTreeCommand;
 import com.coltsoftware.liquidsledgehammer.commands.ListCommand;
 import com.coltsoftware.liquidsledgehammer.commands.ListTreeCommand;
+import com.coltsoftware.liquidsledgehammer.commands.PromptCommand;
 import com.coltsoftware.liquidsledgehammer.commands.LocalBalanceCommand;
 import com.coltsoftware.liquidsledgehammer.filters.DateFilter;
 import com.coltsoftware.liquidsledgehammer.filters.FilterCombine;
@@ -65,10 +67,13 @@ public final class CommandsMain {
 
 		FinancialTreeNode root = createTree(singleSource, new File(jsonGroups));
 
+		State state = new State();
+		state.setCurrentNode(root);
+		state.setSource(singleSource);
+
 		for (String commandName : commands.keySet())
 			if (commandName.equals(commandFlag))
-				commands.get(commandName).execute(root, singleSource,
-						arguments, out);
+				commands.get(commandName).execute(state, arguments, out);
 	}
 
 	protected static TransactionFilter constructFilters(Arguments arguments) {
@@ -89,6 +94,8 @@ public final class CommandsMain {
 		commands.put("Balance", new LocalBalanceCommand());
 		commands.put("List", new ListCommand());
 		commands.put("ls", new ListTreeCommand());
+		commands.put("cd", new ChangeNodeTreeCommand());
+		commands.put("prompt", new PromptCommand(commands));
 	}
 
 	private static void registerFilters() {
