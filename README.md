@@ -51,7 +51,11 @@ Specify an input source, json only supported currently:
 
 Filter
 
-    -f/-filter s:<BankName> [s:<BankName2>] [s:<BankName3> ...]
+    -f/-filter
+        s:<BankName> [s:<BankName2>] [s:<BankName3> ...]
+        d:>2015-11-13	After date
+        d:<2015-11-13	Before date
+        d:=M2015-11  	Whole month
 
 Specify `Balance` as the command and optionally the source name:
 
