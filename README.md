@@ -47,6 +47,7 @@ Arguments
 
 Specify an input source, json only supported currently:
 
+    -jsongroup <groupfile>
     -jsonin <jsonsourcepath> [<jsonsourcepath2>] [<jsonsourcepath3> ...]
 
 Filter
@@ -60,6 +61,7 @@ Filter
 Specify `Balance` as the command and optionally the source name:
 
     -c/-command
+      ls	List tree
       List
       Balance
 

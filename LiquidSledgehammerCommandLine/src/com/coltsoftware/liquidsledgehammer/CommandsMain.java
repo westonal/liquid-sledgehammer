@@ -1,17 +1,24 @@
 package com.coltsoftware.liquidsledgehammer;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.coltsoftware.liquidsledgehammer.cmd.Arguments;
 import com.coltsoftware.liquidsledgehammer.cmd.Context;
+import com.coltsoftware.liquidsledgehammer.collections.AliasPathResolver;
+import com.coltsoftware.liquidsledgehammer.collections.FinancialTreeNode;
 import com.coltsoftware.liquidsledgehammer.commands.ListCommand;
+import com.coltsoftware.liquidsledgehammer.commands.ListTreeCommand;
 import com.coltsoftware.liquidsledgehammer.commands.LocalBalanceCommand;
 import com.coltsoftware.liquidsledgehammer.filters.DateFilter;
 import com.coltsoftware.liquidsledgehammer.filters.FilterCombine;
 import com.coltsoftware.liquidsledgehammer.filters.SourceFilter;
 import com.coltsoftware.liquidsledgehammer.filters.TransactionFilter;
+import com.coltsoftware.liquidsledgehammer.groups.JsonGroupsFactory;
+import com.coltsoftware.liquidsledgehammer.processing.Processor;
 import com.coltsoftware.liquidsledgehammer.sources.FinancialTransactionSource;
 
 public final class CommandsMain {
@@ -34,9 +41,15 @@ public final class CommandsMain {
 		}
 	}
 
-	protected static void run(Arguments arguments, PrintStream out) {
+	protected static void run(Arguments arguments, PrintStream out)
+			throws IOException {
 		String commandFlag = arguments.flagValue("c", "command");
 		if (commandFlag == null) {
+			printUsage(out);
+			return;
+		}
+		String jsonGroups = arguments.flagValue("jsongroup");
+		if (jsonGroups == null) {
 			printUsage(out);
 			return;
 		}
@@ -50,9 +63,12 @@ public final class CommandsMain {
 
 		singleSource = FilterHelper.filterSource(singleSource, filter);
 
+		FinancialTreeNode root = createTree(singleSource, new File(jsonGroups));
+
 		for (String commandName : commands.keySet())
 			if (commandName.equals(commandFlag))
-				commands.get(commandName).execute(singleSource, arguments, out);
+				commands.get(commandName).execute(root, singleSource,
+						arguments, out);
 	}
 
 	protected static TransactionFilter constructFilters(Arguments arguments) {
@@ -72,6 +88,7 @@ public final class CommandsMain {
 	private static void registerCommands() {
 		commands.put("Balance", new LocalBalanceCommand());
 		commands.put("List", new ListCommand());
+		commands.put("ls", new ListTreeCommand());
 	}
 
 	private static void registerFilters() {
@@ -83,6 +100,7 @@ public final class CommandsMain {
 		out.println("Usage:");
 		out.println();
 		out.println("Specify a source:");
+		out.println("    -jsongroup <groupfile>");
 		printSources(out);
 		out.println();
 		out.println("Specify filters:");
@@ -106,6 +124,18 @@ public final class CommandsMain {
 
 	private static void printSources(PrintStream out) {
 		Context.printSources(out);
+	}
+
+	private static FinancialTreeNode createTree(
+			FinancialTransactionSource transactionSource, File groupsPath)
+			throws IOException {
+		AliasPathResolver aliasPathResolver = JsonGroupsFactory
+				.createAliasPathResolver(groupsPath);
+		Processor processor = new Processor(aliasPathResolver,
+				JsonGroupsFactory.createSubTransactionFactory(groupsPath));
+		FinancialTreeNode root = new FinancialTreeNode();
+		processor.populateTree(transactionSource, root);
+		return root;
 	}
 
 }

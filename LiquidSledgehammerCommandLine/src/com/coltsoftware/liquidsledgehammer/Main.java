@@ -114,67 +114,14 @@ public class Main {
 
 	private static SubTransactionFactory createSubTransactionFactory(File path)
 			throws IOException {
-		DescriptionMatchingStrategy strategy = new DescriptionMatchingStrategy();
-
-		path = new File(path, "..\\groups.json");
-
-		FileReader reader = new FileReader(path);
-		try {
-			GroupJson[] groups = new Gson().fromJson(reader, GroupJson[].class);
-			for (GroupJson group : groups) {
-				DescriptionStrategy descStrat = createStratForGroup(group);
-				if (descStrat == null)
-					continue;
-				NamedDescriptionStrategy named = DescriptionStrategyNamer.name(
-						group.uniqueName, descStrat);
-				strategy.add(named);
-			}
-		} finally {
-			reader.close();
-		}
-
-		SubTransactionFactory subTransactionFactory = new SubTransactionFactory();
-
-		subTransactionFactory.setUnassignedValueStrategy(strategy);
-		return subTransactionFactory;
-	}
-
-	private static DescriptionStrategy createStratForGroup(GroupJson group) {
-		if (group.matchStrings == null && group.excludeStrings == null
-				|| group.matchStrings.length == 0
-				&& group.excludeStrings.length == 0)
-			return null;
-
-		IncludeExcludeDescriptionStrategy strat = new IncludeExcludeDescriptionStrategy();
-
-		if (group.matchStrings != null) {
-			for (String s : group.matchStrings)
-				strat.addInclude(s);
-		}
-		if (group.excludeStrings != null) {
-			for (String s : group.excludeStrings)
-				strat.addExclude(s);
-		}
-
-		return strat;
+		return JsonGroupsFactory.createSubTransactionFactory(new File(
+				path, "..\\groups.json"));
 	}
 
 	private static AliasPathResolver createAliasPathResolver(File path)
 			throws IOException {
-		AliasPathResolver aliasPathResolver = new AliasPathResolver();
-
-		path = new File(path, "..\\groups.json");
-
-		FileReader reader = new FileReader(path);
-		try {
-			GroupJson[] groups = new Gson().fromJson(reader, GroupJson[].class);
-			for (GroupJson group : groups)
-				aliasPathResolver.put(group.uniqueName, group.path);
-		} finally {
-			reader.close();
-		}
-
-		return aliasPathResolver;
+		return JsonGroupsFactory.createAliasPathResolver(new File(path,
+				"..\\groups.json"));
 	}
 
 	private static void outputTree(FinancialTreeNode root) {
@@ -252,12 +199,5 @@ public class Main {
 		private String source;
 		private String description;
 		private String value;
-	}
-
-	public static class GroupJson {
-		public String path;
-		public String uniqueName;
-		public String[] matchStrings;
-		public String[] excludeStrings;
 	}
 }
