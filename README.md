@@ -59,4 +59,7 @@ Filter
 
 Specify `Balance` as the command and optionally the source name:
 
-    -c/-command Balance
+    -c/-command
+      List
+      Balance
+

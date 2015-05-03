@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import com.coltsoftware.liquidsledgehammer.cmd.Arguments;
 import com.coltsoftware.liquidsledgehammer.cmd.Context;
+import com.coltsoftware.liquidsledgehammer.commands.ListCommand;
 import com.coltsoftware.liquidsledgehammer.commands.LocalBalanceCommand;
 import com.coltsoftware.liquidsledgehammer.filters.DateFilter;
 import com.coltsoftware.liquidsledgehammer.filters.FilterCombine;
@@ -70,6 +71,7 @@ public final class CommandsMain {
 
 	private static void registerCommands() {
 		commands.put("Balance", new LocalBalanceCommand());
+		commands.put("List", new ListCommand());
 	}
 
 	private static void registerFilters() {
@@ -84,10 +86,11 @@ public final class CommandsMain {
 		printSources(out);
 		out.println();
 		out.println("Specify filters:");
-		out.println("    -f/-filter");
+		out.println("  -f/-filter");
 		printFilters(out);
 		out.println();
 		out.println("Specify a command:");
+		out.println("  -c/-command");
 		printCommands(out);
 	}
 

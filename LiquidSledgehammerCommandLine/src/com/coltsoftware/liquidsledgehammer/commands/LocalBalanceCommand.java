@@ -18,6 +18,6 @@ public final class LocalBalanceCommand implements Command {
 
 	@Override
 	public void printUsage(PrintStream out) {
-		out.println("    -c Balance");
+		out.println("    Balance");
 	}
 }
