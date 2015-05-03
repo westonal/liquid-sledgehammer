@@ -69,4 +69,21 @@ public final class FinancialTreeNodePathTests extends
 		assertEquals(ftnOne, ftnOneTwo.getParent());
 	}
 
+	@Test
+	public void can_get_roots_full_path() {
+		assertEquals("~", root.getFullPath());
+	}
+
+	@Test
+	public void can_get_full_path_of_item_one_deep() {
+		FinancialTreeNode ftnOne = root.findOrCreate("one");
+		assertEquals("~.one", ftnOne.getFullPath());
+	}
+
+	@Test
+	public void can_get_full_path_of_item_two_deep() {
+		FinancialTreeNode ftnOneTwo = root.findOrCreate("one.two");
+		assertEquals("~.one.two", ftnOneTwo.getFullPath());
+	}
+
 }

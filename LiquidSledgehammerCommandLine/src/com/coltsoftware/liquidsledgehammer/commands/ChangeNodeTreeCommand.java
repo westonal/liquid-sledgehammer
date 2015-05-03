@@ -14,13 +14,13 @@ public final class ChangeNodeTreeCommand extends PathCommandBase implements
 		FinancialTreeNode node = state.getCurrentNode();
 		String second = arguments.second();
 		if ("".equals(second)) {
-			out.println(fullPath(node));
+			out.println(node.getFullPath());
 			return;
 		}
 		node = findPath(out, node, second);
 		if (node != null) {
 			state.setCurrentNode(node);
-			out.println(fullPath(node));
+			out.println(node.getFullPath());
 		}
 	}
 

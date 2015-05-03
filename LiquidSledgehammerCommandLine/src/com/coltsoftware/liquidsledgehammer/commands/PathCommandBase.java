@@ -28,17 +28,6 @@ public abstract class PathCommandBase {
 		return node;
 	}
 
-	protected static String fullPath(FinancialTreeNode node) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(node.getName());
-		while (node.getParent() != null) {
-			node = node.getParent();
-			sb.insert(0, ".");
-			sb.insert(0, node.getName());
-		}
-		return sb.toString();
-	}
-
 	protected static FinancialTreeNode findChild(FinancialTreeNode node,
 			String path, PrintStream out) {
 		ArrayList<FinancialTreeNode> possibles = new ArrayList<FinancialTreeNode>();

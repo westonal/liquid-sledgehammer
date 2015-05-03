@@ -80,4 +80,22 @@ public final class FinancialTreeNode implements Iterable<FinancialTreeNode> {
 		parent = null;
 	}
 
+	public String getFullPath() {
+		StringBuilder sb = new StringBuilder();
+		FinancialTreeNode node = this;
+		sb.append(node.getNameOrRootSymbol());
+		while (node.getParent() != null) {
+			node = node.getParent();
+			sb.insert(0, ".");
+			sb.insert(0, node.getNameOrRootSymbol());
+		}
+		return sb.toString();
+	}
+
+	protected String getNameOrRootSymbol() {
+		if (getParent() == null)
+			return "~";
+		return getName();
+	}
+
 }
