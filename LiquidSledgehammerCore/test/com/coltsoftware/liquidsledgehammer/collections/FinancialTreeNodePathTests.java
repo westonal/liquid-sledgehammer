@@ -75,6 +75,29 @@ public final class FinancialTreeNodePathTests extends
 	}
 
 	@Test
+	public void can_get_a_named_roots_full_path() {
+		FinancialTreeNode namedRoot = new FinancialTreeNode("root name");
+		assertEquals("root name", namedRoot.getFullPath());
+	}
+
+	@Test
+	public void can_get_a_full_path_of_unnamed_node() {
+		FinancialTreeNode unnamed = new FinancialTreeNode();
+		root.add(unnamed);
+		assertEquals("~.", unnamed.getFullPath());
+	}
+
+	@Test
+	public void can_get_a_full_path_of_unnamed_node_and_child() {
+		FinancialTreeNode unnamed = new FinancialTreeNode();
+		FinancialTreeNode named = new FinancialTreeNode("a");
+		root.add(unnamed);
+		unnamed.add(named);
+		assertEquals("~..a", named.getFullPath());
+		assertEquals("~.", unnamed.getFullPath());
+	}
+
+	@Test
 	public void can_get_full_path_of_item_one_deep() {
 		FinancialTreeNode ftnOne = root.findOrCreate("one");
 		assertEquals("~.one", ftnOne.getFullPath());

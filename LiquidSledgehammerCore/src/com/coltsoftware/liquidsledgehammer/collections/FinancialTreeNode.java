@@ -93,7 +93,7 @@ public final class FinancialTreeNode implements Iterable<FinancialTreeNode> {
 	}
 
 	protected String getNameOrRootSymbol() {
-		if (getParent() == null)
+		if (getParent() == null && getName().equals(""))
 			return "~";
 		return getName();
 	}
