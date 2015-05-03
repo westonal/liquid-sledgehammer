@@ -38,22 +38,28 @@ public final class Arguments {
 		return null;
 	}
 
-	public String[] flagValues(String flag) {
-		validateFlagArgument(flag);
-		ArrayList<String> result = new ArrayList<String>();
-		String formattedFlag = formatFlag(flag);
-		boolean foundArg = false;
-		for (String arg : args) {
-			if (isFlag(arg)) {
-				foundArg = formattedFlag.equals(arg);
-				continue;
+	public String[] flagValues(String... flags) {
+		validateFlagArguments(flags);
+		int count = 0;
+		String[] tempResult = new String[args.length];
+		for (String flag : flags) {
+			String formattedFlag = formatFlag(flag);
+			boolean foundArg = false;
+			for (int i = 0; i < args.length; i++) {
+				String arg = args[i];
+				if (isFlag(arg)) {
+					foundArg = formattedFlag.equals(arg);
+					continue;
+				}
+				if (foundArg) {
+					tempResult[i] = arg;
+					count++;
+				}
 			}
-			if (foundArg)
-				result.add(arg);
 		}
-		if (result.isEmpty())
+		if (count == 0)
 			return null;
-		return result.toArray(new String[result.size()]);
+		return copyNonNullStringsToNewStringArray(count, tempResult);
 	}
 
 	private static boolean isFlag(String argument) {
@@ -80,5 +86,15 @@ public final class Arguments {
 			throw new IllegalArgumentException();
 		if (flag.startsWith(FLAG_PREFIX))
 			throw new IllegalArgumentException();
+	}
+
+	protected static String[] copyNonNullStringsToNewStringArray(
+			int nonNullCount, String[] inputWithNulls) {
+		int idx = 0;
+		String[] result = new String[nonNullCount];
+		for (String arg : inputWithNulls)
+			if (arg != null)
+				result[idx++] = arg;
+		return result;
 	}
 }

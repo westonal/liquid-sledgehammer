@@ -108,7 +108,7 @@ public final class ArgumentProcessingTests {
 
 		@Test(expected = IllegalArgumentException.class)
 		public void throws_for_null_flag() {
-			arguments.flagValues(null);
+			arguments.flagValues((String[]) null);
 		}
 
 		@Test(expected = IllegalArgumentException.class)
@@ -362,6 +362,17 @@ public final class ArgumentProcessingTests {
 					.fromString("-f v1 -g v2 -f v3 v4 -h -f v5");
 			assertArrayEquals(new String[] { "v1", "v3", "v4", "v5" },
 					arguments.flagValues("f"));
+		}
+	}
+
+	public static class MultiValueMultiFlagArguments {
+
+		@Test
+		public void returns_both() {
+			Arguments arguments = Arguments
+					.fromString("-f v1 v2 -g v3 -flag v4 -h v5 -f v6");
+			assertArrayEquals(new String[] { "v1", "v2", "v4", "v6" },
+					arguments.flagValues("f", "flag"));
 		}
 	}
 
