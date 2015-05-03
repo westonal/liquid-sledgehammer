@@ -71,5 +71,9 @@ Specify `Balance` as the command and optionally the source name:
 You can use live prompt to navigate the tree. The commands are similar to navigating a directory structure:
 
     ls	List tree
-    cd <Node>	Change tree node
-
+    cd                  	Show node path
+    cd <PartialNodePath>	Change tree node
+    cd ..               	Change tree node to parent
+    cd ~                	Change tree node to root
+    filter remove
+    filter <filterArgs>

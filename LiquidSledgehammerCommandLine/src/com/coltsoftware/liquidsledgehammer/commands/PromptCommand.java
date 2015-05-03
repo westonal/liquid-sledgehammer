@@ -37,6 +37,7 @@ public final class PromptCommand implements Command {
 	private void printHelp(PrintStream out) {
 		for (String key : commands.keySet())
 			commands.get(key).printUsage(out);
+		out.println("    exit");
 	}
 
 	public class Prompter {

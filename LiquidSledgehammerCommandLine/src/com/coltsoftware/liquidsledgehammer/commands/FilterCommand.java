@@ -24,7 +24,16 @@ public final class FilterCommand implements Command {
 
 	@Override
 	public void printUsage(PrintStream out) {
-		out.println("filter <filterArgs>");
+		out.println("    filter remove");
+		out.println("    filter <filterArgs>");
+		printFilters(filters, out);
+		out.println();
+	}
+
+	private static void printFilters(HashMap<String, FilterFactory> filters,
+			PrintStream out) {
+		for (String key : filters.keySet())
+			filters.get(key).printUsage(out);
 	}
 
 	@Override
