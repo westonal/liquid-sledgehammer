@@ -13,7 +13,7 @@ public abstract class ContextTestBase {
 	protected static SourceFactory createMockSourceFactory(int sourcesCount,
 			String usage) {
 		SourceFactory mock = mock(SourceFactory.class);
-		when(mock.getSources(any(String.class), any(Arguments.class)))
+		when(mock.getSources(any(String[].class), any(Arguments.class)))
 				.thenReturn(sources(sourcesCount));
 		when(mock.getUsageLine()).thenReturn(usage);
 		return mock;

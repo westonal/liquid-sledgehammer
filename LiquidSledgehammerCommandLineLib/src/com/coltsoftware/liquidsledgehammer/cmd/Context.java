@@ -23,7 +23,7 @@ public final class Context {
 			if (args.hasFlag(sourceFactoryName)) {
 				SourceFactory factory = sourceFactories.get(sourceFactoryName);
 				sources.addAll(factory.getSources(
-						args.flagValue(sourceFactoryName), args));
+						args.flagValues(sourceFactoryName), args));
 			}
 		}
 		if (sources.isEmpty())

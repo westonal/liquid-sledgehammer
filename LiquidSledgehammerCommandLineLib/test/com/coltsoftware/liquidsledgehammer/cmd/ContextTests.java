@@ -61,8 +61,8 @@ public final class ContextTests extends ContextTestBase {
 	@Test
 	public void mocks_were_given_path() {
 		Context.fromArgs(args);
-		verify(mock1).getSources("thePath", args);
-		verify(mock2).getSources("path2", args);
+		verify(mock1).getSources(new String[] { "thePath" }, args);
+		verify(mock2).getSources(new String[] { "path2" }, args);
 	}
 
 	@Test
