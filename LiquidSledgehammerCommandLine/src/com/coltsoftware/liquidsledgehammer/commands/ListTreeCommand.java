@@ -27,7 +27,8 @@ public final class ListTreeCommand implements Command {
 
 	private static String formatSubTransaction(SubTransaction subTransaction) {
 		FinancialTransaction transaction = subTransaction.getTransaction();
-		return String.format("%s\t%s\t%s", transaction.getDate(),
+		return String.format("%s\t%s\t%s\t%s", transaction.getDate(),
+				transaction.getSource().getName(),
 				transaction.getDescription(), subTransaction.getValue());
 	}
 
