@@ -3,7 +3,6 @@ package com.coltsoftware.liquidsledgehammer;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.coltsoftware.liquidsledgehammer.cmd.Arguments;
@@ -11,12 +10,12 @@ import com.coltsoftware.liquidsledgehammer.cmd.Context;
 import com.coltsoftware.liquidsledgehammer.collections.AliasPathResolver;
 import com.coltsoftware.liquidsledgehammer.collections.FinancialTreeNode;
 import com.coltsoftware.liquidsledgehammer.commands.ChangeNodeTreeCommand;
+import com.coltsoftware.liquidsledgehammer.commands.FilterCommand;
 import com.coltsoftware.liquidsledgehammer.commands.ListCommand;
 import com.coltsoftware.liquidsledgehammer.commands.ListTreeCommand;
-import com.coltsoftware.liquidsledgehammer.commands.PromptCommand;
 import com.coltsoftware.liquidsledgehammer.commands.LocalBalanceCommand;
+import com.coltsoftware.liquidsledgehammer.commands.PromptCommand;
 import com.coltsoftware.liquidsledgehammer.filters.DateFilter;
-import com.coltsoftware.liquidsledgehammer.filters.FilterCombine;
 import com.coltsoftware.liquidsledgehammer.filters.SourceFilter;
 import com.coltsoftware.liquidsledgehammer.filters.TransactionFilter;
 import com.coltsoftware.liquidsledgehammer.groups.JsonGroupsFactory;
@@ -50,7 +49,7 @@ public final class CommandsMain {
 			printUsage(out);
 			return;
 		}
-		String jsonGroups = arguments.flagValue("jsongroup");
+		final String jsonGroups = arguments.flagValue("jsongroup");
 		if (jsonGroups == null) {
 			printUsage(out);
 			return;
@@ -67,7 +66,19 @@ public final class CommandsMain {
 
 		FinancialTreeNode root = createTree(singleSource, new File(jsonGroups));
 
-		State state = new State();
+		State state = new State(singleSource);
+		state.setRecalc(new NodeRecalc() {
+
+			@Override
+			public FinancialTreeNode doRecalc(FinancialTransactionSource source) {
+				try {
+					return createTree(source, new File(jsonGroups));
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+			}
+
+		});
 		state.setCurrentNode(root);
 		state.setSource(singleSource);
 
@@ -78,12 +89,7 @@ public final class CommandsMain {
 
 	protected static TransactionFilter constructFilters(Arguments arguments) {
 		String[] filterArguments = arguments.flagValues("f", "filter");
-
-		ArrayList<TransactionFilter> allFilters = new ArrayList<TransactionFilter>();
-
-		for (String key : filters.keySet())
-			allFilters.add(filters.get(key).constructFilter(filterArguments));
-		return FilterCombine.andAll(allFilters);
+		return FilterCommand.constructFilters(filters, filterArguments);
 	}
 
 	protected static void registerSourceFactories() {
@@ -96,6 +102,7 @@ public final class CommandsMain {
 		commands.put("ls", new ListTreeCommand());
 		commands.put("cd", new ChangeNodeTreeCommand());
 		commands.put("prompt", new PromptCommand(commands));
+		commands.put("filter", new FilterCommand(filters));
 	}
 
 	private static void registerFilters() {
