@@ -105,4 +105,8 @@ public final class Arguments {
 	public String second() {
 		return args.length > 1 ? args[1] : "";
 	}
+
+	public String[] allAsArray() {
+		return args;
+	}
 }

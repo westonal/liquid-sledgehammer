@@ -424,4 +424,14 @@ public final class ArgumentProcessingTests {
 		}
 	}
 
+	public static class AllArgs {
+
+		@Test
+		public void of_one() {
+			String[] args = new String[] { "" };
+			Arguments arguments = new Arguments(args);
+			assertSame(args, arguments.allAsArray());
+		}
+	}
+
 }
