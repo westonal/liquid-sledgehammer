@@ -12,11 +12,15 @@ import com.coltsoftware.liquidsledgehammer.sources.FinancialTransactionSource;
 public final class JsonSourceFatory implements SourceFactory {
 
 	@Override
-	public ArrayList<FinancialTransactionSource> getSources(String pathString,
+	public ArrayList<FinancialTransactionSource> getSources(String[] paths,
 			Arguments otherArguments) {
 		try {
-			Path path = new File(pathString).toPath();
-			return PathSourceWalker.loadAllSourcesBelowPath(path);
+			ArrayList<FinancialTransactionSource> result = new ArrayList<FinancialTransactionSource>();
+			for (String pathString : paths) {
+				Path path = new File(pathString).toPath();
+				result.addAll(PathSourceWalker.loadAllSourcesBelowPath(path));
+			}
+			return result;
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -24,7 +28,7 @@ public final class JsonSourceFatory implements SourceFactory {
 
 	@Override
 	public String getUsageLine() {
-		return "<path>";
+		return "<path1> [<path2> ...]";
 	}
 
 }
