@@ -1,5 +1,7 @@
 package com.coltsoftware.liquidsledgehammer.cmd;
 
+import java.util.ArrayList;
+
 public final class Arguments {
 
 	private static final String FLAG_PREFIX = "-";
@@ -36,11 +38,35 @@ public final class Arguments {
 		return null;
 	}
 
+	public String[] flagValues(String flag) {
+		validateFlagArgument(flag);
+		ArrayList<String> result = new ArrayList<String>();
+		String formattedFlag = formatFlag(flag);
+		boolean foundArg = false;
+		for (String arg : args) {
+			if (isFlag(arg)) {
+				foundArg = formattedFlag.equals(arg);
+				continue;
+			}
+			if (foundArg)
+				result.add(arg);
+		}
+		if (result.isEmpty())
+			return null;
+		return result.toArray(new String[result.size()]);
+	}
+
+	private static boolean isFlag(String argument) {
+		return argument.startsWith(FLAG_PREFIX);
+	}
+
 	protected static String formatFlag(String flag) {
 		return FLAG_PREFIX + flag;
 	}
 
 	protected static void validateFlagArguments(String... flags) {
+		if (flags == null)
+			throw new IllegalArgumentException();
 		for (String flag : flags)
 			validateFlagArgument(flag);
 	}

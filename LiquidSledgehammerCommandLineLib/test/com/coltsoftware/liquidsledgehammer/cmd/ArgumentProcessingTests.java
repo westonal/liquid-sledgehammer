@@ -33,7 +33,7 @@ public final class ArgumentProcessingTests {
 
 		@Test(expected = IllegalArgumentException.class)
 		public void throws_for_null_flag() {
-			arguments.hasFlag(null);
+			arguments.hasFlag((String[]) null);
 		}
 
 		@Test(expected = IllegalArgumentException.class)
@@ -68,7 +68,7 @@ public final class ArgumentProcessingTests {
 
 		@Test(expected = IllegalArgumentException.class)
 		public void throws_for_null_flag() {
-			arguments.flagValue(null);
+			arguments.flagValue((String[]) null);
 		}
 
 		@Test(expected = IllegalArgumentException.class)
@@ -94,6 +94,46 @@ public final class ArgumentProcessingTests {
 		@Test
 		public void returns_null_if_flag_has_no_value() {
 			assertNull(arguments.flagValue("n"));
+		}
+	}
+
+	public static class InvalidFlagValuesQueries {
+
+		private Arguments arguments;
+
+		@Before
+		public void setUp() {
+			arguments = new Arguments(new String[] { "-m", "v", "-n" });
+		}
+
+		@Test(expected = IllegalArgumentException.class)
+		public void throws_for_null_flag() {
+			arguments.flagValues(null);
+		}
+
+		@Test(expected = IllegalArgumentException.class)
+		public void throws_for_flag_if_specify_dash() {
+			arguments.flagValues("-m");
+		}
+
+		@Test(expected = IllegalArgumentException.class)
+		public void throws_for_empty_flag() {
+			arguments.flagValues("");
+		}
+
+		@Test(expected = IllegalArgumentException.class)
+		public void throws_for_pre_whitespace() {
+			arguments.flagValues(" m");
+		}
+
+		@Test(expected = IllegalArgumentException.class)
+		public void throws_for_post_whitespace() {
+			arguments.flagValues("m ");
+		}
+
+		@Test
+		public void returns_null_if_flag_has_no_value() {
+			assertNull(arguments.flagValues("n"));
 		}
 	}
 
@@ -162,7 +202,7 @@ public final class ArgumentProcessingTests {
 		}
 	}
 
-	public static class TwoValuedArgument {
+	public static class TwoValuedArguments {
 
 		private Arguments arguments;
 
@@ -286,6 +326,42 @@ public final class ArgumentProcessingTests {
 		@Test(expected = IllegalArgumentException.class)
 		public void checks_all_arguments_first() {
 			arguments.hasFlag("a", "-b");
+		}
+	}
+
+	public static class MultiValueArguments {
+
+		@Test
+		public void returns_both() {
+			Arguments arguments = Arguments.fromString("-f v1 v2");
+			assertArrayEquals(new String[] { "v1", "v2" },
+					arguments.flagValues("f"));
+		}
+
+		@Test
+		public void stops_when_hits_other_flag() {
+			Arguments arguments = Arguments.fromString("-f v1 -g");
+			assertArrayEquals(new String[] { "v1" }, arguments.flagValues("f"));
+		}
+
+		@Test
+		public void stops_when_hits_other_flag_with_argument() {
+			Arguments arguments = Arguments.fromString("-f v1 -g v2");
+			assertArrayEquals(new String[] { "v1" }, arguments.flagValues("f"));
+		}
+
+		@Test
+		public void can_gather_values_from_flag_not_in_first_position() {
+			Arguments arguments = Arguments.fromString("-f v1 -g v2");
+			assertArrayEquals(new String[] { "v2" }, arguments.flagValues("g"));
+		}
+
+		@Test
+		public void can_gather_from_distributed_flags() {
+			Arguments arguments = Arguments
+					.fromString("-f v1 -g v2 -f v3 v4 -h -f v5");
+			assertArrayEquals(new String[] { "v1", "v3", "v4", "v5" },
+					arguments.flagValues("f"));
 		}
 	}
 
