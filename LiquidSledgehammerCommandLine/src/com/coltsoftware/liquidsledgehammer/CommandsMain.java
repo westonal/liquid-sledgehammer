@@ -1,12 +1,16 @@
 package com.coltsoftware.liquidsledgehammer;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.coltsoftware.liquidsledgehammer.cmd.Arguments;
 import com.coltsoftware.liquidsledgehammer.cmd.Context;
 import com.coltsoftware.liquidsledgehammer.commands.LocalBalanceCommand;
+import com.coltsoftware.liquidsledgehammer.filters.DateFilter;
+import com.coltsoftware.liquidsledgehammer.filters.FilterCombine;
 import com.coltsoftware.liquidsledgehammer.filters.SourceFilter;
+import com.coltsoftware.liquidsledgehammer.filters.TransactionFilter;
 import com.coltsoftware.liquidsledgehammer.sources.FinancialTransactionSource;
 
 public final class CommandsMain {
@@ -36,26 +40,28 @@ public final class CommandsMain {
 			return;
 		}
 
+		TransactionFilter filter = constructFilters(arguments);
+
 		Context context = Context.fromArgs(arguments);
 
 		FinancialTransactionSource singleSource = PathSourceWalker
 				.combineSources(context.getSources());
 
-		singleSource = applyAllfilters(arguments, singleSource);
+		singleSource = FilterHelper.filterSource(singleSource, filter);
 
 		for (String commandName : commands.keySet())
 			if (commandName.equals(commandFlag))
 				commands.get(commandName).execute(singleSource, arguments, out);
 	}
 
-	protected static FinancialTransactionSource applyAllfilters(
-			Arguments arguments, FinancialTransactionSource singleSource) {
+	protected static TransactionFilter constructFilters(Arguments arguments) {
 		String[] filterArguments = arguments.flagValues("f", "filter");
 
+		ArrayList<TransactionFilter> allFilters = new ArrayList<TransactionFilter>();
+
 		for (String key : filters.keySet())
-			singleSource = filters.get(key).filter(singleSource,
-					filterArguments);
-		return singleSource;
+			allFilters.add(filters.get(key).constructFilter(filterArguments));
+		return FilterCombine.andAll(allFilters);
 	}
 
 	protected static void registerSourceFactories() {
@@ -68,6 +74,7 @@ public final class CommandsMain {
 
 	private static void registerFilters() {
 		filters.put("source", new SourceFilter());
+		filters.put("date", new DateFilter());
 	}
 
 	private static void printUsage(PrintStream out) {

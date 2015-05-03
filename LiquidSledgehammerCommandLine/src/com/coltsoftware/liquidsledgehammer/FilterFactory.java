@@ -1,10 +1,8 @@
 package com.coltsoftware.liquidsledgehammer;
 
-import com.coltsoftware.liquidsledgehammer.sources.FinancialTransactionSource;
+import com.coltsoftware.liquidsledgehammer.filters.TransactionFilter;
 
 public interface FilterFactory extends UsagePrinter {
 
-	FinancialTransactionSource filter(FinancialTransactionSource source,
-			String[] filterArguments);
-
+	TransactionFilter constructFilter(String[] filterArguments);
 }
