@@ -101,4 +101,8 @@ public final class Arguments {
 	public String first() {
 		return args[0];
 	}
+
+	public String second() {
+		return args.length > 1 ? args[1] : "";
+	}
 }
