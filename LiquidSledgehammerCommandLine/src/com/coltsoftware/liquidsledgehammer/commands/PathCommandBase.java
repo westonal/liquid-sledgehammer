@@ -15,7 +15,7 @@ public abstract class PathCommandBase {
 				: pathString.split("[./]");
 		for (String path : paths) {
 			if ("~".equals(path))
-				node = getRoot(node);
+				node = node.getRoot();
 			else if ("..".equals(path))
 				node = node.getParent();
 			else {
@@ -51,12 +51,6 @@ public abstract class PathCommandBase {
 			return node;
 		}
 		}
-	}
-
-	protected static FinancialTreeNode getRoot(FinancialTreeNode node) {
-		while (node.getParent() != null)
-			node = node.getParent();
-		return node;
 	}
 
 }

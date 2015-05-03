@@ -98,4 +98,11 @@ public final class FinancialTreeNode implements Iterable<FinancialTreeNode> {
 		return getName();
 	}
 
+	public FinancialTreeNode getRoot() {
+		FinancialTreeNode node = this;
+		while (node.getParent() != null)
+			node = node.getParent();
+		return node;
+	}
+
 }
