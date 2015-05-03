@@ -50,8 +50,11 @@ public final class CommandsMain {
 
 	protected static FinancialTransactionSource applyAllfilters(
 			Arguments arguments, FinancialTransactionSource singleSource) {
+		String[] filterArguments = arguments.flagValues("f", "filter");
+
 		for (String key : filters.keySet())
-			singleSource = filters.get(key).filter(singleSource, arguments);
+			singleSource = filters.get(key).filter(singleSource,
+					filterArguments);
 		return singleSource;
 	}
 
@@ -74,6 +77,7 @@ public final class CommandsMain {
 		printSources(out);
 		out.println();
 		out.println("Specify filters:");
+		out.println("    -f/-filter");
 		printFilters(out);
 		out.println();
 		out.println("Specify a command:");

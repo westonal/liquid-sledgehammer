@@ -47,8 +47,12 @@ Arguments
 
 Specify an input source, json only supported currently:
 
-    -jsonin <jsonsourcepath>
+    -jsonin <jsonsourcepath> [<jsonsourcepath2>] [<jsonsourcepath3> ...]
+
+Filter
+
+    -f/-filter s:<BankName> [s:<BankName2>] [s:<BankName3> ...]
 
 Specify `Balance` as the command and optionally the source name:
 
-    -c/-command Balance [-s/-source <sourcename>]
+    -c/-command Balance
