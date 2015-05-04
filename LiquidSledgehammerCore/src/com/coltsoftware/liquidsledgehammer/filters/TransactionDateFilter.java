@@ -31,7 +31,18 @@ public final class TransactionDateFilter {
 			if (minimumDate.equals(maximumDate))
 				return buildExactDateFilter();
 
-			return and(buildMinDateFilter(), buildMaxDateFilter());
+			TransactionFilter anded = and(buildMinDateFilter(),
+					buildMaxDateFilter());
+
+			final String toString = String.format("%s <= Date <= %s",
+					minimumDate, maximumDate);
+
+			return new TransactionFilterDecorator(anded) {
+				@Override
+				public String toString() {
+					return toString;
+				}
+			};
 		}
 
 		protected void checkDateRangeValid() {
