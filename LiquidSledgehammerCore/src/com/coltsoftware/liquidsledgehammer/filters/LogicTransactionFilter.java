@@ -9,6 +9,14 @@ public final class LogicTransactionFilter {
 
 	public static TransactionFilter and(TransactionFilter lhsFilter,
 			TransactionFilter rhsFilter) {
+		if (lhsFilter == BooleanTransactionFilter.TRUE)
+			return rhsFilter;
+		if (lhsFilter == BooleanTransactionFilter.FALSE)
+			return BooleanTransactionFilter.FALSE;
+		if (rhsFilter == BooleanTransactionFilter.TRUE)
+			return lhsFilter;
+		if (rhsFilter == BooleanTransactionFilter.FALSE)
+			return BooleanTransactionFilter.FALSE;
 		return new AndTransactionFilter(lhsFilter, rhsFilter);
 	}
 
