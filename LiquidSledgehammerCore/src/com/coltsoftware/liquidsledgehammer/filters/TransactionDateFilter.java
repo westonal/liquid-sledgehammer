@@ -83,7 +83,8 @@ public final class TransactionDateFilter {
 
 		public Builder exactMonth(int year, int month) {
 			LocalDate start = ymdToLocalDate(year, month, 1);
-			return minimumDate(start).maximumDate(start.plusMonths(1).minusDays(1));
+			return minimumDate(start).maximumDate(
+					start.plusMonths(1).minusDays(1));
 		}
 	}
 
@@ -102,6 +103,13 @@ public final class TransactionDateFilter {
 		}
 
 		protected abstract boolean evaluateCompareValue(int compared);
+
+		protected abstract String getStringRepresentation();
+
+		@Override
+		public String toString() {
+			return "Date " + getStringRepresentation() + " " + date.toString();
+		}
 	}
 
 	private static class MinDateFilter extends SingleDateFilter {
@@ -114,6 +122,11 @@ public final class TransactionDateFilter {
 		protected boolean evaluateCompareValue(int compared) {
 			return compared >= 0;
 		}
+
+		@Override
+		protected String getStringRepresentation() {
+			return ">=";
+		}
 	}
 
 	private static class MaxDateFilter extends SingleDateFilter {
@@ -125,6 +138,11 @@ public final class TransactionDateFilter {
 		@Override
 		protected boolean evaluateCompareValue(int compared) {
 			return compared <= 0;
+		}
+
+		@Override
+		protected String getStringRepresentation() {
+			return "<=";
 		}
 	}
 
