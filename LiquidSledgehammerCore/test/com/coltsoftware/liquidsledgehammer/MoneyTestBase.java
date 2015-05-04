@@ -13,23 +13,23 @@ public abstract class MoneyTestBase extends BaseTest {
     protected final Currency euro = MoneyHelper.euro;
     protected final Currency local = MoneyHelper.local;
 
-    protected Money gbp(long pence) {
+    protected static Money gbp(long pence) {
         return MoneyHelper.gbp(pence);
     }
 
-    protected Money usd(long cents) {
+    protected static Money usd(long cents) {
         return MoneyHelper.usd(cents);
     }
 
-    protected Money yen(long yenValue) {
+    protected static Money yen(long yenValue) {
         return MoneyHelper.yen(yenValue);
     }
 
-    protected Money euro(long cents) {
+    protected static Money euro(long cents) {
         return MoneyHelper.euro(cents);
     }
 
-    protected Money local(long minorUnit) {
+    protected static Money local(long minorUnit) {
         return MoneyHelper.local(minorUnit);
     }
 

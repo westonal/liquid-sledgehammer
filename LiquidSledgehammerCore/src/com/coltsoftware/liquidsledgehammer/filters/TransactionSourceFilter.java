@@ -44,6 +44,11 @@ public final class TransactionSourceFilter {
 		public boolean allow(FinancialTransaction transaction) {
 			return name.equals(transaction.getSource().getName());
 		}
+
+		@Override
+		public String toString() {
+			return String.format("source =(case) \"%s\"", name);
+		}
 	}
 
 	public static class CaseInsensitiveTransactionSourceFilter implements
@@ -57,6 +62,11 @@ public final class TransactionSourceFilter {
 		@Override
 		public boolean allow(FinancialTransaction transaction) {
 			return name.equalsIgnoreCase(transaction.getSource().getName());
+		}
+
+		@Override
+		public String toString() {
+			return String.format("source = \"%s\"", name);
 		}
 	}
 
