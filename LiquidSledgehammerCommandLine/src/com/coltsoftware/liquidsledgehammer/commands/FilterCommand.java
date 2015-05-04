@@ -43,13 +43,17 @@ public final class FilterCommand implements Command {
 
 		if ("remove".equalsIgnoreCase(arguments.second())) {
 			source = state.getUnfilteredSource();
+			state.clearFilters();
 		} else {
 			TransactionFilter filter = constructFilters(filters,
 					arguments.allAsArray());
 			source = FilterHelper.filterSource(source, filter);
+			state.setLatestFilter(filter);
 		}
 
 		state.setSource(source);
+		
+		out.println(state.getFilter());
 	}
 
 	public static TransactionFilter constructFilters(

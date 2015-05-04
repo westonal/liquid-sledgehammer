@@ -66,7 +66,7 @@ public final class CommandsMain {
 
 		FinancialTreeNode root = createTree(singleSource, new File(jsonGroups));
 
-		State state = new State(singleSource);
+		State state = new State(singleSource, filter);
 		state.setRecalc(new NodeRecalc() {
 
 			@Override
