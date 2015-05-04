@@ -22,6 +22,14 @@ public final class LogicTransactionFilter {
 
 	public static TransactionFilter or(TransactionFilter lhsFilter,
 			TransactionFilter rhsFilter) {
+		if (lhsFilter == BooleanTransactionFilter.TRUE)
+			return BooleanTransactionFilter.TRUE;
+		if (lhsFilter == BooleanTransactionFilter.FALSE)
+			return rhsFilter;
+		if (rhsFilter == BooleanTransactionFilter.TRUE)
+			return BooleanTransactionFilter.TRUE;
+		if (rhsFilter == BooleanTransactionFilter.FALSE)
+			return lhsFilter;
 		return new OrTransactionFilter(lhsFilter, rhsFilter);
 	}
 
