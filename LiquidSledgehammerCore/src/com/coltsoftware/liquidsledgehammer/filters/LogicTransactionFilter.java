@@ -53,6 +53,11 @@ public final class LogicTransactionFilter {
 		public boolean allow(FinancialTransaction transaction) {
 			return lhsFilter.allow(transaction) && rhsFilter.allow(transaction);
 		}
+
+		@Override
+		public String toString() {
+			return String.format("%s and %s", lhsFilter, rhsFilter);
+		}
 	}
 
 	private static class OrTransactionFilter extends
@@ -67,6 +72,11 @@ public final class LogicTransactionFilter {
 		public boolean allow(FinancialTransaction transaction) {
 			return lhsFilter.allow(transaction) || rhsFilter.allow(transaction);
 		}
+
+		@Override
+		public String toString() {
+			return String.format("(%s or %s)", lhsFilter, rhsFilter);
+		}
 	}
 
 	private static class XOrTransactionFilter extends
@@ -80,6 +90,11 @@ public final class LogicTransactionFilter {
 		@Override
 		public boolean allow(FinancialTransaction transaction) {
 			return lhsFilter.allow(transaction) ^ rhsFilter.allow(transaction);
+		}
+
+		@Override
+		public String toString() {
+			return String.format("(%s xor %s)", lhsFilter, rhsFilter);
 		}
 	}
 
@@ -98,6 +113,11 @@ public final class LogicTransactionFilter {
 
 		public TransactionFilter getInnerFilter() {
 			return innerFilter;
+		}
+
+		@Override
+		public String toString() {
+			return String.format("not(%s)", innerFilter);
 		}
 	}
 }

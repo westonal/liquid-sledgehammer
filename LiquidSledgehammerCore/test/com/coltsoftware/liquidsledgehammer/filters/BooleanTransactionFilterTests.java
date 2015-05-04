@@ -27,4 +27,13 @@ public final class BooleanTransactionFilterTests extends
 		assertTrue(BooleanTransactionFilter.TRUE.allow(transaction));
 	}
 
+	@Test
+	public void false_to_string() {
+		assertEquals("false", BooleanTransactionFilter.FALSE.toString());
+	}
+
+	@Test
+	public void true_to_string() {
+		assertEquals("true", BooleanTransactionFilter.TRUE.toString());
+	}
 }

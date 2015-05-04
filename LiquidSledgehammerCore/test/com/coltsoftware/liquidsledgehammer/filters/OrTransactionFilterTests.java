@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import static org.mockito.Mockito.*;
 
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
@@ -47,6 +48,22 @@ public final class OrTransactionFilterTests extends TransactionFilterTestBase {
 		assertTrue(LogicTransactionFilter.or(BooleanTransactionFilter.TRUE,
 				rhsMock).allow(transaction));
 		verify(rhsMock, never()).allow(any(FinancialTransaction.class));
+	}
+
+	@Test
+	public void to_string() {
+		TransactionFilter rhsMock = createFilterWithToStringValue("A");
+		TransactionFilter lhsMock = createFilterWithToStringValue("B");
+		TransactionFilter or = LogicTransactionFilter.or(rhsMock, lhsMock);
+		assertEquals("(A or B)", or.toString());
+	}
+
+	@Test
+	public void to_string_2() {
+		TransactionFilter rhsMock = createFilterWithToStringValue("1");
+		TransactionFilter lhsMock = createFilterWithToStringValue("2");
+		TransactionFilter or = LogicTransactionFilter.or(rhsMock, lhsMock);
+		assertEquals("(1 or 2)", or.toString());
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.coltsoftware.liquidsledgehammer.filters;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
@@ -77,5 +78,21 @@ public final class XOrTransactionFilterTests extends TransactionFilterTestBase {
 		LogicTransactionFilter.xor(lhsMock, rhsMock).allow(transaction);
 		verify(lhsMock, times(1)).allow(any(FinancialTransaction.class));
 		verify(rhsMock, times(1)).allow(any(FinancialTransaction.class));
+	}
+	
+	@Test
+	public void to_string() {
+		TransactionFilter rhsMock = createFilterWithToStringValue("A");
+		TransactionFilter lhsMock = createFilterWithToStringValue("B");
+		TransactionFilter xor = LogicTransactionFilter.xor(rhsMock, lhsMock);
+		assertEquals("(A xor B)", xor.toString());
+	}
+
+	@Test
+	public void to_string_2() {
+		TransactionFilter rhsMock = createFilterWithToStringValue("1");
+		TransactionFilter lhsMock = createFilterWithToStringValue("2");
+		TransactionFilter xor = LogicTransactionFilter.xor(rhsMock, lhsMock);
+		assertEquals("(1 xor 2)", xor.toString());
 	}
 }

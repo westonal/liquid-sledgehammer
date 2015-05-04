@@ -38,4 +38,18 @@ public final class NotTransactionFilterTests extends TransactionFilterTestBase {
 				.not(filter);
 		assertSame(mock, doubleNegativeFilter);
 	}
+
+	@Test
+	public void to_string() {
+		TransactionFilter mock = createFilterWithToStringValue("A");
+		TransactionFilter or = LogicTransactionFilter.not(mock);
+		assertEquals("not(A)", or.toString());
+	}
+
+	@Test
+	public void to_string_2() {
+		TransactionFilter mock = createFilterWithToStringValue("1");
+		TransactionFilter or = LogicTransactionFilter.not(mock);
+		assertEquals("not(1)", or.toString());
+	}
 }

@@ -15,4 +15,9 @@ public enum BooleanTransactionFilter implements TransactionFilter {
 	public boolean allow(FinancialTransaction transaction) {
 		return result;
 	}
+
+	@Override
+	public String toString() {
+		return result ? "true" : "false";
+	}
 }

@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import static org.mockito.Mockito.*;
 
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
@@ -47,6 +48,22 @@ public final class AndTransactionFilterTests extends TransactionFilterTestBase {
 		assertFalse(LogicTransactionFilter.and(BooleanTransactionFilter.FALSE,
 				rhsMock).allow(transaction));
 		verify(rhsMock, never()).allow(any(FinancialTransaction.class));
+	}
+
+	@Test
+	public void to_string() {
+		TransactionFilter rhsMock = createFilterWithToStringValue("A");
+		TransactionFilter lhsMock = createFilterWithToStringValue("B");
+		TransactionFilter and = LogicTransactionFilter.and(rhsMock, lhsMock);
+		assertEquals("A and B", and.toString());
+	}
+
+	@Test
+	public void to_string_2() {
+		TransactionFilter rhsMock = createFilterWithToStringValue("1");
+		TransactionFilter lhsMock = createFilterWithToStringValue("2");
+		TransactionFilter and = LogicTransactionFilter.and(rhsMock, lhsMock);
+		assertEquals("1 and 2", and.toString());
 	}
 
 }

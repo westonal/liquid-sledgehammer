@@ -1,5 +1,8 @@
 package com.coltsoftware.liquidsledgehammer.filters;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import com.coltsoftware.liquidsledgehammer.MoneyTestBase;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction.Builder;
@@ -12,8 +15,11 @@ public abstract class TransactionFilterTestBase extends MoneyTestBase {
 				.source(NullFinancialTransactionSourceInformation.INSTANCE);
 	}
 
-	public TransactionFilterTestBase() {
-		super();
+	protected static TransactionFilter createFilterWithToStringValue(
+			String toStringValue) {
+		TransactionFilter mock = mock(TransactionFilter.class);
+		when(mock.toString()).thenReturn(toStringValue);
+		return mock;
 	}
 
 }
