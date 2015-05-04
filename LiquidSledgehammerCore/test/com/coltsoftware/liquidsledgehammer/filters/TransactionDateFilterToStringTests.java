@@ -55,4 +55,19 @@ public final class TransactionDateFilterToStringTests extends
 		String expected = "Date <= 1980-05-03";
 		assertToString(expected, f);
 	}
+	
+	@Test
+	public void exact_date() {
+		TransactionFilter f = builder.exactDate(2015, 12, 30).build();
+		String expected = "Date = 2015-12-30";
+		assertToString(expected, f);
+	}
+	
+	@Test
+	public void exact_date_2() {
+		TransactionFilter f = builder.exactDate(1980, 5, 3).build();
+		String expected = "Date = 1980-05-03";
+		assertToString(expected, f);
+	}
+
 }

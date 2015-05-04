@@ -156,6 +156,11 @@ public final class TransactionDateFilter {
 		protected boolean evaluateCompareValue(int compared) {
 			return compared == 0;
 		}
+
+		@Override
+		protected String getStringRepresentation() {
+			return "=";
+		}
 	}
 
 }
