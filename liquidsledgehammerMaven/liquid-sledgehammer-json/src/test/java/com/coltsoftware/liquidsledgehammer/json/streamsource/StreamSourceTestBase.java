@@ -6,8 +6,6 @@ import java.io.InputStream;
 import org.junit.After;
 import org.junit.Before;
 
-import com.coltsoftware.liquidsledgehammer.MoneyTestBase;
-
 public abstract class StreamSourceTestBase {
 
 	public static InputStream loadAsset(String assetName) {
