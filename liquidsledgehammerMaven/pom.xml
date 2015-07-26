@@ -6,11 +6,13 @@
 
     <groupId>com.coltsoftware</groupId>
     <artifactId>liquidsledgehammer</artifactId>
+
     <packaging>pom</packaging>
+
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>liquid-sledgehammer-core</module>
+        <module>liquid-sledgehammer-json</module>
     </modules>
-
 
 </project>
