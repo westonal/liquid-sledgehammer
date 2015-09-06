@@ -72,7 +72,6 @@ public final class FinancialTreeNode implements Iterable<FinancialTreeNode> {
 		return parent;
 	}
 
-	@Override
 	public Iterator<FinancialTreeNode> iterator() {
 		return children.iterator();
 	}
