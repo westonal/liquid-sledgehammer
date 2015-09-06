@@ -20,7 +20,7 @@ public final class DateFilter implements FilterFactory {
 	}
 
 	protected static TransactionFilter buildDateFilter(String filter) {
-		TransactionDateFilter.Builder builder = new TransactionDateFilter.Builder();
+		Builder builder = new Builder();
 		if (filter.startsWith("<"))
 			builder.maximumDate(getDate(filter.substring(1)));
 		if (filter.startsWith(">"))

@@ -14,6 +14,7 @@
         <module>liquid-sledgehammer-core</module>
         <module>liquid-sledgehammer-json</module>
         <module>liquid-sledgehammer-command-line-lib</module>
+        <module>liquid-sledgehammer-command-line</module>
     </modules>
 
 </project>
