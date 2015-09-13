@@ -1,0 +1,54 @@
+[
+  {
+    "name": "Default",
+    "uniqueName": "Default",
+    "path": "No group.Default",
+    "matchStrings": [],
+    "excludeStrings": []
+  },
+  {
+    "name": "Error",
+    "uniqueName": "Error",
+    "path": "No group.Error",
+    "matchStrings": [],
+    "excludeStrings": []
+  },
+  {
+    "name": "Cash",
+    "uniqueName": "cash",
+    "path": "External.Cash",
+    "matchStrings": [
+      "ATM"
+    ],
+    "excludeStrings": []
+  },
+  {
+    "name": "Pay",
+    "uniqueName": "pay",
+    "path": "External.Pay",
+    "matchStrings": [
+      "Deposit from company"
+    ],
+    "excludeStrings": []
+  },
+  {
+    "name": "Supermarket",
+    "uniqueName": "supermarket",
+    "path": "External.Food.Super Market",
+    "matchStrings": [
+      "Supermarket"
+    ],
+    "excludeStrings": [
+	  "Supermarket Fuel"
+	]
+  },
+  {
+    "name": "Fuel",
+    "uniqueName": "petrol",
+    "path": "External.Transport.Petrol",
+    "matchStrings": [
+      "Supermarket Fuel"
+    ],
+    "excludeStrings": []
+  }
+]

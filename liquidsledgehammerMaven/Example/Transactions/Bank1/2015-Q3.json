@@ -1,0 +1,20 @@
+{
+  "entries": [
+    {
+      "date": "2015-09-11",
+      "description": "Deposit from company",
+      "value": 100.0
+    },
+    {
+      "date": "2015-09-12",
+      "description": "ATM Withdrawal",
+      "value": -50.0
+    },
+    {
+      "date": "2015-09-13",
+      "description": "Supermarket",
+      "value": -22.52,
+      "group": "cash=-10"
+    }
+  ]
+}
