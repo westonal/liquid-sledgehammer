@@ -32,4 +32,9 @@ public final class JLine2PromptCommand implements Command {
 			throw new RuntimeException(e);
 		}
 	}
+
+    @Override
+    public Completer getCompleter(State state) {
+        return null;
+    }
 }

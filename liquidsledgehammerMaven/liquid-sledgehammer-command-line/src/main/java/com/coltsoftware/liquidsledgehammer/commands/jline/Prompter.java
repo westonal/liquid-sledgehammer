@@ -26,7 +26,7 @@ public final class Prompter {
     }
 
     private void addCompleters(ConsoleReader reader) {
-        reader.addCompleter(new CommandCompleter(commands));
+        reader.addCompleter(new CommandCompleter(state, commands));
     }
 
     protected void prompt() throws IOException {

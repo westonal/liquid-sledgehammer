@@ -6,6 +6,7 @@ import com.coltsoftware.liquidsledgehammer.Command;
 import com.coltsoftware.liquidsledgehammer.State;
 import com.coltsoftware.liquidsledgehammer.cmd.Arguments;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
+import jline.console.completer.Completer;
 
 public final class ListCommand implements Command {
 
@@ -13,6 +14,11 @@ public final class ListCommand implements Command {
 	public void execute(State state, Arguments arguments, PrintStream out) {
 		for (FinancialTransaction transaction : state.getSource())
 			out.println(formatTransaction(transaction));
+	}
+
+	@Override
+	public Completer getCompleter(State state){
+		return null;
 	}
 
 	protected String formatTransaction(FinancialTransaction transaction) {

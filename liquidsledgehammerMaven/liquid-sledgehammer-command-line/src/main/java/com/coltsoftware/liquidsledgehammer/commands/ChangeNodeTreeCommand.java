@@ -5,6 +5,7 @@ import com.coltsoftware.liquidsledgehammer.Command;
 import com.coltsoftware.liquidsledgehammer.State;
 import com.coltsoftware.liquidsledgehammer.cmd.Arguments;
 import com.coltsoftware.liquidsledgehammer.collections.FinancialTreeNode;
+import jline.console.completer.Completer;
 
 public final class ChangeNodeTreeCommand extends PathCommandBase implements
 		Command {
@@ -22,6 +23,11 @@ public final class ChangeNodeTreeCommand extends PathCommandBase implements
 			state.setCurrentNode(node);
 			out.println(node.getFullPath());
 		}
+	}
+
+	@Override
+	public Completer getCompleter(State state){
+		return null;
 	}
 
 	@Override

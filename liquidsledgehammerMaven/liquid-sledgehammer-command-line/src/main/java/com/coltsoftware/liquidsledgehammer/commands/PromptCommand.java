@@ -9,6 +9,7 @@ import java.util.HashMap;
 import com.coltsoftware.liquidsledgehammer.Command;
 import com.coltsoftware.liquidsledgehammer.State;
 import com.coltsoftware.liquidsledgehammer.cmd.Arguments;
+import jline.console.completer.Completer;
 
 public final class PromptCommand implements Command {
 
@@ -32,6 +33,11 @@ public final class PromptCommand implements Command {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	@Override
+	public Completer getCompleter(State state){
+		return null;
 	}
 
 	private void printHelp(PrintStream out) {

@@ -13,6 +13,7 @@ import com.coltsoftware.liquidsledgehammer.filters.BooleanTransactionFilter;
 import com.coltsoftware.liquidsledgehammer.filters.FilterCombine;
 import com.coltsoftware.liquidsledgehammer.filters.TransactionFilter;
 import com.coltsoftware.liquidsledgehammer.sources.FinancialTransactionSource;
+import jline.console.completer.Completer;
 
 public final class FilterCommand implements Command {
 
@@ -54,6 +55,11 @@ public final class FilterCommand implements Command {
 		state.setSource(source);
 		
 		out.println(state.getFilter());
+	}
+
+	@Override
+	public Completer getCompleter(State state){
+		return null;
 	}
 
 	public static TransactionFilter constructFilters(
