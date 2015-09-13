@@ -1,5 +1,7 @@
 package com.coltsoftware.liquidsledgehammer;
 
+import static com.coltsoftware.liquidsledgehammer.FilterHelper.filterSource;
+
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
@@ -11,16 +13,18 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import org.joda.time.LocalDate;
-
 import com.coltsoftware.liquidsledgehammer.collections.AliasPathResolver;
 import com.coltsoftware.liquidsledgehammer.collections.FinancialTreeNode;
+import com.coltsoftware.liquidsledgehammer.filters.BooleanTransactionFilter;
+import com.coltsoftware.liquidsledgehammer.filters.TransactionDateFilter;
+import com.coltsoftware.liquidsledgehammer.filters.TransactionFilter;
+import com.coltsoftware.liquidsledgehammer.groups.JsonGroupsFactory;
 import com.coltsoftware.liquidsledgehammer.model.FinancialTransaction;
+import com.coltsoftware.liquidsledgehammer.model.Money;
 import com.coltsoftware.liquidsledgehammer.model.SubTransaction;
 import com.coltsoftware.liquidsledgehammer.processing.Processor;
 import com.coltsoftware.liquidsledgehammer.sources.FinancialTransactionSource;
@@ -38,25 +42,73 @@ import com.google.gson.GsonBuilder;
 
 public class Main {
 
+	private static String inPath = "";
+	private static String outPath = "";
+
 	public static void main(String[] args) throws IOException {
-		File f = new File("C:\\Temp\\Transactions");
+		File f = new File(inPath);
 		ArrayList<FinancialTransactionSource> sources = PathSourceWalker
 				.loadAllSourcesBelowPath(f.toPath());
-		AliasPathResolver aliasPathResolver = createAliasPathResolver(f);		
+		AliasPathResolver aliasPathResolver = createAliasPathResolver(f);
 		Processor processor = new Processor(aliasPathResolver,
 				createSubTransactionFactory(f));
-		FinancialTreeNode root = new FinancialTreeNode();
-		for (FinancialTransactionSource source : sources)
-			processor.populateTree(source, root);
+		outputExpenditure(processor, sources, aliasPathResolver);
+	}
 
-		Output.output("");
-		// outputTree(root);
-		outputJson(root, "output");
-		outputJson(root.findOrCreate("External"), "external");
-		outputJson(root.findOrCreate("Error"), "error");
-		outputImage(root.findOrCreate("External"), "external");
-		new CSVOutput(root.findOrCreate("External"), outPath, "External.csv");
-		new CSVOutput(root.findOrCreate("External"), aliasPathResolver, outPath, "External.csv");
+	private static void reverseBalance(Processor processor,
+			ArrayList<FinancialTransactionSource> sources,
+			AliasPathResolver aliasPathResolver, final String bank) {
+		FinancialTreeNode root = new FinancialTreeNode();
+
+		TransactionFilter filter = new TransactionFilter() {
+
+			@Override
+			public boolean allow(FinancialTransaction transaction) {
+				return transaction.getSource().getName().equals(bank);
+			}
+		};
+
+		for (FinancialTransactionSource source : sources)
+			processor.populateTree(filterSource(source, filter), root);
+
+		new CSVOutput(root, aliasPathResolver, outPath, String.format("%s.csv",
+				bank));
+
+	}
+
+	private static void outputExpenditure(Processor processor,
+			ArrayList<FinancialTransactionSource> sources,
+			AliasPathResolver aliasPathResolver) throws IOException {
+
+		Money grandTotalValue = Money.Zero;
+
+		for (int year = 2008; year <= 2015; year++) {
+			for (int month = 1; month <= 12; month++) {
+				String path = "External";
+				TransactionFilter dateFilter = new TransactionDateFilter.Builder()
+						.exactMonth(year, month).build();
+
+				FinancialTreeNode root = new FinancialTreeNode();
+				TransactionFilter filter = dateFilter;
+				
+				for (FinancialTransactionSource source : sources)
+					processor.populateTree(filterSource(source, filter), root);
+
+				FinancialTreeNode node = root.findOrCreate(path);
+				Money totalValue = node.getTotalValue();
+				grandTotalValue = grandTotalValue.add(totalValue);
+				System.out.println(String.format("%d/%d/1,%s,%s", year, month,
+						totalValue.toStringNoSymbol(),
+						grandTotalValue.toStringNoSymbol()));
+
+				node.findOrCreate("Income.Pay").remove();
+
+				if (year >= 2014) {
+					new CSVOutput(node, aliasPathResolver, outPath,
+							String.format("%02d-%02d.csv", year, month));
+				}
+			}
+		}
 	}
 
 	private static void outputImage(FinancialTreeNode node, String fileName) {
@@ -114,67 +166,14 @@ public class Main {
 
 	private static SubTransactionFactory createSubTransactionFactory(File path)
 			throws IOException {
-		DescriptionMatchingStrategy strategy = new DescriptionMatchingStrategy();
-
-		path = new File(path, "..\\groups.json");
-
-		FileReader reader = new FileReader(path);
-		try {
-			GroupJson[] groups = new Gson().fromJson(reader, GroupJson[].class);
-			for (GroupJson group : groups) {
-				DescriptionStrategy descStrat = createStratForGroup(group);
-				if (descStrat == null)
-					continue;
-				NamedDescriptionStrategy named = DescriptionStrategyNamer.name(
-						group.uniqueName, descStrat);
-				strategy.add(named);
-			}
-		} finally {
-			reader.close();
-		}
-
-		SubTransactionFactory subTransactionFactory = new SubTransactionFactory();
-
-		subTransactionFactory.setUnassignedValueStrategy(strategy);
-		return subTransactionFactory;
-	}
-
-	private static DescriptionStrategy createStratForGroup(GroupJson group) {
-		if (group.matchStrings == null && group.excludeStrings == null
-				|| group.matchStrings.length == 0
-				&& group.excludeStrings.length == 0)
-			return null;
-
-		IncludeExcludeDescriptionStrategy strat = new IncludeExcludeDescriptionStrategy();
-
-		if (group.matchStrings != null) {
-			for (String s : group.matchStrings)
-				strat.addInclude(s);
-		}
-		if (group.excludeStrings != null) {
-			for (String s : group.excludeStrings)
-				strat.addExclude(s);
-		}
-
-		return strat;
+		return JsonGroupsFactory.createSubTransactionFactory(new File(
+				path, "..\\groups.json"));
 	}
 
 	private static AliasPathResolver createAliasPathResolver(File path)
 			throws IOException {
-		AliasPathResolver aliasPathResolver = new AliasPathResolver();
-
-		path = new File(path, "..\\groups.json");
-
-		FileReader reader = new FileReader(path);
-		try {
-			GroupJson[] groups = new Gson().fromJson(reader, GroupJson[].class);
-			for (GroupJson group : groups)
-				aliasPathResolver.put(group.uniqueName, group.path);
-		} finally {
-			reader.close();
-		}
-
-		return aliasPathResolver;
+		return JsonGroupsFactory.createAliasPathResolver(new File(path,
+				"..\\groups.json"));
 	}
 
 	private static void outputTree(FinancialTreeNode root) {
@@ -252,12 +251,5 @@ public class Main {
 		private String source;
 		private String description;
 		private String value;
-	}
-
-	public static class GroupJson {
-		public String path;
-		public String uniqueName;
-		public String[] matchStrings;
-		public String[] excludeStrings;
 	}
 }
