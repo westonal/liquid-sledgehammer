@@ -1,0 +1,15 @@
+{
+  "entries":
+  [
+    {
+      "description": "Value without quote 1",
+      "value": 1.23,
+      "date" : "2010-05-29"
+    },
+    {
+      "description": "Value without quote 2",
+      "value": -45.67,
+      "date" : "2010-05-29"
+    }
+  ]
+}
