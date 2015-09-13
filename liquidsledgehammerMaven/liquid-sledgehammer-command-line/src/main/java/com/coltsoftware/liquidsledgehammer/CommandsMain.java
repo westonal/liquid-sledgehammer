@@ -10,6 +10,7 @@ import com.coltsoftware.liquidsledgehammer.cmd.Context;
 import com.coltsoftware.liquidsledgehammer.collections.AliasPathResolver;
 import com.coltsoftware.liquidsledgehammer.collections.FinancialTreeNode;
 import com.coltsoftware.liquidsledgehammer.commands.*;
+import com.coltsoftware.liquidsledgehammer.commands.jline.JLine2PromptCommand;
 import com.coltsoftware.liquidsledgehammer.filters.DateFilter;
 import com.coltsoftware.liquidsledgehammer.filters.SourceFilter;
 import com.coltsoftware.liquidsledgehammer.filters.TransactionFilter;
