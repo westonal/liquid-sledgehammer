@@ -9,12 +9,7 @@ import com.coltsoftware.liquidsledgehammer.cmd.Arguments;
 import com.coltsoftware.liquidsledgehammer.cmd.Context;
 import com.coltsoftware.liquidsledgehammer.collections.AliasPathResolver;
 import com.coltsoftware.liquidsledgehammer.collections.FinancialTreeNode;
-import com.coltsoftware.liquidsledgehammer.commands.ChangeNodeTreeCommand;
-import com.coltsoftware.liquidsledgehammer.commands.FilterCommand;
-import com.coltsoftware.liquidsledgehammer.commands.ListCommand;
-import com.coltsoftware.liquidsledgehammer.commands.ListTreeCommand;
-import com.coltsoftware.liquidsledgehammer.commands.LocalBalanceCommand;
-import com.coltsoftware.liquidsledgehammer.commands.PromptCommand;
+import com.coltsoftware.liquidsledgehammer.commands.*;
 import com.coltsoftware.liquidsledgehammer.filters.DateFilter;
 import com.coltsoftware.liquidsledgehammer.filters.SourceFilter;
 import com.coltsoftware.liquidsledgehammer.filters.TransactionFilter;
@@ -102,6 +97,7 @@ public final class CommandsMain {
 		commands.put("ls", new ListTreeCommand());
 		commands.put("cd", new ChangeNodeTreeCommand());
 		commands.put("prompt", new PromptCommand(commands));
+		commands.put("jlineprompt", new JLine2PromptCommand(commands));
 		commands.put("filter", new FilterCommand(filters));
 	}
 
