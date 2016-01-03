@@ -19,7 +19,7 @@ public final class ListCommand implements Command {
 		String groupPattern = transaction.getGroupPattern();
 		if (groupPattern == null)
 			groupPattern = "";
-		return String.format("%s,%s,%s,%s,%s", transaction.getDate(),
+		return String.format("%s\t%s\t%s\t%s\t%s", transaction.getDate(),
 				transaction.getDescription(), transaction.getValue(),
 				transaction.getSource().getName(), groupPattern);
 	}

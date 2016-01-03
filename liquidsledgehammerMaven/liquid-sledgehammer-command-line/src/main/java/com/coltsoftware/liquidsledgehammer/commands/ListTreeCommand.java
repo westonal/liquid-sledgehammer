@@ -37,7 +37,7 @@ public final class ListTreeCommand extends PathCommandBase implements Command {
 	}
 
 	private static String formatNode(FinancialTreeNode node) {
-		return String.format("%s %s", node.getName(), node.getTotalValue());
+		return String.format("%s\t%s", node.getName(), node.getTotalValue());
 	}
 
 	@Override
